@@ -1,50 +1,67 @@
 <template>
   <div class="columns is-centered">
-    <div class="column is-3">
+    <div class="column is-2">
       <div class="field is-horizontal">
-        <label class="label">Filtrar: </label>
-        <div class="select">
-          <select v-model="form.column">
-            <option value="0">-- Selecione uma Coluna --</option>
-            <option
-              v-for="(item, index) in columns"
-              :key="index"
-              :value="item.field"
-            >
-              {{ item.title }}
-            </option>
-          </select>
-        </div>
+        <label class="label" style="padding-right: 2rem">Filtrar: </label>
+        <label class="switch">
+          <input type="checkbox" @change="toggleFilter($event)" />
+          <span class="slider round"></span>
+        </label>
       </div>
     </div>
-    <div class="column is-3">
-      <div class="field">
-        <div class="select">
-          <select v-model="form.operator">
-            <option value="0">-- Selecione um Comparador --</option>
-            <option value="=">igual a</option>
-            <option value=">">maior que</option>
-            <option value="<">menor que</option>
-            <option value="!=">diferente de</option>
-            <option value="like">contendo</option>
-          </select>
+    <div class="column is-10" :style="{visibility: filter ? 'visible' : 'hidden'}">
+      <div class="columns">
+        <div class="column is-3">
+          <div class="select">
+            <select v-model="form.column">
+              <option value="0">-- Coluna --</option>
+              <option
+                v-for="(item, index) in columns"
+                :key="index"
+                :value="item.field"
+              >
+                {{ item.title }}
+              </option>
+            </select>
+          </div>
         </div>
-      </div>
-    </div>
-    <div class="column is-3">
-      <div class="field has-addons">
-        <input
-          type="text"
-          class="input"
-          v-model="form.value"
-          placeholder="Valor a filtrar"
-        />
-        <div class="control">
-          <a class="button is-info" @click="setFilter">
+        <div class="column is-3">
+          <div class="field">
+            <div class="select">
+              <select v-model="form.operator">
+                <option value="0">-- Comparador --</option>
+                <option value="=">igual a</option>
+                <option value=">">maior que</option>
+                <option value="<">menor que</option>
+                <option value="!=">diferente de</option>
+                <option value="like">contendo</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="column is-3">
+          <div class="field has-addons">
+            <input
+              type="text"
+              class="input"
+              v-model="form.value"
+              placeholder="Valor a filtrar"
+            />
+            <div class="control">
+              <a class="button is-info" @click="setFilter">
+                <span class="icon is-small">
+                  <font-awesome-icon icon="fa-solid fa-search" />
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="column is-1">
+          <button class="button is-success is-outlined" title="Limpar" @click="clearFilter">
             <span class="icon is-small">
-              <font-awesome-icon icon="fa-solid fa-search" />
-            </span>
-          </a>
+                  <font-awesome-icon icon="fa-solid fa-broom" />
+                </span>
+          </button>
         </div>
       </div>
     </div>
@@ -97,16 +114,24 @@ export default {
         value: "",
         type: "string",
       },
+      filter: false,
     };
   },
   methods: {
     setFilter() {
       let obj = this.form;
-            
-      const col = this.columns.filter(v => v.field === obj.column,obj);
+
+      const col = this.columns.filter((v) => v.field === obj.column, obj);
       obj.type = col[0].type;
 
-      this.tabulator.setFilter(obj.column,obj.operator,obj.value);
+      this.tabulator.setFilter(obj.column, obj.operator, obj.value);
+    },
+    clearFilter() {
+      this.form.column = "0";
+      this.form.operator = "0";
+      this.form.value = "";
+
+      this.tabulator.clearFilter();
     },
     download_csv() {
       this.tabulator.download("csv", "data.csv");
@@ -120,12 +145,13 @@ export default {
         title: "Relatório SisArthro", //add title to report
       });
     },
-
+    toggleFilter(e) {
+      this.filter = e.target.checked;
+    },
   },
   props: ["tableData", "columns"],
   watch: {
     tableData(value) {
-      console.log(value);
       this.tabulator = new Tabulator(this.$refs.table, {
         langs: lang,
         locale: "pt-br",
@@ -172,5 +198,66 @@ export default {
 
 .button {
   margin-right: 1rem;
+}
+
+/** slider classes */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 3rem;
+  height: 1.5rem;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: -0.2rem;
+  left: 0;
+  right: 0;
+  bottom: -0.2rem;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  left: 0.5rem;
+  bottom: 0.5rem;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider {
+  background-color: #2a455a;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2a455a;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(1rem);
+  -ms-transform: translateX(1rem);
+  transform: translateX(1rem);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 0.75rem;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
 </style>

@@ -18,15 +18,16 @@
             <div class="content">
               <div class="field">
                 <label class="label">Nome</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome"
                     v-model="user.name"
+                    :class="{ 'is-danger': v$.user.name.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.user.name.$error">
+                    {{ v$.user.name.$errors[0].$message }}
                   </span>
                 </div>
               </div>
@@ -34,7 +35,7 @@
                 <label class="label">Município</label>
                 <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome"
                     v-model="municipio"
@@ -76,31 +77,29 @@
               </div>
               <div class="field">
                 <label class="label">Email</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="E-mail"
                     v-model="user.email"
+                    :class="{ 'is-danger': v$.user.email.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.user.email.$error">
+                    {{ v$.user.email.$errors[0].$message }}
                   </span>
                 </div>
               </div>
               <div class="field">
                 <label class="label">Login</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome de usuário"
                     v-model="user.username"
                     readonly
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
-                  </span>
                 </div>
               </div>
               <div class="field">
@@ -122,28 +121,32 @@
                     type="password"
                     v-model="user.new_password"
                     placeholder="Confirme a senha"
+                    :class="{ 'is-danger': v$.user.new_password.$error }"
                   />
+                  <span class="is-error" v-if="v$.user.new_password.$error">
+                    {{ v$.user.new_password.$errors[0].$message }}
+                  </span>
+                </div>
+              </div>
+              <div class="field">
+                <label class="label">Confirme a Senha</label>
+                <div class="control">
+                  <input
+                    class="input"
+                    type="password"
+                    v-model="senha"
+                    placeholder="Confirme a senha"
+                    :class="{ 'is-danger': v$.senha.$error }"
+                  />
+                  <span class="is-error" v-if="v$.senha.$error">
+                    {{ v$.senha.$errors[0].$message }}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
           <footer class="card-footer">
-            <div class="column is-full">
-              <div class="columns is-centered">
-                <div class="column is-4">
-                  <div class="control">
-                    <button class="button is-link submit-btn is-fullwidth" @click="update">
-                      Salvar
-                    </button>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <div class="control">
-                    <button class="button is-link is-light is-fullwidth">Cancelar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <footerCard @submit="login" @cancel="" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -155,7 +158,15 @@
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
+import footerCard from '@/components/forms/FooterCard.vue'
 import authService from "@/services/auth.service";
+import useValidate from "@vuelidate/core";
+import {
+  required$,
+  minLength$,
+  email$,
+  sameAs$
+} from "../components/forms/validators.js";
 
 export default {
   data() {
@@ -170,14 +181,31 @@ export default {
         role: 0,
         id_usuario: 1,
       },
-      
+      senha: '',
+      v$: useValidate(),
       municipio:'',
       isLoading: false,
       message: "",
       caption: "",
       type: "",
       showMessage: false,
+      cFooter:{
+          strSubmit:'Entrar',
+          strCancel: 'Cancelar',
+          strAux:'',
+          aux: false
+        }
     };
+  },
+  validations(){
+    return {
+      user: {
+        name: {required$, minLength: minLength$(10)},
+        new_password: {required$, minLength: minLength$(4)},
+        email: {required$, email$},
+      },
+      senha: {sameAs: sameAs$(this.user.password)}
+    }
   },
   computed: {
     loggedIn() {
@@ -191,39 +219,40 @@ export default {
     Message,
     Loader,
     CmbMunicipio,
+    footerCard
   },
-  methods: {
-    validate(){
-      var match = this.old_password === this.user.password;
-      if (!match){
-        this.message = 'A senha informada não confere. Verifique!';
+  methods: {  
+    update() {
+      this.v$.$validate(); 
+      if (!this.v$.$error) {
+        document.getElementById("login").classList.add("is-loading");
+
+        authService.update(this.user).then(
+          (response) => {
+            this.showMessage = true;
+            this.message = "Seu cadastro foi alterado com sucesso.";
+            this.type = "success";
+            this.caption = "Meu Cadastro";
+            setTimeout(() => (this.showMessage = false), 3000);
+          },
+          (error) => {
+            this.message = error;
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Usuário";
+            setTimeout(() => (this.showMessage = false), 3000);
+          }
+        )
+        .finally(() => {
+            document.getElementById("login").classList.remove("is-loading");
+          });
+      } else {
+        this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
         this.type = "alert";
-        this.caption = "Senha atual";
-        setTimeout(() => {this.showMessage = false; this.old_password='';}, 3000);
+        this.caption = "Meu Cadastro";
+        setTimeout(() => (this.showMessage = false), 3000);
       }
-    },
-    update() {
-      this.isLoading = true;
-      
-      authService.update(this.user).then(
-        (response) => {
-          this.showMessage = true;
-          this.message = "Seu cadastro foi alterado com sucesso.";
-          this.type = "success";
-          this.caption = "Meu Cadastro";
-          setTimeout(() => (this.showMessage = false), 3000);
-        },
-        (error) => {
-          this.message = error;
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "Usuário";
-          setTimeout(() => (this.showMessage = false), 3000);
-        }
-      );
-
-      this.isLoading = false;
     },
     loadData() {
       this.isLoading = true;

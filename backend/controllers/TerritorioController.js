@@ -22,24 +22,31 @@ class TerritorioController{
     }
 
     async getSisawebArea(req, res){
-        var id_mun = req.params.id;
+        try {
+            var id_mun = req.params.id;
        
-        var url = process.env.SISAWEB_API;
+            var url = process.env.SISAWEB_API;
 
-        fetch(url + 'area.php?id='+id_mun)
-        .then(res => res.json())
-        .then(json => res.json(json));
+            fetch(url + 'area.php?id='+id_mun)
+            .then(res => res.json())
+            .then(json => res.json(json));
+        } catch (error) {
+            res.status(400).send('Erro de comunicação com o Sisaweb');
+        } 
     }
 
     async getSisawebQuarteirao(req, res){
-        var id_area = req.params.id;
-        var url = process.env.SISAWEB_API;
-        
-        fetch(url + `quarteirao.php?id=${id_area}`)
-        .then(res => res.json())
-        .then(json => res.json(json));
+        try {
+            var id_area = req.params.id;
+            var url = process.env.SISAWEB_API;
+            
+            fetch(url + `quarteirao.php?id=${id_area}`)
+            .then(res => res.json())
+            .then(json => res.json(json));
+        } catch (error) {
+            res.status(400).send('Erro de comunicação com o Sisaweb');
+        } 
     }
-
 }
 
 module.exports = new TerritorioController();

@@ -5,8 +5,9 @@ class CapturaController{
         try {
           var dados = req.body;
           var result = await Captura.create(dados);
+
           res.status(200);
-          res.json({ msg: "Captura cadastrada!", data: result[0] });
+          res.json({ msg: "Captura cadastrada!", master: result });
         } catch (error) {
           res.status(400).send(error);
         }
@@ -17,7 +18,7 @@ class CapturaController{
           var dados = req.body;
           var result = await Captura.createDet(dados);
           res.status(200);
-          res.json({ msg: "Captura cadastrada!", data: result[0] });
+          res.json({ msg: "Captura cadastrada!"});
         } catch (error) {
           res.status(400).send(error);
         }
@@ -32,6 +33,20 @@ class CapturaController{
         } catch (error) {
           res.status(400).send(error);
         }
+    }
+
+    async delete(req, res) {
+      var id = req.params.id;
+      var result = await Captura.delete(id);
+      res.status(200);
+      res.json({ msg: "Captura excluída!" });
+    }
+
+    async deleteDet(req, res) {
+      var id = req.params.id;
+      var result = await Captura.deleteDet(id);
+      res.status(200);
+      res.json({ msg: "Captura excluída!" });
     }
 
     async updateDet(req, res) {
@@ -68,6 +83,19 @@ class CapturaController{
         var cap = await Captura.getCapturaDet(id);
         res.json(cap);
     }
+
+    async getCombo(req, res){
+      var mun = req.params.mun;
+      var cap = await Captura.getCombo(mun);
+      res.json(cap);
+    }
+
+    async getComboAm(req, res){
+      var id = req.params.id;
+      var cap = await Captura.getComboAm(id);
+      res.json(cap);
+    }
+
 
 }
 

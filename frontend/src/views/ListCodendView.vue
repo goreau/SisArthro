@@ -28,12 +28,14 @@
       </div>
     </div>
   </div>
+  <confirm-dialog ref="confirmDialog"></confirm-dialog>
 </template>
 
 <script>
 import codendService from "@/services/codend.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
+import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 
 export default {
   name: "ListaEndereços",
@@ -49,6 +51,7 @@ export default {
   components: {
     MyTable,
     Loader,
+    ConfirmDialog,
   },
   methods: {
     newEnd() {
@@ -114,8 +117,16 @@ export default {
           btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
           btDel.classList.add("button", "is-danger", "is-outlined");
           btDel.innerHTML = this.myspan2.innerHTML;
-          btEdit.addEventListener("click", () => {
-            console.log(row);
+          btDel.addEventListener("click", async () => {
+            const ok = await this.$refs.confirmDialog.show({
+                title: 'Excluir',
+                message: 'Deseja mesmo excluir esse endereço?',
+                okButton: 'Confirmar',
+            })
+            if (ok) {
+              codendService.delete(row.id_codend);
+              location.reload();
+            }          
           });
 
           const buttonHolder = document.createElement("span");

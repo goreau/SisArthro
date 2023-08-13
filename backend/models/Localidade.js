@@ -38,13 +38,24 @@ class Localidade{
     }
   } 
 
+  async delete(id){
+    try{
+      
+      await knex('localidade').where('id_localidade', id)
+      .update({ deleted: 1 });
+      
+    }catch(err){
+        console.log(err);
+    }
+  } 
+
   async getLocalidades(filt){
     try{
         var result =  await knex.select(["l.id_localidade", "l.nome", "l.codigo", "m.nome as municipio"])
         .column(knex.raw("to_char(created_at, 'dd/mm/yyyy') as data"))
         .table("localidade as l")
-        .join('municipio as m','m.id_municipio','=','l.id_municipio');
-       // .where({'l.id_municipio': mun}); //usar o filtro aqui
+        .join('municipio as m','m.id_municipio','=','l.id_municipio')
+        .where({'l.deleted': 0}); //usar o filtro aqui
 
         return result;
     }catch(err){

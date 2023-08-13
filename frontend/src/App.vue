@@ -9,6 +9,7 @@
       />
     </div>
     <div class="main" id="main">
+      
       <router-view />
     </div>
   </div>
@@ -19,6 +20,7 @@
 import Header from "@/components/general/Header.vue";
 import Footer from "@/components/general/Footer.vue";
 import { SidebarMenu } from "vue-sidebar-menu";
+
 import "vue-sidebar-menu/dist/vue-sidebar-menu.css";
 
 export default {
@@ -26,6 +28,7 @@ export default {
     Header,
     SidebarMenu,
     Footer,
+    
   },
   methods: {
     onToggleCollapse(collapsed) {
@@ -170,6 +173,83 @@ export default {
           ],
         },
         {
+          href: "/identifica",
+          title: "Identificação",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-vial-virus",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/identificas",
+              title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+        {
+          href: "",
+          title: "Administrativo",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-screwdriver-wrench",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/generos",
+              title: "Gêneros",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/especies",
+              title: "Espécies",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/auxiliares",
+              title: "Auxiliares",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-info",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+
+        {
           href: "/report/0",
           title: "Relatórios",
           icon: {
@@ -223,7 +303,7 @@ body {
   margin-left: 290px;
   width: calc(100% - 290px);
   height: calc(100% - 7rem);
-  // border:1px solid green;
+  margin-top: 4rem;
 }
 .main_colapsed {
   margin-left: 65px;
@@ -251,9 +331,22 @@ body {
   padding-top: 1rem;
 }
 
+.card-header p {
+  color: rgb(23, 24, 102);
+  font-size: larger;
+}
+
 .select {
   width: 100%;
 }
 
+.is-error {
+  font-size: smaller;
+  color: red;
+  padding-left: 1rem;
+}
+.vsm--child {
+  padding-left: 2rem;
+  color:bisque;
+}
 </style>
-

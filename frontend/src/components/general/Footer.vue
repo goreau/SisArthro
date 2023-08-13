@@ -23,8 +23,8 @@
           width: 100%;
       }*/
       #footer{
-          background-color: #13156e;
-          border-top: 6px solid #1d1a18;
+          background-color: #2B3856;
+          border-top: 6px solid #131e38;
           
           display: flex;
           align-items: center;

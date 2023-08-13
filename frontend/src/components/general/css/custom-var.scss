@@ -1,13 +1,13 @@
-$primary-color: #4285f4 !default;
-$base-bg: #13156e !default;
+$primary-color: #2B3856 !default;
+$base-bg: #2B3856 !default;
 
 $item-color: #c0b59c !default;
 
-$item-active-color: #ebac25 !default;
+$item-active-color: null !default;
 $item-active-bg: null !default;
 $item-active-line-color: $primary-color !default;
 
-$item-open-color: #fff !default;
+$item-open-color: #b19c6d !default;
 $item-open-bg: $primary-color !default;
 
 $item-hover-color: null !default;
@@ -27,8 +27,8 @@ $mobile-item-bg: $primary-color !default;
 $mobile-icon-color: $mobile-item-color !default;
 $mobile-icon-bg: $mobile-item-bg !default;
 
-$dropdown-color: #664405 !default;
-$dropdown-bg: #b8b9e9 !default;
+$dropdown-color: #null !default;
+$dropdown-bg: lighten($base-bg, 5%) !default;
 
 $header-item-color: rgba($item-color, 0.7) !default;
 

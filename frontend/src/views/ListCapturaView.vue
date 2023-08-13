@@ -28,12 +28,14 @@
       </div>
     </div>
   </div>
+  <confirm-dialog ref="confirmDialog"></confirm-dialog>
 </template>
 
 <script>
 import capturaService from "@/services/captura.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
+import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 
 export default {
   name: "ListaCapturas",
@@ -49,6 +51,7 @@ export default {
   components: {
     MyTable,
     Loader,
+    ConfirmDialog,
   },
   methods: {
     newCapt() {
@@ -70,9 +73,7 @@ export default {
   mounted() {
     this.myspan = document.getElementsByName("coisa")[0];
     this.myspan2 = document.getElementsByName("coisa2")[0];
-    //document.createElement('span');
-    // this.myspan.innerHTML='<p>teste</p>';;
-
+    
     this.isLoading = true;
     capturaService.getCapturas({})
       .then((response) => {
@@ -105,18 +106,22 @@ export default {
             this.$router.push(`/editCapt/${row.id_captura}`);
           });
 
-          /* const teste = document.createElement('div'); 
-              teste.classList.add('icon', 'is-small');
-              teste.innerHTML='<span><font-awesome-icon icon=\"fa-solid fa-envelope\" /></span>';*/
-
           const btDel = document.createElement("button");
           btDel.type = "button";
           btDel.title = "Excluir";
           btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
           btDel.classList.add("button", "is-danger", "is-outlined");
           btDel.innerHTML = this.myspan2.innerHTML;
-          btEdit.addEventListener("click", () => {
-            console.log(row);
+          btDel.addEventListener("click", async () => {
+            const ok = await this.$refs.confirmDialog.show({
+                title: 'Excluir',
+                message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
+                okButton: 'Confirmar',
+            })
+            if (ok) {
+              capturaService.delete(row.id_captura);
+              location.reload();
+            }
           });
 
           const buttonHolder = document.createElement("span");

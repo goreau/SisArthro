@@ -20,45 +20,39 @@
                 <label class="label">Município</label>
                 <div class="control">
                   <CmbMunicipio
-                      :id_prop="currentUser.id"
-                      @selMun="loc.id_municipio = $event"
-                    />
+                    :id_prop="currentUser.id"
+                    @selMun="loc.id_municipio = $event"
+                    :errclass="{ 'is-danger': v$.loc.id_municipio.$error }"
+                  />
+                  <span class="is-error" v-if="v$.loc.id_municipio.$error">
+                    {{ v$.loc.id_municipio.$errors[0].$message }}
+                  </span>
                 </div>
               </div>
               <div class="field">
                 <label class="label">Nome</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome"
                     v-model="loc.nome"
+                    :class="{ 'is-danger': v$.loc.nome.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.loc.nome.$error">
+                    {{ v$.loc.nome.$errors[0].$message }}
                   </span>
                 </div>
               </div>
             </div>
           </div>
           <footer class="card-footer">
-            <div class="column is-full">
-              <div class="columns is-centered">
-               
-                <div class="column is-4">
-                  <div class="control">
-                    <button class="button is-link submit-btn is-fullwidth" @click="create">
-                      Salvar
-                    </button>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <div class="control">
-                    <button class="button is-link is-light is-fullwidth">Cancelar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <footerCard
+              @submit="create"
+              @cancel=""
+              @aux="details"
+              :cFooter="cFooter"
+            />
           </footer>
         </div>
       </div>
@@ -71,6 +65,14 @@ import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import localidadeService from "@/services/localidade.service";
+import footerCard from "@/components/forms/FooterCard.vue";
+import useValidate from "@vuelidate/core";
+import {
+  required$,
+  combo$,
+  minLength$,
+  maxLength$
+} from "../components/forms/validators.js";
 
 export default {
   data() {
@@ -80,13 +82,33 @@ export default {
         id_municipio: 0,
         id_usuario: 0,
       },
-      
-      municipio:'',
+      v$: useValidate(),
+      municipio: "",
       isLoading: false,
       message: "",
       caption: "",
       type: "",
       showMessage: false,
+      cFooter: {
+        strSubmit: "Salvar",
+        strCancel: "Cancelar",
+        strAux: "",
+        aux: false,
+      },
+    };
+  },
+  validations() {
+    return {
+      loc: {
+        nome: {
+          required$,
+          minLength: minLength$(3),
+          maxLength: maxLength$(100)
+        },
+        id_municipio: {
+          minValue: combo$(1),
+        },
+      },
     };
   },
   computed: {
@@ -98,49 +120,53 @@ export default {
     Message,
     Loader,
     CmbMunicipio,
+    footerCard,
   },
   methods: {
-    validate(){
-      var match = true;// this.old_password === this.user.password;
-      if (!match){
-        this.message = 'A senha informada não confere. Verifique!';
+    create() {
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.$error) {
+        document.getElementById("login").classList.add("is-loading");
+
+        localidadeService
+          .create(this.loc)
+          .then(
+            (response) => {
+              this.showMessage = true;
+              this.message = "Localidade cadastrada.";
+              this.type = "success";
+              this.caption = "Localidade";
+              setTimeout(() => (this.showMessage = false), 3000);
+            },
+            (error) => {
+              this.message = error;
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Usuário";
+              setTimeout(() => (this.showMessage = false), 3000);
+            }
+          )
+          .finally(() => {
+            document.getElementById("login").classList.remove("is-loading");
+          });
+      } else {
+        this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
         this.type = "alert";
-        this.caption = "Senha atual";
-        setTimeout(() => {this.showMessage = false; this.old_password='';}, 3000);
+        this.caption = "Localidade";
+        setTimeout(() => (this.showMessage = false), 3000);
       }
-    },
-    create() {
-      this.isLoading = true;
-      
-      localidadeService.create(this.loc).then(
-        (response) => {
-          this.showMessage = true;
-          this.message = "Localidade cadastrada.";
-          this.type = "success";
-          this.caption = "Localidade";
-          setTimeout(() => (this.showMessage = false), 3000);
-        },
-        (error) => {
-          this.message = error;
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "Usuário";
-          setTimeout(() => (this.showMessage = false), 3000);
-        }
-      );
-
-      this.isLoading = false;
     },
   },
   mounted() {
     let cUser = this.currentUser;
-    if (cUser){
+    if (cUser) {
       this.loc.id_usuario = cUser.id;
     }
-    
   },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

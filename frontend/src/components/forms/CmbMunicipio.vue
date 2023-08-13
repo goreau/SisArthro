@@ -1,7 +1,7 @@
 <template>
   <div class="control">
     <div class="select">
-      <select @change="onChange($event)" class="input">
+      <select @change="onChange($event)" class="input" :class="errclass">
         <option value="0">-- Selecione --</option>
         <option
           v-for="mun in municipios"
@@ -26,7 +26,7 @@ export default {
       municipios: [],
     };
   },
-  props: ['id_prop', 'sel'],
+  props: ['id_prop', 'sel', 'errclass'],
   methods: {
     onChange(event) {
       this.$emit('selMun',event.target.value);
@@ -54,4 +54,6 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+  
+</style>

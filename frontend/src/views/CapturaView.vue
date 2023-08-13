@@ -19,9 +19,9 @@
               <div class="columns">
                 <div class="field column is-3">
                   <label class="label">Número</label>
-                  <div class="control has-icons-left has-icons-right">
+                  <div class="control">
                     <input
-                      class="input is-danger"
+                      class="input"
                       type="text"
                       placeholder="Preenc. Automático"
                       v-model="captura.codigo"
@@ -36,8 +36,12 @@
                     <datepicker
                       placeholder="Data da atividade"
                       :config="{ dateFormat: 'd/m/Y', static: true, onChange: setDate }"
+                      :class="{ 'is-danger': v$.captura.dt_captura.$error }"
                     />
                   </div>
+                  <span class="is-error" v-if="v$.captura.dt_captura.$error">
+                    {{ v$.captura.dt_captura.$errors[0].$message }}
+                  </span>
                 </div>
                 <div class="field column is-3">
                   <label class="label">Execução</label>
@@ -71,6 +75,9 @@
                       3 -
                     </label>
                   </div>
+                  <span class="is-error" v-if="v$.captura.execucao.$error">
+                    {{ v$.captura.execucao.$errors[0].$message }}
+                  </span>
                 </div>
                 <div class="field column is-3">
                   <label class="label">&nbsp;</label>
@@ -80,7 +87,11 @@
                       type="text"
                       v-model="captura.exec_3"
                       :disabled="captura.execucao < 3"
+                      :class="{ 'is-danger': v$.captura.exec_3.$error }"
                     />
+                    <span class="is-error" v-if="v$.captura.exec_3.$error">
+                    {{ v$.captura.exec_3.$errors[0].$message }}
+                  </span>
                   </div>
                 </div>
               </div>
@@ -92,8 +103,12 @@
                     <CmbAuxiliares
                       :tipo="1"
                       @selValue="captura.zona = $event"
+                      :errclass="{ 'is-danger': v$.captura.zona.$error }"
                     />
                   </div>
+                  <span class="is-error" v-if="v$.captura.zona.$error">
+                    {{ v$.captura.zona.$errors[0].$message }}
+                  </span>
                 </div>
                 <div class="field column is-6">
                   <label class="label">CodSis - Município</label>
@@ -101,7 +116,11 @@
                     <CmbMunicipio
                       :id_prop="currentUser.id"
                       @selMun="captura.id_municipio = $event"
+                      :errclass="{ 'is-danger': v$.captura.id_municipio.$error }"
                     />
+                    <span class="is-error" v-if="v$.captura.id_municipio.$error">
+                    {{ v$.captura.id_municipio.$errors[0].$message }}
+                  </span>
                   </div>
                 </div>
                 <div class="field column is-3">
@@ -119,13 +138,11 @@
               <div class="columns">
                 <div class="field column is-6">
                   <label class="label">CodLoc - Localidade</label>
-                  <div class="control has-icons-left has-icons-right">
                     <div class="control">
                     <CmbLocalidade
                       :id_mun="captura.id_municipio"
                       @selLoc="captura.cod_loc = $event"
                     />
-                  </div>
                   </div>
                 </div>
               </div>
@@ -137,7 +154,11 @@
                     <CmbAuxiliares
                       :tipo="2"
                       @selValue="captura.agravo = $event"
+                      :errclass="{ 'is-danger': v$.captura.agravo.$error }"
                     />
+                    <span class="is-error" v-if="v$.captura.agravo.$error">
+                    {{ v$.captura.agravo.$errors[0].$message }}
+                  </span>
                   </div>
                 </div>
                 <div class="field column is-5">
@@ -146,7 +167,11 @@
                     <CmbAuxiliares
                       :tipo="3"
                       @selValue="captura.atividade = $event"
+                      :errclass="{ 'is-danger': v$.captura.id_municipio.$error }"
                     />
+                    <span class="is-error" v-if="v$.captura.atividade.$error">
+                    {{ v$.captura.atividade.$errors[0].$message }}
+                  </span>
                   </div>
                 </div>
               </div>
@@ -154,20 +179,24 @@
               <div class="columns">
                 <div class="field column is-4">
                   <label class="label">Equipe</label>
-                  <div class="control has-icons-left has-icons-right">
+                  <div class="control">
                     <input
-                      class="input is-danger"
+                      class="input"
                       type="text"
                       placeholder="Nome da localidade"
                       v-model="captura.equipe"
+                      :class="{ 'is-danger': v$.captura.equipe.$error }"
                     />
+                    <span class="is-error" v-if="v$.captura.equipe.$error">
+                    {{ v$.captura.equipe.$errors[0].$message }}
+                  </span>
                   </div>
                 </div>
                 <div class="field column is-7">
                   <label class="label">Observação</label>
-                  <div class="control has-icons-left has-icons-right">
+                  <div class="control">
                     <input
-                      class="input is-danger"
+                      class="input"
                       type="text"
                       placeholder="Nome da localidade"
                       v-model="captura.obs"
@@ -195,6 +224,14 @@ import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 import capturaService from "@/services/captura.service";
 import moment from 'moment';
+import footerCard from "@/components/forms/FooterCard.vue";
+import useValidate from "@vuelidate/core";
+import {
+  required$,
+  combo$,
+  requiredIf$,
+  maxLength$,
+} from "../components/forms/validators.js";
 
 
 export default {
@@ -205,6 +242,7 @@ export default {
     CmbAuxiliares,
     CmbMunicipio,
     CmbLocalidade,
+    footerCard
   },
   data() {
     return {
@@ -225,7 +263,7 @@ export default {
         obs: '',
         id_usuario: 0,
       },
-
+      v$: useValidate(),
       isLoading: false,
       message: "",
       caption: "",
@@ -237,6 +275,20 @@ export default {
           strAux:'',
           aux: false
         }
+    };
+  },
+  validations() {
+    return {
+      captura: {
+        dt_captura: {required$,},
+        execucao: {required$,},
+        exec_3: {requiredIf: requiredIf$(this.captura.execucao == 3), maxLength: maxLength$(20) },
+        zona: {minValue: combo$(1),},
+        id_municipio: {minValue: combo$(1),},
+        agravo: {minValue: combo$(1),},
+        atividade: {minValue: combo$(1),},
+        equipe: {required$, maxLength: maxLength$(20)},
+      },
     };
   },
   computed: {
@@ -251,29 +303,38 @@ export default {
       }
     },
     create() {
-      document.getElementById('login').classList.add('is-loading');
-      
-      capturaService.create(this.captura).then(
-        (response) => {
-          this.showMessage = true;
-          this.message = "Captura inserida com numero: " + response.codigo;
-          this.type = "success";
-          this.caption = "Captura";
-          setTimeout(() => {
-            this.showMessage = false; 
-            this.$router.push("/captura_det/"+response)}, 3000);
-        },
-        (error) => {
-          this.message = error;
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "Captura";
-          setTimeout(() => (this.showMessage = false), 3000);
-        }
-      )
-      .finally(() => {
-        document.getElementById('login').classList.remove('is-loading');
-      });
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.$error) {
+        document.getElementById('login').classList.add('is-loading');
+        
+        capturaService.create(this.captura).then(
+          (response) => {
+            this.showMessage = true;
+            this.message = "Captura inserida com numero: " + response.data.master.codigo;
+            this.type = "success";
+            this.caption = "Captura";
+            setTimeout(() => {
+              this.showMessage = false; 
+              this.$router.push("/captura_det/"+response.data.master.id_captura)}, 5000);
+          },
+          (error) => {
+            this.message = error;
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Captura";
+            setTimeout(() => (this.showMessage = false), 3000);
+          }
+        )
+        .finally(() => {
+          document.getElementById('login').classList.remove('is-loading');
+        });
+      } else {
+        this.message = "Corrija os erros para enviar as informações";
+        this.showMessage = true;
+        this.type = "alert";
+        this.caption = "Captura";
+        setTimeout(() => (this.showMessage = false), 3000);
+      }  
     },
     loadData() {
       this.isLoading = true;

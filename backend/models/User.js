@@ -173,20 +173,15 @@ class User{
     }
 
     async delete(id){
-        var user = await this.findById(id);
-        if(user != undefined){
-
-            try{
-                await knex.delete().where({id: id}).table("usuario");
-                return {status: true}
-            }catch(err){
-                return {status: false,err: err}
-            }
-        
-        }else{
-            return {status: false,err: "O usuário não existe, portanto não pode ser deletado."}
+        try{
+          
+          await knex('usuario').where('id_usuario', id)
+          .update({ deleted: 1 });
+          
+        }catch(err){
+            console.log(err);
         }
-    }
+    } 
 
     async changePassword(newPassword,id,token){
         var hash = await bcrypt.hash(newPassword, 10);

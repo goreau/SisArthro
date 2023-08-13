@@ -32,6 +32,16 @@ class TerritorioService {
     })
   }
 
+  delete(id) {
+    return axios.delete(`/localidade/${id}`)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
+
   getLocalidades(filter) {
     return axios.get(`/localidades/${filter}`)
     .then(response => {

@@ -1,7 +1,7 @@
 <template>
   <div class="control">
     <div class="select">
-      <select @change="onChange($event)" class="input">
+      <select @change="onChange($event)" class="input" :class="errclass">
         <option value="0">-- Selecione --</option>
         <option
           v-for="loc in localidades"
@@ -26,7 +26,7 @@ export default {
       localidades: [],
     };
   },
-  props: ['id_mun','sel'],
+  props: ['id_mun','sel', 'errclass'],
   methods: {
     onChange(event) {
       this.$emit('selLoc',event.target.value);

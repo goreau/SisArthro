@@ -53,6 +53,26 @@ class CapturaService {
     })
   }
 
+  createAux(data) {
+    return axios.post("/auxiliares", data)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
+
+  editAux(data) {
+    return axios.put("/auxiliares", data)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
+
   getAuxiliares(tp) {
     return axios.get(`/auxiliares/${tp}`)
     .then(response => {
@@ -62,6 +82,46 @@ class CapturaService {
         return error;
     })
   } 
+
+  getAuxiliaresEd(tp) {
+    return axios.get(`/auxiliaresEd/${tp}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
+  delete(id) {
+    return axios.delete(`/captura/${id}`)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
+
+  deleteDet(id) {
+    return axios.delete(`/captura_det/${id}`)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
+
+  deleteAux(id) {
+    return axios.delete(`/auxiliares/${id}`)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
 
   getCapturas(filter) {
     return axios.get(`/capturas/${filter}`)
@@ -103,6 +163,25 @@ class CapturaService {
     })
   } 
 
+  getCombo(mun) {
+    return axios.get(`/comboCapt/${mun}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
+  getAmostras(id) {
+    return axios.get(`/comboAm/${id}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
 
 }
 

@@ -48,6 +48,17 @@ class AuthService {
       })
     }
 
+    delete(id) {
+      return axios.delete(`/user/${id}`)
+      .then(response => {
+        return response;
+      },
+      (error) => {
+        return error.response.data;
+      })
+    }
+  
+
     getUserData(id) {
       var headers = authHeader();
       headers['Content-Type'] = "application/json";

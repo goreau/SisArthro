@@ -115,10 +115,10 @@ class UserController{
         res.json(ends);
     }
 
-    async deleteEndereco(req, res) {
+    async delete(req, res) {
         var id = req.params.id;
 
-        var end = await User.delEndereco(id);
+        var end = await User.delete(id);
         res.json(end);
     }
 

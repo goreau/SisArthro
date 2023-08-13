@@ -16,7 +16,7 @@
                     <div class="control has-icons-left has-icons-right">
                       <input class="input is-danger" type="text" placeholder="Nome de usuário" v-model="username">
                       <span class="icon is-small is-left">
-                        <font-awesome-icon icon="fa-solid fa-envelope" />
+                        <font-awesome-icon icon="fa-solid fa-user" />
                       </span>
                     </div>
                   </div>

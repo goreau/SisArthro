@@ -18,15 +18,16 @@
             <div class="content">
               <div class="field">
                 <label class="label">Nome</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome"
                     v-model="user.name"
+                    :class="{ 'is-danger': v$.user.name.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.user.name.$error">
+                    {{ v$.user.name.$errors[0].$message }}
                   </span>
                 </div>
               </div>
@@ -36,7 +37,11 @@
                   <CmbMunicipio
                     :id_prop="currentUser.id"
                     @selMun="user.id_municipio = $event"
+                    :errclass="{ 'is-danger': v$.user.id_municipio.$error }"
                   />
+                  <span class="is-error" v-if="v$.user.id_municipio.$error">
+                    {{ v$.user.id_municipio.$errors[0].$message }}
+                  </span>
                 </div>
               </div>
               <div class="field">
@@ -72,32 +77,37 @@
                     Município
                   </label>
                 </div>
+                <span class="is-error" v-if="v$.user.role.$error">
+                    {{ v$.user.role.$errors[0].$message }}
+                </span>
               </div>
               <div class="field">
                 <label class="label">Email</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="E-mail"
                     v-model="user.email"
+                    :class="{ 'is-danger': v$.user.email.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.user.email.$error">
+                    {{ v$.user.email.$errors[0].$message }}
                   </span>
                 </div>
               </div>
               <div class="field">
                 <label class="label">Login</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome de usuário"
                     v-model="user.username"
+                    :class="{ 'is-danger': v$.user.username.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.user.username.$error">
+                    {{ v$.user.username.$errors[0].$message }}
                   </span>
                 </div>
               </div>
@@ -109,39 +119,32 @@
                     type="password"
                     v-model="user.password"
                     placeholder="Informe a senha"
+                    :class="{ 'is-danger': v$.user.password.$error }"
                   />
+                  <span class="is-error" v-if="v$.user.password.$error">
+                    {{ v$.user.password.$errors[0].$message }}
+                  </span>
                 </div>
               </div>
               <div class="field">
-                <label class="label">Senha</label>
+                <label class="label">Confirme a Senha</label>
                 <div class="control">
                   <input
                     class="input"
                     type="password"
-                    v-model="user.password"
+                    v-model="senha"
                     placeholder="Confirme a senha"
+                    :class="{ 'is-danger': v$.senha.$error }"
                   />
+                  <span class="is-error" v-if="v$.senha.$error">
+                    {{ v$.senha.$errors[0].$message }}
+                  </span>
                 </div>
               </div>
             </div>
           </div>
           <footer class="card-footer">
-            <div class="column is-full">
-              <div class="columns is-centered">
-                <div class="column is-4">
-                  <div class="control">
-                    <button class="button is-link submit-btn is-fullwidth" @click="register">
-                      Salvar
-                    </button>
-                  </div>
-                </div>
-                <div class="column is-4">
-                  <div class="control">
-                    <button class="button is-link is-light is-fullwidth">Cancelar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <footerCard @submit="login" @cancel="" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -153,7 +156,16 @@
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
+import footerCard from '@/components/forms/FooterCard.vue'
 import authService from "@/services/auth.service";
+import useValidate from "@vuelidate/core";
+import {
+  required$,
+  combo$,
+  minLength$,
+  email$,
+  sameAs$
+} from "../components/forms/validators.js";
 
 export default {
   data() {
@@ -167,12 +179,33 @@ export default {
         role: 0,
         id_prop: 0,
       },
+      senha: '',
+      v$: useValidate(),
       isLoading: false,
       message: "",
       caption: "",
       type: "",
       showMessage: false,
+      cFooter:{
+          strSubmit:'Entrar',
+          strCancel: 'Cancelar',
+          strAux:'',
+          aux: false
+        }
     };
+  },
+  validations(){
+    return {
+      user: {
+        name: {required$, minLength: minLength$(10)},
+        username: {required$, minLength: minLength$(5)},
+        password: {required$, minLength: minLength$(4)},
+        email: {required$, email$},
+        id_municipio: {minValue: combo$(1)},
+        role: { minValue: combo$(1) },
+      },
+      senha: {sameAs: sameAs$(this.user.password)}
+    }
   },
   computed: {
     loggedIn() {
@@ -186,35 +219,46 @@ export default {
     Message,
     Loader,
     CmbMunicipio,
+    footerCard
   },
   methods: {
     register() {
-      this.isLoading = true;
+      this.v$.$validate(); 
+      if (!this.v$.$error) {
+        document.getElementById("login").classList.add("is-loading");
 
-      authService.register(this.user).then(
-        (response) => {
-          this.showMessage = true;
-          this.msg = "Usuário cadastrado comm sucesso.";
-          this.type = "success";
-          this.caption = "Usuário";
-          setTimeout(() => (this.showMessage = false), 3000);
-        },
-        (error) => {
-          this.msg =
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.response.data ||
-            error.message ||
-            error.toString();
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "Usuário";
-          setTimeout(() => (this.showMessage = false), 3000);
-        }
-      );
-
-      this.isLoading = false;
+        authService.register(this.user).then(
+          (response) => {
+            this.showMessage = true;
+            this.msg = "Usuário cadastrado comm sucesso.";
+            this.type = "success";
+            this.caption = "Usuário";
+            setTimeout(() => (this.showMessage = false), 3000);
+          },
+          (error) => {
+            this.msg =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.response.data ||
+              error.message ||
+              error.toString();
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Usuário";
+            setTimeout(() => (this.showMessage = false), 3000);
+          }
+        )
+        .finally(() => {
+            document.getElementById("login").classList.remove("is-loading");
+          });
+      } else {
+        this.message = "Corrija os erros para enviar as informações";
+        this.showMessage = true;
+        this.type = "alert";
+        this.caption = "Usuário";
+        setTimeout(() => (this.showMessage = false), 3000);
+      }
     },
   },
   mounted() {

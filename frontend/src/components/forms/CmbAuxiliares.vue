@@ -1,7 +1,7 @@
 <template>
   <div class="control">
     <div class="select">
-      <select @change="onChange($event)" class="input">
+      <select @change="onChange($event)" class="input" :class="errclass">
         <option value="0">-- Selecione --</option>
         <option
           v-for="aux in auxiliares"
@@ -26,7 +26,7 @@ export default {
       auxiliares: [],
     };
   },
-  props: ['tipo', 'sel'],
+  props: ['tipo', 'sel', 'errclass'],
   methods: {
     onChange(event) {
       this.$emit('selValue',event.target.value);

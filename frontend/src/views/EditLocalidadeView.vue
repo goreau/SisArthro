@@ -20,7 +20,7 @@
                 <label class="label">Município</label>
                 <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome"
                     v-model="municipio"
@@ -30,15 +30,16 @@
               </div>
               <div class="field">
                 <label class="label">Nome</label>
-                <div class="control has-icons-left has-icons-right">
+                <div class="control">
                   <input
-                    class="input is-danger"
+                    class="input"
                     type="text"
                     placeholder="Nome"
                     v-model="loc.nome"
+                    :class="{ 'is-danger': v$.loc.nome.$error }"
                   />
-                  <span class="icon is-small is-left">
-                    <font-awesome-icon icon="fa-solid fa-envelope" />
+                  <span class="is-error" v-if="v$.loc.nome.$error">
+                    {{ v$.loc.nome.$errors[0].$message }}
                   </span>
                 </div>
               </div>
@@ -56,7 +57,13 @@
 <script>
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
+import footerCard from "@/components/forms/FooterCard.vue";
 import localidadeService from "@/services/localidade.service";
+import useValidate from "@vuelidate/core";
+import {
+  required$,
+  minLength$,
+} from "../components/forms/validators.js";
 
 export default {
   data() {
@@ -67,7 +74,7 @@ export default {
         id_municipio: 0,
         id_usuario: 0,
       },
-      
+      v$: useValidate(),
       municipio:'',
       isLoading: false,
       message: "",
@@ -82,6 +89,17 @@ export default {
         }
     };
   },
+  validations() {
+    return {
+      loc: {
+        nome: {
+          required$,
+          minLength: minLength$(3),
+          maxLength: maxLength$(100)
+        }
+      },
+    };
+  },
   computed: {
     currentUser() {
       return this.$store.getters["auth/loggedUser"];
@@ -90,40 +108,40 @@ export default {
   components: {
     Message,
     Loader,
+    footerCard
   },
   methods: {
-    validate(){
-      var match = true;// this.old_password === this.user.password;
-      if (!match){
-        this.message = 'A senha informada não confere. Verifique!';
+    edit() {
+      this.v$.$validate(); // checks all inputs
+      if (!this.v$.$error) {
+        document.getElementById('login').classList.add('is-loading');
+        
+        localidadeService.edit(this.loc).then(
+          (response) => {
+            this.showMessage = true;
+            this.message = "Localidade alterada.";
+            this.type = "success";
+            this.caption = "Localidade";
+            setTimeout(() => (this.showMessage = false), 3000);
+          },
+          (error) => {
+            this.message = error;
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Localidade";
+            setTimeout(() => (this.showMessage = false), 3000);
+          }
+        )
+        .finally(() => {
+          document.getElementById('login').classList.remove('is-loading');
+        });
+      } else {
+        this.message = "Corrija os erros para enviar a informação";
         this.showMessage = true;
         this.type = "alert";
-        this.caption = "Senha atual";
-        setTimeout(() => {this.showMessage = false; this.old_password='';}, 3000);
+        this.caption = "Localidade";
+        setTimeout(() => (this.showMessage = false), 3000);
       }
-    },
-    edit() {
-      document.getElementById('login').classList.add('is-loading');
-      
-      localidadeService.edit(this.loc).then(
-        (response) => {
-          this.showMessage = true;
-          this.message = "Localidade alterada.";
-          this.type = "success";
-          this.caption = "Localidade";
-          setTimeout(() => (this.showMessage = false), 3000);
-        },
-        (error) => {
-          this.message = error;
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "Localidade";
-          setTimeout(() => (this.showMessage = false), 3000);
-        }
-      )
-      .finally(() => {
-        document.getElementById('login').classList.remove('is-loading');
-      });
     },
     loadData() {
       this.isLoading = true;

@@ -31,8 +31,29 @@ class CodendService {
     })
   }
 
+  delete(id) {
+    return axios.delete(`/codend/${id}`)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
+
+
   getCodends(filter) {
     return axios.get(`/codends/${filter}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getCodendsByQuadra(qt) {
+    return axios.get(`/codendsbyquadra/${qt}`)
     .then(response => {
         return {data: response.data};
     },

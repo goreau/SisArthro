@@ -18,7 +18,7 @@ class Codend{
         .table("codend as c")
         .join('municipio as m','m.id_municipio','=','c.id_municipio')
         .where({'c.id_codend': id}); //usar o filtro aqui
-console.log(id)
+
         return result;
     }catch(err){
         console.log(err);
@@ -66,6 +66,31 @@ console.log(id)
         return [];
     }
   }
+
+  async getCodendsByQuadra(qt){
+    try{
+        var result =  await knex.select(["c.id_codend"])
+        .column(knex.raw("CONCAT(c.codigo, ' - (', TRIM(c.logradouro), ', ', TRIM(c.numero), ')') as codigo"))
+        .table("codend as c")
+        .where({'c.id_quarteirao': qt}); 
+
+        return result;
+    }catch(err){
+        console.log(err);
+        return [];
+    }
+  }
+
+  async delete(id){
+    try{
+      
+      await knex('codend').where('id_codend', id)
+      .update({ deleted: 1 });
+      
+    }catch(err){
+        console.log(err);
+    }
+  } 
 
 }
 

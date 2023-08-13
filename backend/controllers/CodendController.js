@@ -40,6 +40,19 @@ class CodendController {
     var locs = await Codend.getCodendsByMun(mun);
     res.json(locs);
   }
+
+  async getCodendsByQuadra(req, res) {
+    var qt = req.params.qt;
+    var locs = await Codend.getCodendsByQuadra(qt);
+    res.json(locs);
+  }
+
+  async delete(req, res) {
+    var id = req.params.id;
+    var result = await Codend.delete(id);
+    res.status(200);
+    res.json({ msg: "Endereço excluído!" });
+  }
 }
 
 module.exports = new CodendController();

@@ -1,16 +1,19 @@
 <template>
   <div class="conteudo">
     <div class="tile is-ancestor">
-      <div class="tile is-2">
+      <div class="tile is-3">
         <nav>
           <router-link to="/home" id="logo_url">
             <img src="@/assets/micro_t.png" alt="img" id="logo" />
           </router-link>
         </nav>
+        <p class="title">SisArtrho</p>
       </div>
       <div class="tile">
-        <p class="title">SisArtrho - fffffff</p>
+        
+        <Breadcrumb />
       </div>
+      
     </div>
     
   </div>
@@ -18,19 +21,26 @@
 
 <script>
 // import Name from '@/components/Name.vue';
+import Breadcrumb from '@/components/general/Breadcrumb.vue';
 
 export default {
   name: "Header",
-  components: {},
+  components: {
+    Breadcrumb
+  },
 };
 </script>
 
 <style scoped>
 .conteudo {
   height: 4rem;
-  background-color: #13156e;
-  border-bottom: 4px solid #111;
+  background-color: #2B3856;
+  border-bottom: 4px solid #121f3d;
   padding: 1rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 10;
 }
 nav {
   

@@ -40,6 +40,13 @@ class LocalidadeController {
     var locs = await Localidade.getLocalidades(mun);
     res.json(locs);
   }
+
+  async delete(req, res) {
+    var loc = req.params.id;
+    var result = await Localidade.delete(loc);
+    res.status(200);
+    res.json({ msg: "Localidade excluída!" });
+  }
 }
 
 module.exports = new LocalidadeController();
