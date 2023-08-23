@@ -63,6 +63,7 @@ import useValidate from "@vuelidate/core";
 import {
   required$,
   minLength$,
+  maxLength$,
 } from "../components/forms/validators.js";
 
 export default {

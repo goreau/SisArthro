@@ -83,7 +83,7 @@ console.log(femea);
 
   async getIdentificas(filt){
     try{
-        var result =  await knex.select(["i.id_identificacao", "m.nome as municipio", "c.codigo", "i.dt_identificacao"])
+        var result =  await knex.select(["i.id_identificacao", "m.nome as municipio", "c.codigo", "i.dt_identificacao", "i.id_usuario"])
         .table("identificacao as i")
         .join('captura as c','c.id_captura','=','i.id_captura')
         .join('municipio as m','m.id_municipio','=','c.id_municipio');

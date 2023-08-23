@@ -1,71 +1,4 @@
 <template>
-  <div class="columns is-centered" v-if="is-centered">
-    <div class="column is-2">
-      <div class="field is-horizontal">
-        <label class="label" style="padding-right: 2rem">Filtrar: </label>
-        <label class="switch">
-          <input type="checkbox" @change="toggleFilter($event)" />
-          <span class="slider round"></span>
-        </label>
-      </div>
-    </div>
-    <div class="column is-10" :style="{visibility: filter ? 'visible' : 'hidden'}">
-      <div class="columns">
-        <div class="column is-3">
-          <div class="select">
-            <select v-model="form.column">
-              <option value="0">-- Coluna --</option>
-              <option
-                v-for="(item, index) in columns"
-                :key="index"
-                :value="item.field"
-              >
-                {{ item.title }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="field">
-            <div class="select">
-              <select v-model="form.operator">
-                <option value="0">-- Comparador --</option>
-                <option value="=">igual a</option>
-                <option value=">">maior que</option>
-                <option value="<">menor que</option>
-                <option value="!=">diferente de</option>
-                <option value="like">contendo</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="field has-addons">
-            <input
-              type="text"
-              class="input"
-              v-model="form.value"
-              placeholder="Valor a filtrar"
-            />
-            <div class="control">
-              <a class="button is-info" @click="setFilter">
-                <span class="icon is-small">
-                  <font-awesome-icon icon="fa-solid fa-search" />
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="column is-1">
-          <button class="button is-success is-outlined" title="Limpar" @click="clearFilter">
-            <span class="icon is-small">
-                  <font-awesome-icon icon="fa-solid fa-broom" />
-                </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="has-text-right">
     <button
@@ -98,17 +31,21 @@
     </button>
   </div>
   <div ref="table" class="is-striped"></div>
+  <div ref="tableExp" style="display: none;" ></div>
 </template>
 
 <script>
 import { TabulatorFull as Tabulator } from "tabulator-tables"; //import Tabulator library
 import lang from "./lang";
-
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 
 export default {
   data() {
     return {
       tabulator: null, //variable to hold your table
+      tabulatorExp: null,
+      xuxu: "coisas",
       form: {
         column: "0",
         operator: "0",
@@ -135,40 +72,113 @@ export default {
       this.tabulator.clearFilter();
     },
     download_csv() {
-      this.tabulator.download("csv", "data.csv");
+      this.tabulatorExp.download("csv", "data.csv");
+      //this.tabulatorExp.download(dataTreeCSVfileFormatter, "data.csv",{nested:true, nestedParentTitle:"Parent Name", nestedParentField:"name"});
     },
     download_xlsx() {
-      this.tabulator.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
-    },
-    download_pdf() {
-      this.tabulator.download("pdf", "data.pdf", {
-        orientation: "portrait", //set page orientation to portrait
-        title: "Relatório SisArthro", //add title to report
+      this.tabulatorExp.download("xlsx", "data.xlsx", {
+        sheetName: "SisArthro",
       });
     },
     download_json() {
       this.tabulator.download("json", "data.json");
     },
+    download_pdf() {
+      this.tabulatorExp.download("pdf", "data.pdf", {
+        orientation: "landscape", //set page orientation to portrait
+        title: "Relatório SisArthro", //add title to report
+      });
+    },
     toggleFilter(e) {
       this.filter = e.target.checked;
     },
   },
-  props: ["tableData", "columns","is-filtered"],
+  props: ["tableData", "columns", "expData", "expColumns"],
   watch: {
     tableData(value) {
       this.tabulator = new Tabulator(this.$refs.table, {
         langs: lang,
         locale: "pt-br",
-        data: value, //link data to table
         layout: "fitColumns",
         placeholder:"Nenhum registro atende aos critérios escolhidos!",
-        reactiveData: true, //enable data reactivity
-        columns: this.columns, //define table columns
+        height: 600,
+        columnDefaults: {
+          resizable: true,
+        },
+        data: this.tableData,
+        columns: this.columns,
         pagination: "local",
         paginationSize: 10,
         paginationSizeSelector: [5, 10, 15, 20],
-        movableColumns: true,
         paginationCounter: "rows",
+        rowFormatter: function (row) {
+          //create and style holder elements
+          var holderEl = document.createElement("div");
+          var tableEl = document.createElement("div");
+
+          const id = row.getData().id;
+
+          holderEl.style.boxSizing = "border-box";
+          holderEl.style.padding = "10px 30px 10px 10px";
+          holderEl.style.borderTop = "1px solid #333";
+          holderEl.style.borderBotom = "1px solid #333";
+          holderEl.setAttribute("class", "subTable" + id + "");
+
+          tableEl.style.border = "1px solid #333";
+          holderEl.setAttribute("class", "subTable" + id + "");
+          holderEl.style.display = "none";
+
+          holderEl.appendChild(tableEl);
+
+          row.getElement().appendChild(holderEl);
+          var _nt = [];
+
+          switch (row.getData().tp) {
+            case "1":
+              _nt = [
+                { title: "Área", field: "dets.fant_area" },
+                { title: "Quadra", field: "dets.fant_quart" },
+                { title: "CodEnd", field: "dets.codend" },
+                { title: "Coordenadas", field: "dets.coordenadas" },
+                { title: "Método", field: "dets.metodo" },
+                { title: "Ambiente", field: "dets.ambiente" },
+                { title: "Local Capt", field: "dets.local_captura" },
+                { title: "No Amostra", field: "dets.amostra" },
+                { title: "Potes", field: "dets.quant_potes" },
+              ];
+              break;
+            case "2":
+              _nt = [
+                { title: "Amostra", field: "dets.amostra" },
+                { title: "Espécie", field: "dets.especie" },
+                { title: "Macho", field: "dets.macho" },
+                { title: "Fêmea", field: "dets.femea" },
+                { title: "Fêmea Ing", field: "dets.femea_ing" },
+                { title: "Larva", field: "dets.larva" },
+                { title: "Ninfa", field: "dets.ninfa" },
+                { title: "No Pool", field: "dets.pool" },
+              ];
+              break;
+            default:
+              break;
+          }
+
+          var subTable = new Tabulator(tableEl, {
+            layout: "fitColumns",
+            data: row.getData().detail,
+            columns: _nt,
+          });
+        },
+      });
+    },
+    expData(value) {
+      this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
+        langs: lang,
+        locale: "pt-br",
+        layout: "fitColumns",
+        heigth: 10,
+        data: this.expData,
+        columns: this.expColumns,
       });
     },
   },
@@ -178,20 +188,7 @@ export default {
       "src",
       "https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"
     );
-    document.head.appendChild(externalScript);
-
-   /* let externalScript1 = document.createElement("script");
-    externalScript1.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"
-    );
-    document.head.appendChild(externalScript1);
-    let externalScript2 = document.createElement("script");
-    externalScript2.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"
-    );
-    document.head.appendChild(externalScript2);*/
+    document.head.appendChild(externalScript);   
   },
 };
 </script>

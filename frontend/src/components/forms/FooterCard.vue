@@ -19,7 +19,7 @@
       </div>
       <div class="column is-4">
         <div class="control">
-          <button class="button is-link cancel-btn is-fullwidth" @click="$emit('cancel')">
+          <button class="button is-link cancel-btn is-fullwidth" @click="$router.go(-1)">
             <span class="btico"><font-awesome-icon icon="fa-solid fa-ban" /></span>
             {{ cFooter.strCancel }}
           </button>

@@ -19,7 +19,7 @@
               <div class="tile is-vertical">
                 <div class="tile">
                   <div class="tile is-parent is-vertical">
-                    <article class="tile is-child notification">
+                    <article class="tile is-child conteudo">
                       <div class="columns">
                         <div class="field column is-6">
                           <label class="label">CodSis - Município</label>
@@ -119,7 +119,7 @@
                       </div>
                     </article>
                     <article
-                      class="tile is-child notification is-warning"
+                      class="tile is-child conteudo"
                       v-if="identifica.id_identificacao > 0"
                     >
                       <div class="columns">
@@ -500,4 +500,11 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.conteudo {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    position: relative;
+    padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+}
+</style>

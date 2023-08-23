@@ -41,7 +41,13 @@ export default {
         if(rota.meta.breadcrumb.root){
             this.breadcrumbList = [{name: rota.meta.breadcrumb.name, link: rota.href }]
         } else {
+          const pos = this.breadcrumbList.map(e => e.name).indexOf(rota.meta.breadcrumb.name);
+          if (pos < 0) {
             this.breadcrumbList.push({name: rota.meta.breadcrumb.name, link: rota.href })
+          } else {          
+            this.breadcrumbList.splice(pos+1);
+          }
+            
         }
         this.quant = this.breadcrumbList.length - 1;
        // this.breadcrumbList = this.$route.meta.breadcrumb; 

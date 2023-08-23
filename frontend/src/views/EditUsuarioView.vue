@@ -12,7 +12,7 @@
         />
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title is-centered">Meu Cadastro</p>
+            <p class="card-header-title is-centered">Usuário</p>
           </header>
           <div class="card-content">
             <div class="content">
@@ -34,6 +34,7 @@
               <div class="field">
                 <label class="label">Município</label>
                 <div class="control">
+                  <div class="control">
                   <input
                     class="input"
                     type="text"
@@ -42,34 +43,38 @@
                     readonly
                   />
                 </div>
+                </div>
               </div>
               <div class="field">
                 <label class="label">Nível</label>
                 <div class="control has-icons-left has-icons-right">
-                  <label class="radio" v-if="user.role==1">
+                  <label class="radio">
                     <input
                       type="radio"
                       name="role"
                       value="1"
-                      checked="checked"
+                      v-model="user.role"
+                      :disabled="true"
                     />
                     Administrador
                   </label>
-                  <label class="radio" v-if="user.role==2">
+                  <label class="radio">
                     <input
                       type="radio"
                       name="role"
                       value="2"
-                      checked="checked"
+                      v-model="user.role"
+                      :disabled="true"
                     />
                     Regional
                   </label>
-                  <label class="radio"  v-if="user.role==3">
+                  <label class="radio">
                     <input
                       type="radio"
                       name="role"
                       value="3"
-                      checked="checked"
+                      v-model="user.role"
+                      :disabled="true"
                     />
                     Município
                   </label>
@@ -98,33 +103,25 @@
                     type="text"
                     placeholder="Nome de usuário"
                     v-model="user.username"
-                    readonly
+                    :class="{ 'is-danger': v$.user.username.$error }"
                   />
+                  <span class="is-error" v-if="v$.user.username.$error">
+                    {{ v$.user.username.$errors[0].$message }}
+                  </span>
                 </div>
               </div>
               <div class="field">
-                <label class="label">Senha Atual</label>
+                <label class="label">Senha</label>
                 <div class="control">
                   <input
                     class="input"
                     type="password"
-                    v-model="user.old_password"
+                    v-model="user.password"
                     placeholder="Informe a senha"
+                    :class="{ 'is-danger': v$.user.password.$error }"
                   />
-                </div>
-              </div>
-              <div class="field">
-                <label class="label">Nova Senha</label>
-                <div class="control">
-                  <input
-                    class="input"
-                    type="password"
-                    v-model="user.new_password"
-                    placeholder="Confirme a senha"
-                    :class="{ 'is-danger': v$.user.new_password.$error }"
-                  />
-                  <span class="is-error" v-if="v$.user.new_password.$error">
-                    {{ v$.user.new_password.$errors[0].$message }}
+                  <span class="is-error" v-if="v$.user.password.$error">
+                    {{ v$.user.password.$errors[0].$message }}
                   </span>
                 </div>
               </div>
@@ -146,7 +143,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="login" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="edit" @cancel="" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -163,6 +160,7 @@ import authService from "@/services/auth.service";
 import useValidate from "@vuelidate/core";
 import {
   required$,
+  combo$,
   minLength$,
   email$,
   sameAs$
@@ -174,23 +172,22 @@ export default {
       user: {
         name: "",
         username: "",
-        old_password: '',
-        new_password: '',
+        password: "",
         email: "",
         id_municipio: 0,
         role: 0,
-        id_usuario: 1,
+        id_prop: 0,
       },
       senha: '',
+      municipio: '',
       v$: useValidate(),
-      municipio:'',
       isLoading: false,
       message: "",
       caption: "",
       type: "",
       showMessage: false,
       cFooter:{
-          strSubmit:'Entrar',
+          strSubmit:'Salvar',
           strCancel: 'Cancelar',
           strAux:'',
           aux: false
@@ -201,8 +198,10 @@ export default {
     return {
       user: {
         name: {required$, minLength: minLength$(10)},
-        new_password: {required$, minLength: minLength$(4)},
+        username: {required$, minLength: minLength$(5)},
+        password: {required$, minLength: minLength$(4)},
         email: {required$, email$},
+        role: { minValue: combo$(1) },
       },
       senha: {sameAs: sameAs$(this.user.password)}
     }
@@ -221,22 +220,58 @@ export default {
     CmbMunicipio,
     footerCard
   },
-  methods: {  
-    update() {
+  methods: {
+    loadData(){
+      this.isLoading = true;
+
+      authService.getUserData(this.user.id_usuario).then(
+        (response) => {
+          let data = response.data;
+          this.user.name = data.name;
+          this.user.username = data.username;
+          this.id_municipio = data.id_municipio;
+          this.municipio = data.municipio;
+          this.user.email = data.email;
+          this.user.role = data.role;
+        },
+        (error) => {
+          this.message =
+            (error.response &&
+              error.response.data &&
+              error.response.data.message) ||
+            error.response.data ||
+            error.message ||
+            error.toString();
+          this.showMessage = true;
+          this.type = "alert";
+          this.caption = "Localidade";
+          setTimeout(() => (this.showMessage = false), 3000);
+        }
+      );
+
+      this.isLoading = false;
+    },
+    edit() {
       this.v$.$validate(); 
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
-        authService.update(this.user).then(
+        authService.edit(this.user).then(
           (response) => {
             this.showMessage = true;
-            this.message = "Seu cadastro foi alterado com sucesso.";
+            this.msg = "Dados do usuário alterados comm sucesso.";
             this.type = "success";
-            this.caption = "Meu Cadastro";
+            this.caption = "Usuário";
             setTimeout(() => (this.showMessage = false), 3000);
           },
           (error) => {
-            this.message = error;
+            this.msg =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.response.data ||
+              error.message ||
+              error.toString();
             this.showMessage = true;
             this.type = "alert";
             this.caption = "Usuário";
@@ -250,42 +285,16 @@ export default {
         this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
         this.type = "alert";
-        this.caption = "Meu Cadastro";
+        this.caption = "Usuário";
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
-    loadData() {
-      this.isLoading = true;
-
-      authService.getUserData(this.user.id_usuario).then(
-        (response) => {
-          let data = response.data;
-          this.user.name = data.name;
-          this.user.email = data.email;
-          this.municipio = data.municipio;
-          this.user.role = data.role;
-          this.user.password = data.password;
-          this.user.username = data.username;
-        },
-        (error) => {
-          this.message = error.data;
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "Usuário";
-          setTimeout(() => (this.showMessage = false), 3000);
-        }
-      );
-
-      this.isLoading = false;
-    },
-
   },
   mounted() {
-    let cUser = this.currentUser;
-    if (cUser){
-      this.user.id_usuario = cUser.id;
-    }
-    
+    this.user.id_prop = this.currentUser.id;
+  },
+  created() {
+    this.user.id_usuario = this.$route.params.id;
     this.loadData();
   },
 };

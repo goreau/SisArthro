@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" />
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
           </div>
         </div>
         <div style="display: none">
@@ -46,6 +46,7 @@ export default {
       columns: [],
       myspan: null,
       myspan2: null,
+      id_user: 0,
     };
   },
   components: {
@@ -73,6 +74,8 @@ export default {
   mounted() {
     this.myspan = document.getElementsByName("coisa")[0];
     this.myspan2 = document.getElementsByName("coisa2")[0];
+
+    this.id_user = this.currentUser.id;
     
     this.isLoading = true;
     identificaService.getidentificas({})
@@ -97,6 +100,7 @@ export default {
           const btEdit = document.createElement("button");
           btEdit.type = "button";
           btEdit.title = "Editar";
+          btEdit.disabled = this.id_user != row.id_usuario;
           btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
           btEdit.classList.add("button", "is-primary", "is-outlined");
           btEdit.innerHTML = this.myspan.innerHTML;
@@ -107,6 +111,7 @@ export default {
           const btDel = document.createElement("button");
           btDel.type = "button";
           btDel.title = "Excluir";
+          btDel.disabled = this.id_user != row.id_usuario;
           btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
           btDel.classList.add("button", "is-danger", "is-outlined");
           btDel.innerHTML = this.myspan2.innerHTML;
@@ -131,7 +136,11 @@ export default {
       },
     ];
   },
-  created() {},
+  computed: {
+    currentUser() {
+      return this.$store.getters["auth/loggedUser"];
+    },
+  },
 };
 </script>
 

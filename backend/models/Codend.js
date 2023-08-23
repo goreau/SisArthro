@@ -40,7 +40,7 @@ class Codend{
 
   async getCodends(filt){
     try{
-        var result =  await knex.select(["c.id_codend", "m.nome as municipio", "c.fant_quart as quarteirao", "c.codigo"])
+        var result =  await knex.select(["c.id_codend", "m.nome as municipio", "c.fant_quart as quarteirao", "c.codigo", "c.id_usuario"])
         .column(knex.raw("CONCAT(TRIM(c.logradouro), ', ', TRIM(c.numero)) as endereco"))
         .table("codend as c")
         .join('municipio as m','m.id_municipio','=','c.id_municipio');

@@ -12,12 +12,14 @@ const AuxiliaresController = require("../controllers/AuxiliaresController");
 const CapturaController = require("../controllers/CapturaController");
 const EspecieController = require("../controllers/EspecieController");
 const IdentificaController = require("../controllers/IdentificaController");
+const RelatorioController = require("../controllers/RelatorioController");
 
 
 router.get('/', HomeController.index);
 router.get('/validate', AdminAuth, HomeController.index);
-router.post('/user', UserController.create);
-router.put('/user', UserController.update);
+router.post('/user', AdminAuth, UserController.create);
+router.put('/user', AdminAuth, UserController.update);
+router.put('/editUser', AdminAuth, UserController.edit);
 router.post("/login",UserController.login);
 router.post("/endereco", AdminAuth, UserController.endereco);
 router.get("/enderecos/:id", AdminAuth, UserController.enderecos);
@@ -44,6 +46,7 @@ router.get("/municipios/:id", AdminAuth, TerritorioController.getMunicipios);
 router.get("/codsis/:id", AdminAuth, TerritorioController.getCodsis);
 router.get("/area/:id", AdminAuth, TerritorioController.getSisawebArea);
 router.get("/quarteirao/:id", AdminAuth, TerritorioController.getSisawebQuarteirao);
+router.get("/territorios/:tipo/:id",  TerritorioController.getTerritorios);
 
 router.get("/auxiliares/:tp", AdminAuth, AuxiliaresController.getAuxiliares);
 router.get("/auxiliaresEd/:tp", AdminAuth, AuxiliaresController.getAuxiliaresEd);
@@ -91,5 +94,7 @@ router.put('/identifica_det', AdminAuth, IdentificaController.updateDet);
 router.get("/identifica_dets/:master", AdminAuth, IdentificaController.getIdentificaDets);
 router.delete('/identifica_det/:id', AdminAuth, IdentificaController.deleteDet);
 
+router.post("/relat/:id", AdminAuth, RelatorioController.getRelat);
+router.post("/export/:id", AdminAuth, RelatorioController.getExport);
 
 module.exports = router;

@@ -74,14 +74,13 @@ class UserController{
     }
 
     async update(req, res){
-
         var user = req.body;
 
         if (user.password){
             let oldUser = await User.findById(user.id_usuario);
-//console.log(user.old_password);
+
             var resultado = await bcrypt.compare(user.old_password, oldUser.password);
-            console.log(resultado);
+
             if (!resultado){
                 res.status(400);
                 res.json({status: false,message:"A senha atual não está correta!"});
@@ -89,6 +88,14 @@ class UserController{
             }
         }
         user.password = user.new_password;
+
+        var ret = await User.update(user);
+        
+        res.status(200).send({data: "Tudo OK!"});
+    }
+
+    async edit(req, res){
+        var user = req.body;
 
         var ret = await User.update(user);
         
@@ -122,7 +129,7 @@ class UserController{
         res.json(end);
     }
 
-    async edit(req, res){
+    async editOff(req, res){
         var {id, name, role, email} = req.body;
         var result = await User.update(id,email,name,role);
         if(result != undefined){

@@ -1,6 +1,4 @@
 import axios from "@/services/api.js";
-import store from "@/store/index.js";
-import authHeader from './auth.header.js';
 
 class TerritorioService {
   getCodSis(id) {
@@ -54,6 +52,16 @@ class TerritorioService {
         return error.response.data;
     })
   } 
+
+  getTerritorios(tipo, id){
+    return axios.get(`/territorios/${tipo}/${id}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  }
 }
 
 export default new TerritorioService();

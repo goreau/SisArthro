@@ -13,13 +13,13 @@ import '../node_modules/tabulator-tables/dist/css/tabulator_bulma.min.css'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
-import { faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, 
-  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo } from '@fortawesome/free-solid-svg-icons'
+import { faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash,
+  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose } from '@fortawesome/free-solid-svg-icons'
 
 
 /* add icons to the library */
-library.add(faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, 
-  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo)
+library.add(faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash,
+  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose)
 
 createApp(App)
 .use(router)

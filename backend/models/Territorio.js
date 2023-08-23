@@ -107,6 +107,38 @@ class Territorio{
             return [];
         }
     }
+
+    async getTerritorios(tipo, id){
+        try{
+            var user = await knex.select(['u.role','u.id_municipio','m.id_drs', 'm.id_regional','m.id_colegiado'])
+            .table("usuario as u")
+            .join("municipio as m", "u.id_municipio","=","m.id_municipio")
+            .where({'u.id_usuario': id}).first();
+
+
+            var result =  await knex.select(["t.id_territorio", "t.nome"])
+            .table("territorio as t")
+            .where('tipo', tipo)
+            .modify(function(queryBuilder) {
+                if (user.role == 2){
+                    queryBuilder.where("t.regional", '=', user.id_regional)                   
+                } else if (user.role == 3) {
+                    if ( tipo == 1 ){
+                        queryBuilder.where("t.regional", '=', user.id_regional)    
+                    } else if ( tipo == 2 ) {
+                        queryBuilder.where("t.id_territorio", '=', user.id_drs) 
+                    } else {
+                        queryBuilder.where("t.id_colegiado", '=', user.id_colegiado)    
+                    }                   
+                }
+            }); 
+
+            return result;
+        }catch(err){
+            console.log(err);
+            return [];
+        }
+    }
 }
 
 module.exports = new Territorio();

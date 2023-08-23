@@ -250,7 +250,7 @@ export default {
         },
 
         {
-          href: "/report/0",
+          href: "/report",
           title: "Relatórios",
           icon: {
             element: "font-awesome-icon",
@@ -261,12 +261,6 @@ export default {
             },
             // text: ''
           },
-          child: [
-            {
-              href: "/report/1",
-              title: "Relatório 1",
-            },
-          ],
         },
       ],
     };

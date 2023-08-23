@@ -6,7 +6,7 @@ class User{
 
     async findAll(){
         try{
-            var result = await knex.select(["id_usuario","email","name", "username", "m.nome as municipio"])
+            var result = await knex.select(["id_usuario","email","name", "username", "id_prop", "m.nome as municipio"])
             .column(knex.raw("(CASE role WHEN 1 THEN 'Estado' WHEN 2 THEN 'Município' ELSE 'Outro' END) as role"))
             .table("usuario as u")
             .join("municipio as m","m.id_municipio", '=' , "u.id_municipio");
@@ -105,6 +105,7 @@ class User{
                 }
                 fields[property] = user[property];
             }
+            
             await knex('usuario').where('id_usuario', id).update(fields);
                
         }catch(err){

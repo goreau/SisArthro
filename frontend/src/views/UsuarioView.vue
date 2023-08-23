@@ -144,7 +144,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="login" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="register" @cancel="" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -187,7 +187,7 @@ export default {
       type: "",
       showMessage: false,
       cFooter:{
-          strSubmit:'Entrar',
+          strSubmit:'Cadastrar',
           strCancel: 'Cancelar',
           strAux:'',
           aux: false

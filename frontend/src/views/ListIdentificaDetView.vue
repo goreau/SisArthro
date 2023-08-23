@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" />
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
           </div>
         </div>
         <div style="display: none">

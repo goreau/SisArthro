@@ -21,6 +21,13 @@ class TerritorioController{
         res.json(territorio);
     }
 
+    async getTerritorios(req, res){
+        var id = req.params.id;
+        var tipo = req.params.tipo
+        var territorios = await Territorio.getTerritorios(tipo, id);
+        res.json(territorios);
+    }
+
     async getSisawebArea(req, res){
         try {
             var id_mun = req.params.id;

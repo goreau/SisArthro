@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 const routes = [
   {
     path: '/',
-    name: 'login',
+    name: 'loginHome',
     component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
     meta: {
       breadcrumb: {
@@ -67,6 +67,17 @@ const routes = [
     meta: {
       breadcrumb: {
         name: 'Lista Usuários',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/editUser/:id',
+    name: 'editUser',
+    component: () => import(/* webpackChunkName: "user" */ '../views/EditUsuarioView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Editar Usuário',
         root: false
       }
     }
@@ -292,12 +303,34 @@ const routes = [
     }
   },
   {
-    path: '/report/:id',
+    path: '/report',
     name: 'report',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ReportView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/MainReportView.vue'),
     meta: {
       breadcrumb: {
         name: 'Relatório',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/report/:id',
+    name: 'report_id',
+    component: () => import(/* webpackChunkName: "user" */ '../views/ReportView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Relatórios',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/reportN/:id',
+    name: 'reportN_id',
+    component: () => import(/* webpackChunkName: "user" */ '../views/ReportNestedView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Relatórios',
         root: true
       }
     }
