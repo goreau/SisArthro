@@ -7,6 +7,22 @@ class AuxiliaresController{
         res.json(auxs);
     }
 
+    async getAllData(req, res){
+      var auxs = await Auxiliares.getAllData();
+      res.json(auxs);
+    }
+
+    async mobExporta(req, res){
+      try {
+        var dados = req.body;
+        var result = await Auxiliares.mobExporta(dados);
+        res.status(200);
+        res.json({status: 'ok', result: result});
+      } catch (error) {
+        res.status(400).send(error);
+      }
+    }
+
     async getAuxiliaresEd(req, res){
         var tp = req.params.tp;
         var auxs = await Auxiliares.getAuxiliaresEd(tp);

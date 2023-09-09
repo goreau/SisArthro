@@ -1,3 +1,4 @@
+const TerritorioController = require("../controllers/TerritorioController");
 var knex = require("../database/connection");
 var User = require("./User")
 
@@ -86,6 +87,105 @@ class Territorio{
             }
             
             return result;
+        }catch(err){
+            console.log(err);
+            return [];
+        }
+    }
+
+    async getMobMunicipios(){
+        try{
+            var result = [];
+            
+            result = await knex.select(["id_municipio as id","nome"]).table("municipio").orderBy('nome', 'asc');
+                    
+            var ret = {'dados': result};
+            return ret;
+        }catch(err){
+            console.log(err);
+            return [];
+        }
+    }
+
+    async editPropMunicipio(dados){
+        try {
+            var {
+                tipo,
+                local,
+                id_prop,
+            } = dados;
+            console.log(dados);
+      
+            await knex("municipio")
+              .update({
+                id_prop
+              })
+              .modify(function(queryBuilder) {
+                switch (tipo) {
+                    case '2':
+                        queryBuilder.where({id_colegiado: local});
+                        break;
+                    case '3':
+                        queryBuilder.where({id_drs: local});
+                        break;
+                    case '4':
+                        queryBuilder.where({id_regional: local});
+                        break;
+                    default:
+                        queryBuilder.where({id_municipio: local});
+                        break;
+                }             
+              });
+          } catch (err) {
+            console.log(err);
+          }
+    }
+    
+
+    async getAllCadastro(mun){
+        try{
+            var result = [];
+            
+            var res = await knex.select(["id_municipio as id","nome", "codigo", "id_prop"]).table("municipio").where({id_municipio: mun});
+
+            result.push({'municipio': res});
+
+            res = await knex.select(["id_localidade as id", "id_municipio","nome", "codigo"]).table("localidade").where({id_municipio: mun});
+
+            result.push({'localidade': res});
+
+            res = await knex.select(["id_codend as id", "id_municipio", "logradouro", "numero", "complemento", "id_area", "id_quarteirao", "codigo", "fant_area", "fant_quart"]).table("codend").where({id_municipio: mun});
+
+            result.push({'codend': res});
+
+            try {
+
+                var url = process.env.SISAWEB_API;
+                
+                var response = await fetch(url + `area.php?id=${mun}`);
+            
+                res = await response.json();
+
+                result.push({'area': res.area});
+             
+
+                var response = await fetch(url + `quarteirao_mun.php?id=${mun}`);
+            
+                res = await response.json();
+            
+
+                result.push({'quarteirao': res.quarteirao});
+            
+            } catch (error) {
+                console.log(error);
+                result.push({'area': []});
+                result.push({'quarteirao': []});
+            } 
+
+                  
+            var ret = {'dados': result};
+
+            return ret;
         }catch(err){
             console.log(err);
             return [];

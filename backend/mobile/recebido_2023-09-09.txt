@@ -1,0 +1,3 @@
+10:10 - [{"id_master":1,"dt_captura":"09/09/2023","execucao":1,"exec_3":"","zona":18,"id_municipio":206,"cod_loc":6,"quadrante":22,"agravo":22,"atividade":35,"equipe":"tablet","obs":"teste do app","id_usuario":1,"detail":"[{\"area\":493,\"quadra\":95681,\"codend\":8,\"latitude\":\"-27.6121017\",\"longitude\":\"-48.4786483\",\"metodo\":55,\"ambiente\":58,\"local_captura\":75,\"num_arm\":\"\",\"altura\":\"\",\"hora_inicio\":\"10:03 AM\",\"hora_final\":\"10:35 AM\",\"temp_inicio\":\"23\",\"temp_final\":\"25\",\"umidade_inicio\":\"78\",\"umidade_final\":\"77\",\"amostra\":\"2\",\"quant_potes\":3,\"fant_area\":\"01\",\"fant_quart\":\"7\"}]"}]
+---> [{"id":1,"status":1}]
+==========================================

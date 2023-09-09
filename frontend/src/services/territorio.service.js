@@ -62,6 +62,16 @@ class TerritorioService {
         return error.response.data;
     })
   }
+
+  editPropMun(data){
+    return axios.put("/editpropmun", data)
+    .then(response => {
+      return response;
+    },
+    (error) => {
+      return error.response.data;
+    })
+  }
 }
 
 export default new TerritorioService();

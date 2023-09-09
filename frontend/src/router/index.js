@@ -303,6 +303,17 @@ const routes = [
     }
   },
   {
+    path: '/propmun',
+    name: 'propmun',
+    component: () => import(/* webpackChunkName: "user" */ '../views/EditPropMunView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Adm - Usuário/Município',
+        root: true
+      }
+    }
+  },
+  {
     path: '/report',
     name: 'report',
     component: () => import(/* webpackChunkName: "user" */ '../views/MainReportView.vue'),

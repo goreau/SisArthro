@@ -246,6 +246,18 @@ export default {
                 },
               },
             },
+            {
+              href: "/propmun",
+              title: "Usuário/Município",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-city",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
           ],
         },
 

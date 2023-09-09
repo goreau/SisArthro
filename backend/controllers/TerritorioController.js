@@ -8,6 +8,17 @@ class TerritorioController{
         res.json(muns);
     }
 
+    async getMobMunicipios(req, res){
+        var muns = await Territorio.getMobMunicipios();
+        res.json(muns);
+    }
+
+    async getAllCadastro(req, res){
+        var mun = req.params.mun;
+        var cads = await Territorio.getAllCadastro(mun);
+        res.json(cads);
+    }
+
     async getCodsis(req, res){
         var id = req.params.id;
         var muns = await Territorio.getCodsis(id);
@@ -53,6 +64,30 @@ class TerritorioController{
         } catch (error) {
             res.status(400).send('Erro de comunicação com o Sisaweb');
         } 
+    }
+
+    async getSisawebBase(req, res){
+        try {
+            var id_mun = req.params.id;
+            var url = process.env.SISAWEB_API;
+            
+            fetch(url + `base.php?nivel=1&id=${id_mun}`)
+            .then(res => res.json())
+            .then(json => res.json(json));
+        } catch (error) {
+            res.status(400).send('Erro de comunicação com o Sisaweb');
+        } 
+    }
+
+    async editPropMunicipio(req, res){
+        try {
+            var dados = req.body;
+            var result = await Territorio.editPropMunicipio(dados);
+            res.status(200);
+            res.json({ msg: "Município alterado!" });
+          } catch (error) {
+            res.status(400).send(error);
+          }
     }
 }
 

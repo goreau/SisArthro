@@ -47,6 +47,7 @@ router.get("/codsis/:id", AdminAuth, TerritorioController.getCodsis);
 router.get("/area/:id", AdminAuth, TerritorioController.getSisawebArea);
 router.get("/quarteirao/:id", AdminAuth, TerritorioController.getSisawebQuarteirao);
 router.get("/territorios/:tipo/:id",  TerritorioController.getTerritorios);
+router.put('/editpropmun', AdminAuth, TerritorioController.editPropMunicipio);
 
 router.get("/auxiliares/:tp", AdminAuth, AuxiliaresController.getAuxiliares);
 router.get("/auxiliaresEd/:tp", AdminAuth, AuxiliaresController.getAuxiliaresEd);
@@ -96,5 +97,11 @@ router.delete('/identifica_det/:id', AdminAuth, IdentificaController.deleteDet);
 
 router.post("/relat/:id", AdminAuth, RelatorioController.getRelat);
 router.post("/export/:id", AdminAuth, RelatorioController.getExport);
+
+//mobile
+router.get("/mobMunicipios", TerritorioController.getMobMunicipios);
+router.get("/mobAuxiliares", AuxiliaresController.getAllData);
+router.get("/mobCadastro/:mun", TerritorioController.getAllCadastro);
+router.post("/mobExporta", AuxiliaresController.mobExporta);
 
 module.exports = router;
