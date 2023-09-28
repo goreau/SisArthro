@@ -3,6 +3,7 @@ var express = require("express")
 const cors = require('cors')
 var app = express()
 var router = require("./routes/routes")
+
 app.use(cors());
 
 require('dotenv').config();
@@ -14,6 +15,7 @@ app.use(bodyParser.json())
 
 
 app.use("/",router);
+
 
 app.listen(process.env.PORT || 8686,() => {
     console.log("Servidor rodando")

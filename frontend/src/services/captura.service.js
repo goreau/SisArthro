@@ -183,6 +183,26 @@ class CapturaService {
     })
   } 
 
+  listFiles() {
+    return axios.get(`/listfiles`)
+    .then(response => {
+        return {data: response.data.files};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
+  getFile(file) {
+    return axios.get(`/getfile/${file}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
 }
 
 export default new CapturaService();

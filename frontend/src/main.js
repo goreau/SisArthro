@@ -18,7 +18,7 @@ import { faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExcl
 
 
 /* add icons to the library */
-library.add(faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash, faCity,
+library.add(faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash, faCity, 
   faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose)
 
 createApp(App)

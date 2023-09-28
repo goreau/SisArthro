@@ -187,8 +187,9 @@ class UserController{
     }
 
     async login(req, res){
+        console.log(req.body);
         var { username, password } = req.body;
-    
+
         try {
 
             var user = await User.findByUsername(username);

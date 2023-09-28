@@ -258,6 +258,18 @@ export default {
                 },
               },
             },
+            {
+              href: "/listfiles",
+              title: "Arquivos Tablet",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-file-lines",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
           ],
         },
 

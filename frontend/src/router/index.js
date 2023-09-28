@@ -314,6 +314,17 @@ const routes = [
     }
   },
   {
+    path: '/listfiles',
+    name: 'listfiles',
+    component: () => import(/* webpackChunkName: "user" */ '../views/ListTabletView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Adm - Arquivos Tablet',
+        root: true
+      }
+    }
+  },
+  {
     path: '/report',
     name: 'report',
     component: () => import(/* webpackChunkName: "user" */ '../views/MainReportView.vue'),

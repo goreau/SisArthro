@@ -13,6 +13,7 @@ const CapturaController = require("../controllers/CapturaController");
 const EspecieController = require("../controllers/EspecieController");
 const IdentificaController = require("../controllers/IdentificaController");
 const RelatorioController = require("../controllers/RelatorioController");
+const GenericController = require("../controllers/GenericController");
 
 
 router.get('/', HomeController.index);
@@ -103,5 +104,7 @@ router.get("/mobMunicipios", TerritorioController.getMobMunicipios);
 router.get("/mobAuxiliares", AuxiliaresController.getAllData);
 router.get("/mobCadastro/:mun", TerritorioController.getAllCadastro);
 router.post("/mobExporta", AuxiliaresController.mobExporta);
+router.get('/listfiles', AdminAuth, GenericController.listFiles);
+router.get('/getfile/:file', AdminAuth, GenericController.getFile)
 
 module.exports = router;

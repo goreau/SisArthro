@@ -59,7 +59,7 @@ class User{
         try{
             var result = await knex.select(["id_usuario","email","username", "password","role","name"]).where({username: username}).table("usuario");
             
-            
+            console.log(result);
             if(result.length > 0){
                 return result[0];
             }else{
