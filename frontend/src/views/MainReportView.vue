@@ -28,15 +28,14 @@
                             name="execucao"
                             value="1"
                             v-model="tipo_relat"
-                            :disabled="currentUser.role == 3"
                           />
                           1 - Capturas </label
-                        ><label class="radio">
+                        ><label class="radio" v-if="currentUser.role == 1">
                           <input
                             type="radio"
                             name="execucao"
                             value="101"
-                            v-model="tipo_relat"
+                            v-model="tipo_relat" 
                           />
                           3 - Extrato de Capturas
                         </label>
@@ -50,7 +49,7 @@
                             v-model="tipo_relat"
                           />
                           2 - Identificações </label
-                        ><label class="radio">
+                        ><label class="radio" v-if="currentUser.role == 1">
                           <input
                             type="radio"
                             name="execucao"
@@ -70,11 +69,11 @@
                   <div class="columns">
                     <div class="column is-full">
                       <div class="field">
-                        <label class="label">Regional</label>
+                        <label class="label">DRS</label>
                         <div class="control">
                           <CmbTerritorio
-                            :id_prop="currentUser.id" :tipo="1" :sel="filter.id_regional"
-                            @selLoc="filter.id_regional = $event"
+                            :id_prop="currentUser.id" :tipo="2" :sel="filter.id_drs"
+                            @selLoc="filter.id_drs = $event"
                           />
                         </div>
                       </div>
@@ -83,11 +82,11 @@
                   <div class="columns">
                     <div class="column is-full">
                       <div class="field">
-                        <label class="label">DRS</label>
+                        <label class="label">GVE</label>
                         <div class="control">
                           <CmbTerritorio
-                            :id_prop="currentUser.id" :tipo="2" :sel="filter.id_drs"
-                            @selLoc="filter.id_drs = $event"
+                            :id_prop="currentUser.id" :tipo="4" :sel="filter.id_gve"
+                            @selLoc="filter.id_gve = $event"
                           />
                         </div>
                       </div>
@@ -197,7 +196,7 @@ export default {
     return {
       tipo_relat: 0,
       filter: {
-        id_regional: 0,
+        id_gve: 0,
         id_drs: 0,
         id_municipio: 0,
         dt_inicio: "",

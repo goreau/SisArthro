@@ -3,7 +3,7 @@ class GenericController {
     var fs = require("fs");
     var path = require("path");
 
-    var directoryName = '../backend/mobile';
+    var directoryName = '../mobile';
     var myFiles = [];
 
       fs.readdir(directoryName, function (e, files) {

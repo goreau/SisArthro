@@ -19,7 +19,7 @@
       </div>
       <div class="column is-4">
         <div class="control">
-          <button class="button is-link cancel-btn is-fullwidth" @click="$router.go(-1)">
+          <button class="button is-link cancel-btn is-fullwidth" @click="cancel">
             <span class="btico"><font-awesome-icon icon="fa-solid fa-ban" /></span>
             {{ cFooter.strCancel }}
           </button>
@@ -33,6 +33,13 @@
 export default {
   name: "footerCard",
   props: ["cFooter"],
+  methods: {
+    cancel(){
+      if (this.$route.path != "/"){
+        this.$router.go(-1);
+      }
+    }
+  }
 };
 </script>
 

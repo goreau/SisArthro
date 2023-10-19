@@ -54,8 +54,8 @@
                   </div>
                 </div>
                 <div class="field column is-2">
-                  <label class="label">Cod End</label>
-                  <div class="select">
+                  <label class="label">Cod End/PC</label>
+                 <!-- <div class="select">
                     <select v-model="captura_det.codend" class="input">
                         <option value="0">-- Selecione --</option>
                         <option
@@ -66,6 +66,18 @@
                           {{ reg.codigo }}
                         </option>
                       </select>
+                  </div>-->
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder=""
+                      v-model="captura_det.codend"
+                      :class="{ 'is-danger': v$.captura_det.codend.$error }"
+                  />
+                  <span class="is-error" v-if="v$.captura_det.codend.$error">
+                    {{ v$.captura_det.codend.$errors[0].$message }}
+                  </span>
                   </div>
                 </div>
                 <div class="field column is-3">
@@ -466,13 +478,11 @@ export default {
     },
     getAreas() {
       capturaService
-        .getCaptura(this.master)
+        .getCaptura(this.captura_det.id_captura)
         .then((res) => {
-          console.log(res);
           territorioService
             .getAreas(res.data.id_municipio)
             .then((res) => {
-              console.log(res);
               this.area = res.data.area;
             })
             .catch((err) => {
@@ -493,7 +503,7 @@ export default {
           this.quarteirao = [];
         });
     },
-    getCodends(){
+   /* getCodends(){
       codendService.getCodendsByQuadra(this.captura_det.quadra)
       .then((res) => {
         this.codends = res.data;
@@ -501,7 +511,7 @@ export default {
       .catch((err) => {
         this.codends = [];
       })
-    },
+    },*/
     changeComma(e) {
       let str = e.target.value;
       e.target.value = str.replace(/,/g , ".")
@@ -524,7 +534,7 @@ export default {
         (item) => item.id_quarteirao === value
       );
       this.captura_det.fant_quart = fant_q[0].numero;
-      this.getCodends();
+   //   this.getCodends();
     },
   },
 };

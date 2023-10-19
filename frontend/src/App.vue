@@ -47,7 +47,7 @@ export default {
   },
   computed: {
     showMenu() {
-      this.hide = this.$route.path === "/login";
+      this.hide = this.$route.path === "/"  || this.$route.path === "/login";
       return !this.hide;
     },
   },
@@ -78,6 +78,10 @@ export default {
             {
               href: "/about",
               title: "Sobre",
+            },
+            {
+              href: "/",
+              title: "Sair",
             },
           ],
         },

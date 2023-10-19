@@ -55,7 +55,8 @@ class Localidade{
         .column(knex.raw("to_char(created_at, 'dd/mm/yyyy') as data"))
         .table("localidade as l")
         .join('municipio as m','m.id_municipio','=','l.id_municipio')
-        .where({'l.deleted': 0}); //usar o filtro aqui
+        .where({'l.deleted': 0})
+        .andWhere('l.id_municipio', filt);
 
         return result;
     }catch(err){

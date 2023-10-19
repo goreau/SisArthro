@@ -71,6 +71,7 @@
     },
     created() {
       document.getElementById('main').className = "main_colapsed";
+      this.$store.dispatch("auth/logout").then(() => {});
     /*  if (this.loggedIn) {
         this.$router.push("/home");
       }*/

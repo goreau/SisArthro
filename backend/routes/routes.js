@@ -105,6 +105,6 @@ router.get("/mobAuxiliares", AuxiliaresController.getAllData);
 router.get("/mobCadastro/:mun", TerritorioController.getAllCadastro);
 router.post("/mobExporta", AuxiliaresController.mobExporta);
 router.get('/listfiles', AdminAuth, GenericController.listFiles);
-router.get('/getfile/:file', AdminAuth, GenericController.getFile)
+router.get('/getfile/:file', AdminAuth, GenericController.getFile);
 
 module.exports = router;

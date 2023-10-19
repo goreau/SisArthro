@@ -6,7 +6,7 @@
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Gêneros Cadastrados</p>
-            <button class="button is-primary is-outlined" :disabled="id_user != 2" @click="newGen">
+            <button class="button is-primary is-outlined" :disabled="currentUser.role > 1" @click="newGen">
               <span class="icon">
                 <font-awesome-icon icon="fa-solid fa-plus-circle" />
               </span>
@@ -176,7 +176,7 @@ export default {
           const btEdit = document.createElement("button");
           btEdit.type = "button";
           btEdit.title = "Editar";
-          btEdit.disabled = this.id_user != 2;
+          btEdit.disabled = this.currentUser.role > 1;
           btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
           btEdit.classList.add("button", "is-primary", "is-outlined");
           btEdit.innerHTML = this.myspan.innerHTML;
@@ -191,7 +191,7 @@ export default {
           const btDel = document.createElement("button");
           btDel.type = "button";
           btDel.title = "Excluir";
-          btDel.disabled = this.id_user != 2;
+          btDel.disabled = this.currentUser.role > 1;
           btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
           btDel.classList.add("button", "is-danger", "is-outlined");
           btDel.innerHTML = this.myspan2.innerHTML;
