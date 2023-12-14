@@ -46,7 +46,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="edit" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>

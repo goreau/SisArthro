@@ -44,7 +44,7 @@
               </div>
           </header>
           <div class="card-content" >
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true" :has-exports="true"/>
           </div>
         </div>
         <div style="display: none">

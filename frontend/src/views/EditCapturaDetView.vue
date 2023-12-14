@@ -192,7 +192,7 @@
                   </div>
                 </div>
                 <div class="field column is-one-fifth">
-                  <label class="label">Altura AIL</label>
+                  <label class="label">Altura AIL/Plataforma</label>
                   <div class="control">
                     <input
                       class="input"
@@ -379,7 +379,7 @@
           <footer class="card-footer">
             <footerCard
               @submit="edit"
-              @cancel=""
+              @cancel="null"
               @aux="details"
               :cFooter="cFooter"
             />
@@ -396,7 +396,6 @@ import Loader from "@/components/general/Loader.vue";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import territorioService from "@/services/territorio.service";
 import capturaService from "@/services/captura.service";
-import codendService from "@/services/codend.service";
 import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
 import {
@@ -423,7 +422,6 @@ export default {
       local: [],
       area: [],
       quarteirao: [],
-      codends: [],
       captura_det: {
         id_captura: 0,
         area: "",
@@ -485,11 +483,28 @@ export default {
     };
   },
   methods: {
+    prepare(){
+      this.captura_det.temp_inicio = this.captura_det.temp_inicio == "" ? 0 : this.captura_det.temp_inicio;
+      this.captura_det.temp_final = this.captura_det.temp_final == "" ? 0 : this.captura_det.temp_final;
+      this.captura_det.umidade_inicio = this.captura_det.umidade_inicio == "" ? 0 : this.captura_det.umidade_inicio;
+      this.captura_det.umidade_final = this.captura_det.umidade_final == "" ? 0 : this.captura_det.umidade_final;
+      this.captura_det.altura = this.captura_det.altura == "" ? 0 : this.captura_det.altura;
+
+      if (this.captura_det.area == '') {
+          this.captura_det.area = '0';
+          this.captura_det.fant_area = 'N/I';
+      }
+      if (this.captura_det.quadra == '') {
+          this.captura_det.quadra = '0';
+          this.captura_det.fant_quart = 'N/I';
+      }
+    },
     edit() {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
-
+        this.prepare();
+        
         capturaService
           .editDet(this.captura_det)
           .then((response) => {
@@ -549,7 +564,6 @@ export default {
           this.captura_det.quant_potes = data.quant_potes;
           this.getAreas();
           this.getQuarteirao();
-          this.getCodends();
         },
         (error) => {
           this.message =

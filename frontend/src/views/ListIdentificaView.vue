@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        <Loader v-if="isLoading" />
+        
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Identificações</p>
@@ -14,7 +14,15 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
+            <Loader v-if="isLoading" />
+            <Message
+              v-if="showMessage"
+              @do-close="closeMessage"
+              :msg="message"
+              :type="type"
+              :caption="caption"
+            />
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true" :has-exports="true"/>
           </div>
         </div>
         <div style="display: none">
@@ -36,6 +44,7 @@ import identificaService from "@/services/identifica.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
+import Message from "@/components/general/Message.vue";
 
 export default {
   name: "ListaIdentificacao",
@@ -43,6 +52,10 @@ export default {
     return {
       dataTable: [],
       isLoading: false,
+      message: "",
+      caption: "",
+      type: "",
+      showMessage: false,
       columns: [],
       myspan: null,
       myspan2: null,
@@ -52,6 +65,7 @@ export default {
   components: {
     MyTable,
     Loader,
+    Message,
     ConfirmDialog,
   },
   methods: {
@@ -91,7 +105,10 @@ export default {
     this.columns = [
       { title: "Município", field: "municipio", type: "string" },
       { title: "Captura", field: "codigo", type: "string" },
-      { title: "Data", field: "dt_identificacao", type: "string" },
+      { title: "Data", field: "dt_identificacao", type: "string", sorter: "date", sorterParams:{
+          format:"dd/MM/yyyy",
+          alignEmptyValues:"top",
+      }},
       {
         title: "Ações",
         formatter: (cell, formatterParams) => {
@@ -118,12 +135,22 @@ export default {
           btDel.addEventListener("click", async () => {
             const ok = await this.$refs.confirmDialog.show({
                 title: 'Excluir',
-                message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
+                message: 'Deseja mesmo excluir essa identificação e todas as informações associada a ela?',
                 okButton: 'Confirmar',
             })
             if (ok) {
-              identificaService.delete(row.id_identificacao);
-              location.reload();
+              identificaService.delete(row.id_identificacao)
+              .then(()=>{
+                location.reload();
+              })
+              .catch((err)=>{
+                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Identificação";
+                setTimeout(() => (this.showMessage = false), 3000);
+              })
+              
             }
           });
 

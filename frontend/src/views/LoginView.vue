@@ -30,7 +30,7 @@
                 </div>
               </div>
               <footer class="card-footer">
-                <footerCard @submit="login" @cancel="" @aux="details" :cFooter="cFooter" />
+                <footerCard @submit="login" @cancel="null" @aux="details" :cFooter="cFooter" />
               </footer>
             </div>
           </div>
@@ -95,11 +95,11 @@
               this.showMessage = true;
               this.type = 'alert';
               this.caption = 'Erro';
-              this.message =
-              (error.response &&
+              this.message = error;
+             /* (error.response &&
                 error.response.data) ||
               error.message ||
-              error.toString();
+              error.toString();*/
               setTimeout(() => this.showMessage = false, 3000);
             }
           )

@@ -144,7 +144,7 @@
               <footer class="card-footer" v-if="nivel > 0">
                 <footerCard
                   @submit="create"
-                  @cancel=""
+                  @cancel="null"
                   @aux="details"
                   :cFooter="cFooter"
                 />

@@ -1,8 +1,8 @@
 import axios from "@/services/api.js";
 
-class CodendService {
+class CaracterizaService {
   create(data) {
-    return axios.post("/codend", data)
+    return axios.post("/caracteriza", data)
     .then(response => {
       return response;
     },
@@ -11,8 +11,8 @@ class CodendService {
     })
   }
 
-  getCodend(id) {
-    return axios.get(`/codend/${id}`)
+  getCaracteriza(id) {
+    return axios.get(`/caracteriza/${id}`)
     .then(response => {
         return {data: response.data};
     },
@@ -22,7 +22,7 @@ class CodendService {
   } 
 
   update(data) {
-    return axios.put("/codend", data)
+    return axios.put("/caracteriza", data)
     .then(response => {
       return response;
     },
@@ -32,7 +32,7 @@ class CodendService {
   }
 
   delete(id) {
-    return axios.delete(`/codend/${id}`)
+    return axios.delete(`/caracteriza/${id}`)
     .then(response => {
       return response;
     },
@@ -42,18 +42,8 @@ class CodendService {
   }
 
 
-  getCodends(filter) {
-    return axios.get(`/codends/${filter}`)
-    .then(response => {
-        return {data: response.data};
-    },
-    (error) => {
-        return error.response.data;
-    })
-  } 
-
-  getCodendsByQuadra(qt) {
-    return axios.get(`/codendsbyquadra/${qt}`)
+  getCaracterizas(master) {
+    return axios.get(`/caracterizas/${master}`)
     .then(response => {
         return {data: response.data};
     },
@@ -63,4 +53,4 @@ class CodendService {
   } 
 }
 
-export default new CodendService();
+export default new CaracterizaService();

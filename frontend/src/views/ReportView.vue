@@ -9,7 +9,7 @@
           </header>
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="false" v-if="id > 0"/>
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="false" :has-exports="true" v-if="id > 0"/>
           </div>
         </div>
       </div>

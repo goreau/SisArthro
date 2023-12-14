@@ -19,7 +19,7 @@ class CapturaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -29,7 +29,7 @@ class CapturaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -39,7 +39,7 @@ class CapturaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -49,7 +49,7 @@ class CapturaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -99,7 +99,7 @@ class CapturaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -109,7 +109,7 @@ class CapturaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -163,8 +163,8 @@ class CapturaService {
     })
   } 
 
-  getCombo(mun) {
-    return axios.get(`/comboCapt/${mun}`)
+  getCombo(mun,edt) {
+    return axios.get(`/comboCapt/${mun}/${edt}`)
     .then(response => {
         return {data: response.data};
     },

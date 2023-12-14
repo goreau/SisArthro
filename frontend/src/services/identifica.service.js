@@ -8,7 +8,7 @@ class IdentificaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -18,7 +18,7 @@ class IdentificaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -68,7 +68,7 @@ class IdentificaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 
@@ -78,7 +78,7 @@ class IdentificaService {
       return response;
     },
     (error) => {
-      return error.response.data;
+      throw new Error(error.data.msg);
     })
   }
 

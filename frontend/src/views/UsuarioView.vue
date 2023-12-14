@@ -144,7 +144,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="register" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="register" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>

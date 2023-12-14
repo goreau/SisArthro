@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <div class="has-text-right">
+  <div class="has-text-right" v-if="has-exports">
     <button
       id="download-csv"
       class="button is-link is-outlined is-small"
@@ -153,7 +153,7 @@ export default {
       this.filter = e.target.checked;
     },
   },
-  props: ["tableData", "columns","is-filtered"],
+  props: ["tableData", "columns","is-filtered","has-exports"],
   watch: {
     tableData(value) {
       this.tabulator = new Tabulator(this.$refs.table, {

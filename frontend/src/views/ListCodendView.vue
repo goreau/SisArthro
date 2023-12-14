@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true" :has-exports="true"/>
           </div>
         </div>
         <div style="display: none">
@@ -23,6 +23,9 @@
           </span>
           <span class="icon is-small is-left" name="coisa2">
             <font-awesome-icon icon="fa-solid fa-trash" />
+          </span>
+          <span class="icon is-small is-left" name="coisa1">
+            <font-awesome-icon icon="fa-solid fa-dog" />
           </span>
         </div>
       </div>
@@ -76,6 +79,7 @@ export default {
 
     this.myspan = document.getElementsByName("coisa")[0];
     this.myspan2 = document.getElementsByName("coisa2")[0];
+    this.myspan1 = document.getElementsByName("coisa1")[0];
     //document.createElement('span');
     // this.myspan.innerHTML='<p>teste</p>';;
 
@@ -134,9 +138,21 @@ export default {
             }          
           });
 
+          const btCaract = document.createElement("button");
+          btCaract.type = "button";
+          btCaract.title = "Caracterização";
+          //btCaract.disabled = this.id_user != row.id_usuario;
+          btCaract.style.cssText = "height: fit-content; margin-left: 1rem;";
+          btCaract.classList.add("button", "is-info", "is-outlined");
+          btCaract.innerHTML = this.myspan1.innerHTML;
+          btCaract.addEventListener("click", () => {
+            this.$router.push(`/caracteriza/${row.id_codend}/0`);
+          });
+
           const buttonHolder = document.createElement("span");
           buttonHolder.appendChild(btEdit);
           buttonHolder.appendChild(btDel);
+          buttonHolder.appendChild(btCaract);
 
           return buttonHolder;
         },

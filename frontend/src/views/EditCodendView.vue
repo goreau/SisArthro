@@ -122,7 +122,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="edit" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -266,6 +266,13 @@ export default {
             setTimeout(() => (this.showMessage = false), 3000);
           }
         )
+        .catch((err) => {
+                        this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                        this.showMessage = true;
+                        this.type = "alert";
+                        this.caption = "Caracterização";
+                        setTimeout(() => (this.showMessage = false), 3000);
+                    })
         .finally(() => {
           document.getElementById('login').classList.remove('is-loading');
         });

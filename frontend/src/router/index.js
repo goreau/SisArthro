@@ -149,6 +149,28 @@ const routes = [
     }
   },
   {
+    path: '/caracteriza/:master/:id',
+    name: 'caracteriza',
+    component: () => import(/* webpackChunkName: "user" */ '../views/CaracterizaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Caracterização',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/editCaracteriza/:id',
+    name: 'editCaracteriza',
+    component: () => import(/* webpackChunkName: "user" */ '../views/EditCaracterizaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Editar Caracterização',
+        root: false
+      }
+    }
+  },
+  {
     path: '/captura',
     name: 'captura',
     component: () => import(/* webpackChunkName: "user" */ '../views/CapturaView.vue'),

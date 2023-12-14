@@ -7,7 +7,7 @@
             <img src="@/assets/micro_t.png" alt="img" id="logo" />
           </router-link>
         </nav>
-        <p class="title">SisArtrho</p>
+        <p class="title">SisArthro</p>
       </div>
       <div class="tile">
         
@@ -31,7 +31,8 @@ export default {
 };
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "@/components/general/css/custom-var";
 .conteudo {
   height: 4rem;
   background-color: #2B3856;

@@ -186,7 +186,7 @@
                   </div>
                 </div>
                 <div class="field column is-one-fifth">
-                  <label class="label">Altura AIL</label>
+                  <label class="label">Altura AIL/Plataforma</label>
                   <div class="control">
                     <input
                       class="input"
@@ -342,7 +342,7 @@
           <footer class="card-footer">
             <footerCard
               @submit="create"
-              @cancel=""
+              @cancel="null"
               @aux="details"
               :cFooter="cFooter"
             />
@@ -444,10 +444,35 @@ export default {
     details() {
       this.$router.push("/captura_dets/" + this.captura_det.id_captura);
     },
+    prepare(){
+      this.captura_det.temp_inicio = this.captura_det.temp_inicio == "" ? 0 : this.captura_det.temp_inicio;
+      this.captura_det.temp_final = this.captura_det.temp_final == "" ? 0 : this.captura_det.temp_final;
+      this.captura_det.umidade_inicio = this.captura_det.umidade_inicio == "" ? 0 : this.captura_det.umidade_inicio;
+      this.captura_det.umidade_final = this.captura_det.umidade_final == "" ? 0 : this.captura_det.umidade_final;
+      this.captura_det.altura = this.captura_det.altura == "" ? 0 : this.captura_det.altura;
+
+      this.captura_det.latitude.replace(',','.');
+      this.captura_det.longitude.replace(',','.');
+      this.captura_det.temp_inicio.replace(',','.');
+      this.captura_det.temp_final.replace(',','.');
+      this.captura_det.umidade_inicio.replace(',','.');
+      this.captura_det.umidade_final.replace(',','.');
+
+      if (this.captura_det.area == '') {
+          this.captura_det.area = '0';
+          this.captura_det.fant_area = 'N/I';
+      }
+      if (this.captura_det.quadra == '') {
+          this.captura_det.quadra = '0';
+          this.captura_det.fant_quart = 'N/I';
+      }
+    },
     create() {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
+        
+        this.prepare();
 
         capturaService
           .createDet(this.captura_det)
@@ -464,6 +489,13 @@ export default {
               this.caption = "Captura";
               setTimeout(() => (this.showMessage = false), 3000);
             };
+          })
+          .catch((err) => {
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Captura";
+              setTimeout(() => (this.showMessage = false), 3000);
           })
           .finally(() => {
             document.getElementById("login").classList.remove("is-loading");
@@ -525,11 +557,17 @@ export default {
   },
   watch: {
     "captura_det.area"(value) {
+      if (value == 0){
+        return true;
+      }
       let fant_a = this.area.filter((item) => item.id_area === value);
       this.captura_det.fant_area = fant_a[0].codigo;
       this.getQuarteirao(value);
     },
     "captura_det.quadra"(value) {
+      if (value == 0){
+        return true;
+      }
       let fant_q = this.quarteirao.filter(
         (item) => item.id_quarteirao === value
       );

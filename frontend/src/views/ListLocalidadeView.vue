@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :is-filtered="true" :has-exports="true"/>
           </div>
         </div>
         <div style="display: none">
@@ -94,7 +94,10 @@ export default {
       { title: "Municipio", field: "municipio", type: "string" },
       { title: "Código", field: "codigo", type: "string" },
       { title: "Nome", field: "nome", type: "string" },
-      { title: "Data", field: "data", type: "string" },
+      { title: "Data", field: "data", type: "string", sorter: "date", sorterParams:{
+          format:"dd/MM/yyyy",
+          alignEmptyValues:"top",
+      }},
       {
         title: "Ações",
         formatter: (cell, formatterParams) => {

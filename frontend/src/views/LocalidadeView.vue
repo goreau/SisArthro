@@ -49,7 +49,7 @@
           <footer class="card-footer">
             <footerCard
               @submit="create"
-              @cancel=""
+              @cancel="null"
               @aux="details"
               :cFooter="cFooter"
             />

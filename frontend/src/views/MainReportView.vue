@@ -110,18 +110,7 @@
                       <label class="label">Início</label>
                       <div class="field">                        
                         <div class="control">
-                          <datepicker
-                            :value="ini_date"
-                            placeholder="Data de início"
-                            :config="{
-                              dateFormat: 'd/m/Y',
-                              static: true,
-                              wrap: true,
-                              onChange: setDateIni,
-                            }"
-                          >
-                          <a class="button is-light is-info is-outlined" data-clear><font-awesome-icon icon="fa-solid fa-close" /></a>
-                          </datepicker>
+                          <input type="date" id="dtIni">
                         </div>
                       </div>
                     </div>
@@ -130,20 +119,8 @@
                       <label class="label">Final</label>
                       <div class="field">                       
                         <div class="control">
-                          <datepicker
-                            :value="fim_date"
-                            placeholder="Data de término"
-                            :config="{
-                              dateFormat: 'd/m/Y',
-                              static: true,
-                              wrap: true,
-                              onChange: setDateFim,
-                            }"
-                          >
-                          <a class="button is-light is-info is-outlined" data-clear><font-awesome-icon icon="fa-solid fa-close" /></a>
-                          </datepicker>
-                        </div>
-                        
+                          <input type="date" id="dtFim">
+                        </div>                       
                       </div>
                     </div>
                   </div>
@@ -172,7 +149,7 @@
           <footer class="card-footer">
             <footerCard
               @submit="create"
-              @cancel=""
+              @cancel="null"
               @aux="details"
               :cFooter="cFooter"
             />
@@ -188,7 +165,8 @@ import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import CmbTerritorio from "@/components/forms/CmbTerritorio.vue"
-import Datepicker from "vue-bulma-datepicker";
+import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
+import "bulma-calendar/dist/css/bulma-calendar.min.css"; 
 import moment from 'moment';
 
 export default {
@@ -223,7 +201,6 @@ export default {
     Loader,
     CmbTerritorio,
     CmbMunicipio,
-    Datepicker,
   },
   methods: {
     processar() {
@@ -264,9 +241,50 @@ export default {
       this.fim_date = this.filter.dt_final == '' ? '' : moment(String(this.filter.dt_final)).format('DD/MM/YYYY');
     }
 
-    var el = document.getElementsByClassName('flatpickr-input');
-    el[0].style.width = 'auto';
-    el[1].style.width = 'auto';
+    var options = {
+      type: "date",
+      dateFormat: "dd/MM/yyyy",
+      dateStart: this.ini_date,
+      showHeader: false,
+      color: "info",
+      cancelLabel: 'Cancelar',
+      showClearButton: false,
+      todayLabel: 'Hoje'
+    };
+
+    var calini = bulmaCalendar.attach('#dtIni', options);
+
+    const element = document.querySelector('#dtIni');
+
+    if (element) {
+      // bulmaCalendar instance is available as element.bulmaCalendar
+      element.bulmaCalendar.on('select', datepicker => {
+        this.filter.dt_inicio = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+      });
+    }
+
+    options = {
+      type: "date",
+      dateFormat: "dd/MM/yyyy",
+      dateStart: this.fim_date,
+      showHeader: false,
+      color: "info",
+      cancelLabel: 'Cancelar',
+      showClearButton: false,
+      todayLabel: 'Hoje'
+    };
+
+    var calfim = bulmaCalendar.attach('#dtFim', options);
+
+    const element2 = document.querySelector('#dtFim');
+    
+    if (element2) {
+      // bulmaCalendar instance is available as element.bulmaCalendar
+      element2.bulmaCalendar.on('select', datepicker => {
+        this.filter.dt_final = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+      });
+    }
+
   },
 };
 </script>

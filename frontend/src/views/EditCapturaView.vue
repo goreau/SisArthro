@@ -33,12 +33,7 @@
                 <div class="field column is-3">
                   <label class="label">Data</label>
                   <div class="control">
-                    <datepicker
-                      :value="edt_date"
-                      placeholder="Data da atividade"
-                      :config="{ dateFormat: 'd/m/Y', static: true, onChange: setDate }"
-                      :class="{ 'is-danger': v$.captura.dt_captura.$error }"
-                    />
+                    <input type="date" id="dtCapt">
                   </div>
                   <span class="is-error" v-if="v$.captura.dt_captura.$error">
                     {{ v$.captura.dt_captura.$errors[0].$message }}
@@ -209,7 +204,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="edit" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -220,13 +215,15 @@
 <script>
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
-import Datepicker from "vue-bulma-datepicker";
 import footerCard from '@/components/forms/FooterCard.vue'
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 import capturaService from "@/services/captura.service";
 import moment from 'moment';
+import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
+import "bulma-calendar/dist/css/bulma-calendar.min.css";
+
 import useValidate from "@vuelidate/core";
 import {
   required$,
@@ -238,7 +235,6 @@ import {
 
 export default {
   components: {
-    Datepicker,
     Loader,
     Message,
     CmbAuxiliares,
@@ -291,7 +287,7 @@ export default {
         zona: {minValue: combo$(1),},
         agravo: {minValue: combo$(1),},
         atividade: {minValue: combo$(1),},
-        equipe: {required$, maxLength: maxLength$(20)},
+        equipe: {required$, maxLength: maxLength$(50)},
       },
     };
   },
@@ -301,6 +297,39 @@ export default {
     },
   },
   methods: {
+    startCalendar(){
+      var options = {
+        type: "date",
+        dateFormat: "dd/MM/yyyy",
+        startDate: this.captura.dt_captura,
+        showHeader: false,
+        color: "info",
+        cancelLabel: 'Cancelar',
+        showClearButton: false,
+        todayLabel: 'Hoje',
+        maxDate: new Date(),
+      };
+
+      var calini = bulmaCalendar.attach('#dtCapt', options);
+
+      const input = document.querySelector('.datetimepicker-dummy-input');
+      input.removeAttribute('readonly');
+      input.setAttribute('value',"__/__/____");
+      input.setAttribute('data-mask',"__/__/____");
+      this.applyDataMask(input);
+
+      input.addEventListener('blur', ()=>{
+        this.captura.dt_captura = moment(input.value).format('YYYY-MM-DD');
+      })
+
+      const element = document.querySelector('#dtCapt');
+      if (element) {
+        element.bulmaCalendar.on('select', datepicker => {
+          this.captura.dt_captura = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+        });
+      }
+
+    },
     setDate($event){
       if($event){
         this.captura.dt_captura = moment(String($event)).format('YYYY-MM-DD');
@@ -362,6 +391,8 @@ export default {
           this.captura.codigo = data.codigo;
           this.edt_date = moment(String(data.dt_captura)).format('DD/MM/YYYY');
           this.municipio = data.municipio;
+
+          this.startCalendar();
         },
         (error) => {
           this.message =
@@ -380,6 +411,43 @@ export default {
 
       this.isLoading = false;
     },
+    applyDataMask(field) {
+      var mask = field.dataset.mask.split('');
+
+      // For now, this just strips everything that's not a number
+      function stripMask(maskedData) {
+        function isDigit(char) {
+          return /\d/.test(char);
+        }
+        return maskedData.split('').filter(isDigit);
+      }
+
+      // Replace `_` characters with characters from `data`
+      function applyMask(data) {
+        return mask.map(function (char) {
+          if (char != '_') return char;
+          if (data.length == 0) return char;
+          return data.shift();
+        }).join('')
+      }
+
+      function reapplyMask(data) {
+        return applyMask(stripMask(data));
+      }
+
+      function changed() {
+        var oldStart = field.selectionStart;
+        var oldEnd = field.selectionEnd;
+
+        field.value = reapplyMask(field.value);
+
+        field.selectionStart = oldStart;
+        field.selectionEnd = oldEnd;
+      }
+
+      field.addEventListener('click', changed)
+      field.addEventListener('keyup', changed)
+    }
   },
   created() {
     this.captura.id_captura = this.$route.params.id;

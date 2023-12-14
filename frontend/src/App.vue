@@ -6,6 +6,7 @@
         :menu="menu"
         :relative="true"
         @update:collapsed="onToggleCollapse"
+        :showOneChild="true"
       />
     </div>
     <div class="main" id="main">

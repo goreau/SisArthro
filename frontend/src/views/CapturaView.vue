@@ -33,11 +33,7 @@
                 <div class="field column is-3">
                   <label class="label">Data</label>
                   <div class="control">
-                    <datepicker
-                      placeholder="Data da atividade"
-                      :config="{ dateFormat: 'd/m/Y', static: true, onChange: setDate }"
-                      :class="{ 'is-danger': v$.captura.dt_captura.$error }"
-                    />
+                    <input type="text" id="dtCapt">
                   </div>
                   <span class="is-error" v-if="v$.captura.dt_captura.$error">
                     {{ v$.captura.dt_captura.$errors[0].$message }}
@@ -207,7 +203,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="create" @cancel="" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -218,12 +214,13 @@
 <script>
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
-import Datepicker from "vue-bulma-datepicker";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 import capturaService from "@/services/captura.service";
 import moment from 'moment';
+import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
+import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
 import {
@@ -236,7 +233,6 @@ import {
 
 export default {
   components: {
-    Datepicker,
     Loader,
     Message,
     CmbAuxiliares,
@@ -287,7 +283,7 @@ export default {
         id_municipio: {minValue: combo$(1),},
         agravo: {minValue: combo$(1),},
         atividade: {minValue: combo$(1),},
-        equipe: {required$, maxLength: maxLength$(20)},
+        equipe: {required$, maxLength: maxLength$(50)},
       },
     };
   },
@@ -325,6 +321,13 @@ export default {
             setTimeout(() => (this.showMessage = false), 3000);
           }
         )
+        .catch((err) => {
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Captura";
+              setTimeout(() => (this.showMessage = false), 3000);
+          })
         .finally(() => {
           document.getElementById('login').classList.remove('is-loading');
         });
@@ -341,16 +344,90 @@ export default {
 
       this.isLoading = false;
     },
+    applyDataMask(field) {
+      var mask = field.dataset.mask.split('');
+
+      // For now, this just strips everything that's not a number
+      function stripMask(maskedData) {
+        function isDigit(char) {
+          return /\d/.test(char);
+        }
+        return maskedData.split('').filter(isDigit);
+      }
+
+      // Replace `_` characters with characters from `data`
+      function applyMask(data) {
+        return mask.map(function (char) {
+          if (char != '_') return char;
+          if (data.length == 0) return char;
+          return data.shift();
+        }).join('')
+      }
+
+      function reapplyMask(data) {
+        return applyMask(stripMask(data));
+      }
+
+      function changed() {
+        var oldStart = field.selectionStart;
+        var oldEnd = field.selectionEnd;
+
+        field.value = reapplyMask(field.value);
+
+        field.selectionStart = oldStart;
+        field.selectionEnd = oldEnd;
+      }
+
+      field.addEventListener('click', changed)
+      field.addEventListener('keyup', changed)
+    }
   },
   mounted() {
     let cUser = this.currentUser;
     if (cUser){
       this.captura.id_usuario = cUser.id;
     }
+
+    const options = {
+      type: "date",
+      dateFormat: "dd/MM/yyyy",
+      showHeader: false,
+      color: "info",
+      allowInput: true,
+      cancelLabel: 'Cancelar',
+      showClearButton: false,
+      todayLabel: 'Hoje',
+      maxDate: new Date(),
+    };
+
+    var calini = bulmaCalendar.attach('#dtCapt', options);
+
+    const element = document.querySelector('#dtCapt');
+
+    const input = document.querySelector('.datetimepicker-dummy-input');
+    input.removeAttribute('readonly');
+    input.setAttribute('value',"__/__/____");
+    input.setAttribute('data-mask',"__/__/____");
+    this.applyDataMask(input);
+
+    input.addEventListener('blur', ()=>{
+      this.captura.dt_captura = moment(input.value).format('YYYY-MM-DD');
+    })
+
+    if (element) {
+      // bulmaCalendar instance is available as element.bulmaCalendar
+      element.bulmaCalendar.on('select', datepicker => {
+        this.captura.dt_captura = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+      });
+    }
   },
 };
 </script>
 
 <style scoped>
-
+.datetimepicker-dummy.is-info 
+.datetimepicker-clear-button{
+  color: brown;
+  background-color: aqua;
+}
 </style>
