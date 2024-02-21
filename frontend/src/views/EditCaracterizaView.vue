@@ -33,54 +33,62 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="field column is-3">
+                                <div class="column is-3">
                                     <label class="label">Vegetação</label>
-                                    <div class="control">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.vegetacao">
-                                    </div>
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" v-model="caracteriza.vegetacao">
+                                        <label for="vegetacao"></label>
+                                    </div>                           
                                 </div>
                                 <div class="field column is-3">
                                     <label class="label">Mat. Orgânica</label>
-                                    <div class="control">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.mat_organica">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" v-model="caracteriza.mat_organica">
+                                        <label for="mat_organica"></label>
                                     </div>
                                 </div>
                             </div>
                             <div class="columns has-text-centered">
                                 <div class="field column is-1 is-offset-1">
                                     <label class="label">Galinha</label>
-                                    <div class="control is-centered">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.galinha">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" v-model="caracteriza.galinha">
+                                        <label for="galinha"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cão</label>
-                                    <div class="control has-icons">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.cao">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" v-model="caracteriza.cao">
+                                        <label for="cao"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Porco</label>
-                                    <div class="control has-icons">
-                                        <input type="checkbox" true-value="1" v-model="caracteriza.porco">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" v-model="caracteriza.porco">
+                                        <label for="porco"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cavalo</label>
-                                    <div class="control has-icons">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.cavalo">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" v-model="caracteriza.cavalo">
+                                        <label for="cavalo"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Coelho</label>
-                                    <div class="control has-icons">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.coelho">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" v-model="caracteriza.coelho">
+                                        <label for="coelho"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Outros</label>
-                                    <div class="control has-icons">
-                                        <input type="checkbox" true-value="1" name="" id="" v-model="caracteriza.outros">
+                                    <div class="field">                                       
+                                        <input class="is-checkradio is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" v-model="caracteriza.outros">
+                                        <label for="outros"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-5">
@@ -148,14 +156,15 @@
 
             </div>
         </div>
-    </div>
-    <div style="display: none">
-        <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-        </span>
-        <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-        </span>
+    
+        <div style="display: none">
+            <span class="icon is-small is-left" name="coisa">
+                <font-awesome-icon icon="fa-solid fa-edit" />
+            </span>
+            <span class="icon is-small is-left" name="coisa2">
+                <font-awesome-icon icon="fa-solid fa-trash" />
+            </span>
+        </div>
     </div>
 </template>
 

@@ -32,13 +32,24 @@
                 </div>
               </div>
               <div class="field">
-                <label class="label">Município</label>
-                <div class="control">
+                <label class="label">Local</label>
+                <div class="control" v-if="user.role == 3">
                   <CmbMunicipio
                     :id_prop="currentUser.id"
                     @selMun="user.id_municipio = $event"
                     :errclass="{ 'is-danger': v$.user.id_municipio.$error }"
                   />
+                  <span class="is-error" v-if="v$.user.id_municipio.$error">
+                    {{ v$.user.id_municipio.$errors[0].$message }}
+                  </span>
+                </div>
+                <div class="control" v-if="user.role == 2">
+                  <CmbTerritorio
+                        :id_prop="currentUser.id"
+                        :tipo="1"
+                        @selLoc="user.id_municipio = $event"
+                        :errclass="{ 'is-danger': v$.user.id_municipio.$error }"
+                      />
                   <span class="is-error" v-if="v$.user.id_municipio.$error">
                     {{ v$.user.id_municipio.$errors[0].$message }}
                   </span>
@@ -156,6 +167,7 @@
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
+import CmbTerritorio from "@/components/forms/CmbTerritorio.vue";
 import footerCard from '@/components/forms/FooterCard.vue'
 import authService from "@/services/auth.service";
 import useValidate from "@vuelidate/core";
@@ -219,6 +231,7 @@ export default {
     Message,
     Loader,
     CmbMunicipio,
+    CmbTerritorio,
     footerCard
   },
   methods: {
@@ -236,13 +249,7 @@ export default {
             setTimeout(() => (this.showMessage = false), 3000);
           },
           (error) => {
-            this.msg =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.response.data ||
-              error.message ||
-              error.toString();
+            this.msg = error.data.err;
             this.showMessage = true;
             this.type = "alert";
             this.caption = "Usuário";
@@ -260,6 +267,9 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
+    trocaNivel(ev){
+
+    }
   },
   mounted() {
     this.user.id_prop = this.currentUser.id;

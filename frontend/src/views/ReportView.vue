@@ -93,6 +93,21 @@ export default {
                         
           ];
           break;
+        case '103':
+          this.title = 'Extrato de Caracterizações';
+          this.columns = [
+            { title: "Município", field: "municipio" },
+            { title: "Quadra", field: "quadra" },
+            { title: "CodEnd", field: "codend" },
+            { title: "Situação", field: "situacao" },
+            { title: "Tipo Imóvel", field: "tipo_imovel" },
+            { title: "Nº Cães", field: "num_cao" },
+            { title: "Nº Caes Pos", field: "num_cao_pos" },
+            { title: "Ano Ident.", field: "ano_identifica" },
+            { title: "Soma", field: "soma" },
+                        
+          ];
+          break;
       
         default:
           break;

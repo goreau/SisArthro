@@ -59,6 +59,19 @@
                           4 - Extrato de Identificações
                         </label>
                       </div>
+                      <div class="columns">
+                        <div class="column is-6">
+                          <label class="radio">
+                            <input
+                              type="radio"
+                              name="execucao"
+                              value="103"
+                              v-model="tipo_relat"
+                            />
+                            5 - Caracterizações </label
+                          >
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -105,25 +118,27 @@
                       </div>
                     </div>
                   </div>
-                  <div class="columns">
-                    <div class="column is-half">
-                      <label class="label">Início</label>
-                      <div class="field">                        
-                        <div class="control">
-                          <input type="date" id="dtIni">
+                  <section class="section" v-show="noDate.indexOf(tipo_relat) == -1">
+                    <div class="columns">
+                      <div class="column is-half">
+                        <label class="label">Início</label>
+                        <div class="field">                        
+                          <div class="control">
+                            <input type="date" id="dtIni">
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="column is-half">
+                        <label class="label">Final</label>
+                        <div class="field">                       
+                          <div class="control">
+                            <input type="date" id="dtFim">
+                          </div>                       
                         </div>
                       </div>
                     </div>
-
-                    <div class="column is-half">
-                      <label class="label">Final</label>
-                      <div class="field">                       
-                        <div class="control">
-                          <input type="date" id="dtFim">
-                        </div>                       
-                      </div>
-                    </div>
-                  </div>
+                  </section>
                 </div>
               </section>
               <section class="section" v-if="tipo_relat > 0">
@@ -189,6 +204,7 @@ export default {
       caption: "",
       type: "",
       showMessage: false,
+      noDate: new Array('103'),
     };
   },
   computed: {

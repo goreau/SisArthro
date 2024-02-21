@@ -1,5 +1,5 @@
 <template>
-  <div class="columns is-centered" v-if="is-centered">
+  <div class="columns is-centered" :v-if="is-filtered">
     <div class="column is-2">
       <div class="field is-horizontal">
         <label class="label" style="padding-right: 2rem">Filtrar: </label>
@@ -116,6 +116,7 @@ export default {
         type: "string",
       },
       filter: false,
+      cbColumns: []
     };
   },
   methods: {
@@ -170,6 +171,7 @@ export default {
         movableColumns: true,
         paginationCounter: "rows",
       });
+      this.cbColumns = this.columns.filter( el => el.title !== "Ações");
     },
   },
   mounted() {
