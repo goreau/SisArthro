@@ -159,9 +159,24 @@ export default {
                 { title: "No Pool", field: "dets.pool" },
               ];
               break;
+            case "3":
+              _nt = [
+                { title: "Codend", field: "dets.codend" },
+                { title: "Encoleirado", field: "dets.encoleirado" },
+                { title: "Falta Coleira", field: "dets.falta" },
+                { title: "Recusa Alergia", field: "dets.alergia" },
+                { title: "Recusa Outros", field: "dets.recusa" },
+                { title: "Fechado", field: "dets.fechado" },
+                { title: "Desfecho", field: "dets.desfecho" },
+              ];
+              break;
             default:
               break;
           }
+
+        //  var myData= [];
+      //    myData.push(row.getData().detail[0].dets);
+          
 
           var subTable = new Tabulator(tableEl, {
             layout: "fitColumns",

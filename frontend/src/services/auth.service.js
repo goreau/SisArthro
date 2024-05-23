@@ -15,7 +15,7 @@ class AuthService {
           return response.data;
         },
         (error) => {
-             return error.response.data;
+             return error.data;
        })
     }
 

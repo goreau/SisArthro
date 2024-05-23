@@ -25,3 +25,5 @@ export const maxValue$ = (max) => helpers.withMessage(({ $params}) => `O valor m
 export const between$ = (min, max) => helpers.withMessage(({ $params}) => `O valor deve estar entre ${$params.min} e ${$params.max}.`, between(min, max))
 
 export const requiredIf$ = (cond) => helpers.withMessage('Informe o valor desse campo.', requiredIf(cond))
+
+export const minValueIf = (value, vm) => helpers.withMessage('Informe o valor desse campo.', minValueF(value, vm))

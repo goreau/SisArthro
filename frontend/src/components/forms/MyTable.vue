@@ -1,10 +1,10 @@
 <template>
-  <div class="columns is-centered" :v-if="is-filtered">
+  <div class="columns is-centered" v-if="filtered">
     <div class="column is-2">
       <div class="field is-horizontal">
         <label class="label" style="padding-right: 2rem">Filtrar: </label>
         <label class="switch">
-          <input type="checkbox" @change="toggleFilter($event)" />
+          <input type="checkbox" v-model="filter" @change="toggleFilter($event)" />
           <span class="slider round"></span>
         </label>
       </div>
@@ -13,7 +13,7 @@
       <div class="columns">
         <div class="column is-3">
           <div class="select">
-            <select v-model="form.column">
+            <select v-model="form.column" class="input">
               <option value="0">-- Coluna --</option>
               <option
                 v-for="(item, index) in columns"
@@ -28,7 +28,7 @@
         <div class="column is-3">
           <div class="field">
             <div class="select">
-              <select v-model="form.operator">
+              <select v-model="form.operator" class="input">
                 <option value="0">-- Comparador --</option>
                 <option value="=">igual a</option>
                 <option value=">">maior que</option>
@@ -67,7 +67,7 @@
     </div>
   </div>
 
-  <div class="has-text-right" v-if="has-exports">
+  <div class="has-text-right" v-if="exports">
     <button
       id="download-csv"
       class="button is-link is-outlined is-small"
@@ -127,6 +127,9 @@ export default {
       obj.type = col[0].type;
 
       this.tabulator.setFilter(obj.column, obj.operator, obj.value);
+
+      localStorage.setItem(this.tableName, JSON.stringify(obj));
+
     },
     clearFilter() {
       this.form.column = "0";
@@ -134,6 +137,7 @@ export default {
       this.form.value = "";
 
       this.tabulator.clearFilter();
+      localStorage.removeItem(this.tableName);
     },
     download_csv() {
       this.tabulator.download("csv", "data.csv");
@@ -143,7 +147,7 @@ export default {
     },
     download_pdf() {
       this.tabulator.download("pdf", "data.pdf", {
-        orientation: "portrait", //set page orientation to portrait
+        orientation: "landscape", //set page orientation to portrait
         title: "Relatório SisArthro", //add title to report
       });
     },
@@ -154,7 +158,7 @@ export default {
       this.filter = e.target.checked;
     },
   },
-  props: ["tableData", "columns","is-filtered","has-exports"],
+  props: ["tableData", "columns","filtered","exports","tableName"],
   watch: {
     tableData(value) {
       this.tabulator = new Tabulator(this.$refs.table, {
@@ -172,6 +176,9 @@ export default {
         paginationCounter: "rows",
       });
       this.cbColumns = this.columns.filter( el => el.title !== "Ações");
+      if (this.filter){
+        this.tabulator.setFilter(this.form.column, this.form.operator, this.form.value);
+      }
     },
   },
   mounted() {
@@ -182,18 +189,24 @@ export default {
     );
     document.head.appendChild(externalScript);
 
-   /* let externalScript1 = document.createElement("script");
+    var obj = localStorage.getItem(this.tableName);
+    if (obj) {
+      this.form = JSON.parse(obj);
+      this.filter = true;
+    }
+
+    let externalScript1 = document.createElement("script");
     externalScript1.setAttribute(
       "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"
+      "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
     );
     document.head.appendChild(externalScript1);
     let externalScript2 = document.createElement("script");
     externalScript2.setAttribute(
       "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"
+      "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"
     );
-    document.head.appendChild(externalScript2);*/
+    document.head.appendChild(externalScript2);
   },
 };
 </script>

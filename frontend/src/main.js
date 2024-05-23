@@ -14,12 +14,14 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 /* import specific icons */
 import { faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash, faCity,
-  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose, faDog } from '@fortawesome/free-solid-svg-icons'
+  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose, faDog, 
+  faImage, faFileText, faSearchLocation} from '@fortawesome/free-solid-svg-icons'
 
 
 /* add icons to the library */
 library.add(faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash, faCity, 
-  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose, faDog)
+  faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose, faDog, 
+  faImage, faFileText, faSearchLocation)
 
 createApp(App)
 .use(router)

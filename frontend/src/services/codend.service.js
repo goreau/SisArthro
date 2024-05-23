@@ -61,6 +61,16 @@ class CodendService {
         return error.response.data;
     })
   } 
+
+  getAnimalByCodend(cd){
+    return axios.get(`/comboAnimal/${cd}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  }
 }
 
 export default new CodendService();

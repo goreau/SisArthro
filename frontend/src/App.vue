@@ -152,6 +152,84 @@ export default {
           ],
         },
         {
+          href: "/canino",
+          title: "Animais",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-dog",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/caninos",
+              title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+        {
+          href: "/inquerito",
+          title: "Inquerito",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-file-text",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/inqueritos",
+              title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+        {
+          href: "/foco",
+          title: "Invest. Foco",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-search-location",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/focos",
+              title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+        {
           href: "/captura",
           title: "Captura",
           icon: {
@@ -312,7 +390,7 @@ export default {
   margin: 5rem;
   min-height: 40rem;
 }
-
+iframe#webpack-dev-server-client-overlay{display:none!important}
 html,
 body {
   height: 100%;

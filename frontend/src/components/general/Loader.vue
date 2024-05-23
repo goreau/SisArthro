@@ -13,10 +13,10 @@
   <style scoped>
   .loader-wrapper {
     position: absolute;
-    top: 10rem;
-    left: 0;
-    height: 90%;
-    width: 100%;
+    top: 25%;
+    left: 25%;
+    height: 50%;
+    width: 50%;
     background: #fff;
     opacity: 1;
     z-index: 10;

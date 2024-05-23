@@ -1,9 +1,11 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { publicPath } from '../../vue.config';
+//https://github.com/vuejs/vue-router/issues/1735
 const routes = [
   {
     path: '/',
     name: 'loginHome',
-    component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue'),
+    component: () => import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue'),
     meta: {
       breadcrumb: {
         name: 'Login',
@@ -14,7 +16,7 @@ const routes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import(/* webpackChunkName: "home" */ '../views/HomeView.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '../views/general/HomeView.vue'),
     meta: {
       breadcrumb: {
         name: 'Início',
@@ -25,7 +27,7 @@ const routes = [
   {
     path: '/mycad',
     name: 'cadastro',
-    component: () => import(/* webpackChunkName: "home" */ '../views/MyCadastroView.vue'),
+    component: () => import(/* webpackChunkName: "home" */ '../views/usuario/MyCadastroView.vue'),
     meta: {
       breadcrumb: {
         name: 'Meu Cadastro',
@@ -36,7 +38,7 @@ const routes = [
   {
     path: '/about',
     name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/general/AboutView.vue'),
     meta: {
       breadcrumb: {
         name: 'Sobre',
@@ -47,12 +49,12 @@ const routes = [
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/LoginView.vue')
+    component: () => import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue')
   },
   {
     path: '/user',
     name: 'user',
-    component: () => import(/* webpackChunkName: "user" */ '../views/UsuarioView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/usuario/UsuarioView.vue'),
     meta: {
       breadcrumb: {
         name: 'Usuário',
@@ -63,7 +65,7 @@ const routes = [
   {
     path: '/users',
     name: 'users',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListUsersView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/usuario/ListUsersView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista Usuários',
@@ -74,7 +76,7 @@ const routes = [
   {
     path: '/editUser/:id',
     name: 'editUser',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditUsuarioView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/usuario/EditUsuarioView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Usuário',
@@ -85,7 +87,7 @@ const routes = [
   {
     path: '/localidade',
     name: 'localidade',
-    component: () => import(/* webpackChunkName: "user" */ '../views/LocalidadeView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/localidade/LocalidadeView.vue'),
     meta: {
       breadcrumb: {
         name: 'Localidade',
@@ -96,7 +98,7 @@ const routes = [
   {
     path: '/localidades',
     name: 'localidades',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListLocalidadeView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/localidade/ListLocalidadeView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista Localidades',
@@ -107,7 +109,7 @@ const routes = [
   {
     path: '/editLoc/:id',
     name: 'editloc',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditLocalidadeView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/localidade/EditLocalidadeView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Localidade',
@@ -118,7 +120,7 @@ const routes = [
   {
     path: '/codend',
     name: 'codend',
-    component: () => import(/* webpackChunkName: "user" */ '../views/CodendView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/codend/CodendView.vue'),
     meta: {
       breadcrumb: {
         name: 'CodEnd',
@@ -127,9 +129,9 @@ const routes = [
     }
   },
   {
-    path: '/codends',
+    path: '/codends/:quart?',
     name: 'codends',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListCodendView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/codend/ListCodendView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista CodEnds',
@@ -140,7 +142,7 @@ const routes = [
   {
     path: '/editCod/:id',
     name: 'editcod',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditCodendView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/codend/EditCodendView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar CodEnd',
@@ -151,7 +153,7 @@ const routes = [
   {
     path: '/caracteriza/:master/:id',
     name: 'caracteriza',
-    component: () => import(/* webpackChunkName: "user" */ '../views/CaracterizaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/caracteriza/CaracterizaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Caracterização',
@@ -162,7 +164,7 @@ const routes = [
   {
     path: '/editCaracteriza/:id',
     name: 'editCaracteriza',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditCaracterizaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/caracteriza/EditCaracterizaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Caracterização',
@@ -173,7 +175,7 @@ const routes = [
   {
     path: '/captura',
     name: 'captura',
-    component: () => import(/* webpackChunkName: "user" */ '../views/CapturaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/captura/CapturaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Captura',
@@ -184,7 +186,7 @@ const routes = [
   {
     path: '/captura_det/:master',
     name: 'captura_det',
-    component: () => import(/* webpackChunkName: "user" */ '../views/CapturaDetView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/captura/CapturaDetView.vue'),
     meta: {
       breadcrumb: {
         name: 'Captura - Item',
@@ -195,7 +197,7 @@ const routes = [
   {
     path: '/captura_dets/:master',
     name: 'captura_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListCapturaDetView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/captura/ListCapturaDetView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista Itens Captura',
@@ -206,7 +208,7 @@ const routes = [
   {
     path: '/capturas',
     name: 'capturas',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListCapturaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/captura/ListCapturaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista Capturas',
@@ -217,7 +219,7 @@ const routes = [
   {
     path: '/editCapt/:id',
     name: 'editcapt',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditCapturaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/captura/EditCapturaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Captura',
@@ -228,7 +230,7 @@ const routes = [
   {
     path: '/editCaptDet/:id',
     name: 'editcaptdet',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditCapturaDetView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/captura/EditCapturaDetView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Captura Item',
@@ -237,9 +239,218 @@ const routes = [
     }
   },
   {
+    path: '/canino',
+    name: 'canino',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/CaninoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Animal - Endereço',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/canino_det/:master',
+    name: 'canino_det',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/CaninoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Animal',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/caninos',
+    name: 'caninos',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/ListCaninoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Endereços',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/canino_dets/:master',
+    name: 'canino_dets',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/ListCaninoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Animais',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editCanino/:id',
+    name: 'editcanino',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/EditCaninoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Endereço',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editCaninoCodend/:codend',
+    name: 'editcaninocodend',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/EditCaninoCodendView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Endereço',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editCaninoDet/:id',
+    name: 'editcaninodet',
+    component: () => import(/* webpackChunkName: "user" */ '../views/canino/EditCaninoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Animal',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/inquerito',
+    name: 'inquerito',
+    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/InqueritoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Inquérito',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/inquerito_det/:master/:quart',
+    name: 'inquerito_det',
+    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/InqueritoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Coletas',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/inqueritos',
+    name: 'inqueritos',
+    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Inquéritos',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/inquerito_dets/:master',
+    name: 'inquerito_dets',
+    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Coletas',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editInquerito/:id',
+    name: 'editinquerito',
+    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Inquérito',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editInqueritoDet/:id',
+    name: 'editinqueritodet',
+    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Animal',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/foco',
+    name: 'foco',
+    component: () => import(/* webpackChunkName: "user" */ '../views/foco/FocoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Inv. Foco',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/foco_det/:master/:quart',
+    name: 'foco_det',
+    component: () => import(/* webpackChunkName: "user" */ '../views/foco/FocoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Coletas',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/focos',
+    name: 'focos',
+    component: () => import(/* webpackChunkName: "user" */ '../views/foco/ListFocoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Inquéritos',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/foco_dets/:master',
+    name: 'foco_dets',
+    component: () => import(/* webpackChunkName: "user" */ '../views/foco/ListFocoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Coletas',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editFoco/:id',
+    name: 'editfoco',
+    component: () => import(/* webpackChunkName: "user" */ '../views/foco/EditFocoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Inquérito',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/editFocoDet/:id',
+    name: 'editfocodet',
+    component: () => import(/* webpackChunkName: "user" */ '../views/foco/EditFocoDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Animal',
+        root: true,
+      },
+    }
+  },
+  {
     path: '/identifica',
     name: 'identifica',
-    component: () => import(/* webpackChunkName: "user" */ '../views/IdentificaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/IdentificaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Identificação',
@@ -250,7 +461,7 @@ const routes = [
   {
     path: '/identificas',
     name: 'identificas',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListIdentificaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/ListIdentificaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Amostra Identificação',
@@ -261,7 +472,7 @@ const routes = [
   {
     path: '/editIdent/:id',
     name: 'editident',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditIdentificaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/EditIdentificaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Identificação',
@@ -272,7 +483,7 @@ const routes = [
   {
     path: '/editIdent/:id/:det',
     name: 'editident2',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditIdentificaView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/EditIdentificaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Editar Amostra Identificação',
@@ -283,7 +494,7 @@ const routes = [
   {
     path: '/identifica_dets/:master',
     name: 'identifica_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListIdentificaDetView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/ListIdentificaDetView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista Amostras Identificação',
@@ -294,7 +505,7 @@ const routes = [
   {
     path: '/generos',
     name: 'generos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListGeneroView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListGeneroView.vue'),
     meta: {
       breadcrumb: {
         name: 'Adm - Genero',
@@ -305,7 +516,7 @@ const routes = [
   {
     path: '/especies',
     name: 'especies',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListEspecieView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListEspecieView.vue'),
     meta: {
       breadcrumb: {
         name: 'Adm - Espécie',
@@ -316,7 +527,7 @@ const routes = [
   {
     path: '/auxiliares',
     name: 'auxiliares',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListAuxiliaresView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListAuxiliaresView.vue'),
     meta: {
       breadcrumb: {
         name: 'Adm - Auxiliares',
@@ -327,7 +538,7 @@ const routes = [
   {
     path: '/propmun',
     name: 'propmun',
-    component: () => import(/* webpackChunkName: "user" */ '../views/EditPropMunView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/EditPropMunView.vue'),
     meta: {
       breadcrumb: {
         name: 'Adm - Usuário/Município',
@@ -338,7 +549,7 @@ const routes = [
   {
     path: '/listfiles',
     name: 'listfiles',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ListTabletView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListTabletView.vue'),
     meta: {
       breadcrumb: {
         name: 'Adm - Arquivos Tablet',
@@ -349,7 +560,7 @@ const routes = [
   {
     path: '/report',
     name: 'report',
-    component: () => import(/* webpackChunkName: "user" */ '../views/MainReportView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainReportView.vue'),
     meta: {
       breadcrumb: {
         name: 'Relatório',
@@ -360,7 +571,7 @@ const routes = [
   {
     path: '/report/:id',
     name: 'report_id',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ReportView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/ReportView.vue'),
     meta: {
       breadcrumb: {
         name: 'Relatórios',
@@ -371,7 +582,7 @@ const routes = [
   {
     path: '/reportN/:id',
     name: 'reportN_id',
-    component: () => import(/* webpackChunkName: "user" */ '../views/ReportNestedView.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/ReportNestedView.vue'),
     meta: {
       breadcrumb: {
         name: 'Relatórios',
@@ -382,8 +593,9 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes
+  history: createWebHashHistory(process.env.BASE_URL),
+  routes,
+  base: publicPath
 });
 
 export default router
