@@ -75,7 +75,7 @@
                                 </div>
                             </div>
                             <div class="columns">   
-                                <div class="field column is-4">
+                                <div class="field column is-4 is-offset-4">
                                     <label class="label">Responsável Coleta</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Nome "
@@ -83,28 +83,6 @@
                                             :class="{ 'is-danger': v$.foco.resp_coleta.$error }" />
                                         <span class="is-error" v-if="v$.foco.resp_coleta.$error">
                                             {{ v$.foco.resp_coleta.$errors[0].$message }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="field column is-4">
-                                    <label class="label">Responsável Exame</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Nome "
-                                            v-model="foco.resp_exame"
-                                            :class="{ 'is-danger': v$.foco.resp_exame.$error }" />
-                                        <span class="is-error" v-if="v$.foco.resp_exame.$error">
-                                            {{ v$.foco.resp_exame.$errors[0].$message }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="field column is-4">
-                                    <label class="label">Responsável Eutanásia</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Nome "
-                                            v-model="foco.resp_eutanasia"
-                                            :class="{ 'is-danger': v$.foco.resp_eutanasia.$error }" />
-                                        <span class="is-error" v-if="v$.foco.resp_eutanasia.$error">
-                                            {{ v$.foco.resp_eutanasia.$errors[0].$message }}
                                         </span>
                                     </div>
                                 </div>
@@ -160,8 +138,6 @@ export default {
                 numero: '',
                 dt_foco: '',
                 resp_coleta: '',
-                resp_exame: '',
-                resp_eutanasia: '',
                 id_usuario: 0,
             },
             v$: useValidate(),
@@ -194,16 +170,7 @@ export default {
                 resp_coleta: {
                     required$,
                     maxLength: maxLength$(40)
-                },
-                resp_exame: {
-                    required$,
-                    maxLength: maxLength$(40)
-                },
-                resp_eutanasia: {
-                    required$,
-                    maxLength: maxLength$(40)
-                },
-                
+                },               
             },
         };
     },

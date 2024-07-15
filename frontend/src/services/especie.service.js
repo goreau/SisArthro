@@ -113,6 +113,26 @@ class EspecieService {
     })
   } 
 
+  comboGen() {
+    return axios.get(`/comboGen`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  comboEsp(gen) {
+    return axios.get(`/comboEsp/${gen}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
 }
 
 export default new EspecieService();

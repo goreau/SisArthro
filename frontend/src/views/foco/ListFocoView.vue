@@ -16,7 +16,7 @@
                         <Loader v-if="isLoading" />
                         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
                             :caption="caption" />
-                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" />
+                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"  :table-name="tableName"/>
                     </div>
                 </div>
                 <div style="display: none">
@@ -46,6 +46,7 @@ export default {
     data() {
         return {
             dataTable: [],
+            tableName: 'foco',
             isLoading: false,
             message: "",
             caption: "",
@@ -141,7 +142,7 @@ export default {
                             okButton: 'Confirmar',
                         })
                         if (ok) {
-                            caninoService.delete(row.id_foco)
+                            focoService.delete(row.id_foco)
                                 .then(() => {
                                     location.reload();
                                 })

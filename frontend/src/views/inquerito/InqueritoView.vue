@@ -206,7 +206,7 @@ export default {
                     minValue: combo$(1)
                 },
                 encoleiramento: {
-                    minValue: combo$(1)
+                    minValue: combo$(0)
                 },
                 dt_inquerito: { required$, },
                 responsavel: {

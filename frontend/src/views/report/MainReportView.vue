@@ -26,6 +26,9 @@
                         <label class="radio">
                           <input type="radio" name="execucao" value="105" v-model="tipo_relat" />
                           7 - Inquérito Canino </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="107" v-model="tipo_relat" />
+                          10 - Extrato de Notificação de Cães </label>
                       </div>
                       <div class="column is-4 linha">
                         <label class="radio">
@@ -45,7 +48,12 @@
                         </label>
                         <label class="radio">
                           <input type="radio" name="execucao" value="104" v-model="tipo_relat" />
-                          6 - Investigação de Foco </label>
+                          6 - Investigação de Foco 
+                        </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="106" v-model="tipo_relat" />
+                          9 - Notificação de Cães 
+                        </label>
                       </div>
 
                     </div>

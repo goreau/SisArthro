@@ -176,7 +176,7 @@ export default {
         paginationCounter: "rows",
       });
       this.cbColumns = this.columns.filter( el => el.title !== "Ações");
-      if (this.filter){
+      if (this.filter && this.filtered){
         this.tabulator.setFilter(this.form.column, this.form.operator, this.form.value);
       }
     },
@@ -189,10 +189,12 @@ export default {
     );
     document.head.appendChild(externalScript);
 
-    var obj = localStorage.getItem(this.tableName);
-    if (obj) {
-      this.form = JSON.parse(obj);
-      this.filter = true;
+    if (this.filtered){
+      var obj = localStorage.getItem(this.tableName);
+      if (obj) {
+        this.form = JSON.parse(obj);
+        this.filter = true;
+      }
     }
 
     let externalScript1 = document.createElement("script");

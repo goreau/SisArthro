@@ -62,6 +62,16 @@ class CodendService {
     })
   } 
 
+  getListCodendsByQuadra(qt) {
+    return axios.get(`/listcodendsbyquadra/${qt}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
   getAnimalByCodend(cd){
     return axios.get(`/comboAnimal/${cd}`)
     .then(response => {

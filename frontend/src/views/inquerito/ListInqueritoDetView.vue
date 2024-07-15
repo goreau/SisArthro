@@ -16,7 +16,7 @@
                         <Loader v-if="isLoading" />
                         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
                             :caption="caption" />
-                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" />
+                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"  :table-name="tableName"/>
                     </div>
                 </div>
                 <div style="display: none">
@@ -46,6 +46,7 @@ export default {
     data() {
         return {
             dataTable: [],
+            tableName: 'inquerito_det',
             isLoading: false,
             message: "",
             caption: "",
@@ -89,9 +90,14 @@ export default {
 
         this.isLoading = true;
         inqueritoService.getInqueritosDet(this.master)
-            .then((response) => {
-                this.dataTable = response.data;
+            .then((response) => {               
                 this.quart = response.data[0].id_quarteirao;
+                if (response.data[0].codend){
+                    this.dataTable = response.data;
+                } else {
+                    this.dataTable = [];
+                }
+                
                 this.isLoading = false;
             })
             .catch((err) => {

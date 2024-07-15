@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"  :table-name="tableName"/>
           </div>
         </div>
         <div style="display: none">
@@ -42,6 +42,7 @@ export default {
   data() {
     return {
       dataTable: [],
+      tableName: "identifica_det",
       isLoading: false,
       columns: [],
       myspan: null,

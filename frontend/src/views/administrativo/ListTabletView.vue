@@ -20,7 +20,7 @@
                 <pre v-if="content !=''" class="arquivo">{{ content }}</pre>
               </div>
               <div class="column">
-                <li v-for="file in files">
+                <li v-for="(file, index) in files" :key="index">
                   <a v-on:click.prevent="getFile($event)" href="/">{{  file.name }}</a>
                 </li>
               </div>

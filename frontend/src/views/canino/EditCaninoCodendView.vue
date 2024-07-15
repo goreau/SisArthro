@@ -69,7 +69,40 @@
                     {{ v$.canino.id_codend.$errors[0].$message }}
                   </span>
                 </div>
-                <div class="field column is-6">
+                <div class="field column is-2">
+                  <label class="label">Latitude</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="° decimais" v-model="canino.latitude" name="latitude"
+                      :class="{ 'is-danger': v$.canino.latitude.$error }" @blur="changeComma($event)" />
+                    <span class="is-error" v-if="v$.canino.latitude.$error">
+                      {{ v$.canino.latitude.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
+                <div class="field column is-2">
+                  <label class="label">Longitude</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude" name="longitude"
+                      :class="{ 'is-danger': v$.canino.longitude.$error }" @blur="changeComma($event)" />
+                    <span class="is-error" v-if="v$.canino.longitude.$error">
+                      {{ v$.canino.longitude.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
+                <div class="field column is-4">
+                  <label class="label">Situação</label>
+                  <div class="control">
+                    <CmbAuxiliares :tipo="11" @selValue="canino.id_situacao = $event" :errclass="{
+                      'is-danger': v$.canino.id_situacao.$error,
+                    }" :sel="canino.id_situacao"/>
+                    <span class="is-error" v-if="v$.canino.id_situacao.$error">
+                      {{ v$.canino.id_situacao.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
+                <div class="field column is-6 is-offset-2">
                   <label class="label">Proprietário</label>
                   <div class="control has-icons">
                     <input class="input" type="text" placeholder="Nome" v-model="canino.proprietario"
@@ -126,6 +159,7 @@
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
+import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import territorioService from "@/services/territorio.service";
 import caninoService from "@/services/canino.service";
 import codendService from "@/services/codend.service";
@@ -139,6 +173,7 @@ import {
   combo$,
   maxLength$,
   minLength$,
+  decimal$,
 } from "../../components/forms/validators.js";
 
 
@@ -147,6 +182,7 @@ export default {
     Loader,
     Message,
     CmbMunicipio,
+    CmbAuxiliares,
     footerCard
   },
   data() {
@@ -163,6 +199,9 @@ export default {
         id_quarteirao: 0,
         fant_quart: '',
         id_codend: 0,
+        id_situacao: 0,
+        latitude: '',
+        longitude: '',
         proprietario: '',
         telefone: '',
         dt_canino: '',
@@ -210,6 +249,11 @@ export default {
         responsavel: {
           required$,
           maxLength: maxLength$(40)
+        },
+        latitude: { decimal$ },
+        longitude: { decimal$ },
+        id_situacao: {
+          minValue: combo$(1)
         },
       },
     };
@@ -268,7 +312,7 @@ export default {
                 this.caption = "Animais";
                 setTimeout(() => {
                 this.showMessage = false; 
-                // this.$router.push("/canino_det/"+response.data.master.id_canino)
+                this.canino.id_canino = response.data.master.id_canino;
                 }, 5000);
             },
             (error) => {
@@ -318,6 +362,9 @@ export default {
             this.canino.dt_canino = data.dt_canino;
             this.canino.telefone = data.telefone;
             this.canino.id_canino = data.id_canino;
+            this.canino.id_situacao = data.id_situacao;
+            this.canino.latitude = data.latitude;
+            this.canino.longitude = data.longitude;
             this.municipio = data.municipio;
           } else {
             this.loadTerritorio();
@@ -372,7 +419,16 @@ export default {
 //popular combos
     },
     details(){
-      this.$router.push("/canino_dets/"+this.canino.id_canino);
+      if (this.canino.id_canino == 0){
+          this.message = "Vode deve primeiro informar e salvar os dados do imóvel!"      
+          this.showMessage = true;
+          this.type = "alert";
+          this.caption = "CodEnd";
+          setTimeout(() => (this.showMessage = false), 3000);
+      } else {
+        this.$router.push("/canino_dets/"+this.canino.id_canino);
+      }
+      
     },
     applyDataMask(field) {
       var mask = field.dataset.mask.split('');

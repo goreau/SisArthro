@@ -17,6 +17,23 @@
           <div class="card-content">
             <div class="content">
               <div class="columns">
+                <div class="column field is-4 is-offset-4">
+                  <label class="label">CodEnd</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="Código"
+                      v-model="codend.codigo"
+                      :class="{ 'is-danger': v$.codend.codigo.$error }"
+                    />
+                    <span class="is-error" v-if="v$.codend.codigo.$error">
+                      {{ v$.codend.codigo.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="columns">
                 <div class="field column is-4">
                 <label class="label">Município</label>
                 <div class="control">
@@ -121,6 +138,14 @@
           <footer class="card-footer">
             <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
+          <hr>
+          <div class="card-content">
+            <div class="columns">
+              <div class="column is-6 is-offset-3">
+                <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :exports="false" :tableName="tableName"/>
+              </div>
+            </div>  
+          </div>
         </div>
       </div>
     </div>
@@ -133,6 +158,7 @@ import Loader from "@/components/general/Loader.vue";
 import footerCard from "@/components/forms/FooterCard.vue";
 import codendService from "@/services/codend.service";
 import territorioService from "@/services/territorio.service";
+import MyTable from "@/components/forms/MyTable.vue";
 import useValidate from "@vuelidate/core";
 import {
   required$,
@@ -147,8 +173,12 @@ export default {
     return {
       area: [],
       quarteirao: [],
+      dataTable: [],
+      columns: [],
+      tableName: 'codendLst',
       codend: {
         id_codend: 0,
+        codigo:'',
         id_municipio: 0,
         id_area: 0,
         fant_area: '',
@@ -177,6 +207,11 @@ export default {
   validations() {
     return {
       codend: {
+        codigo: {
+          required$,
+          minLength: minLength$(13),
+          maxLength: maxLength$(13)
+        },
         logradouro: {
           required$,
           minLength: minLength$(3),
@@ -206,15 +241,26 @@ export default {
   components: {
     Message,
     Loader,
-    footerCard
+    footerCard,
+    MyTable,
   },
   methods: {
+    lista(){
+      codendService.getListCodendsByQuadra(this.codend.id_quarteirao)
+            .then((response) => {
+                this.dataTable = response.data;
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    },
     loadData() {
       this.isLoading = true;
 
       codendService.getCodend(this.codend.id_codend).then(
         async (response) => {
           let data = response.data[0];
+          this.codend.codigo = data.codigo;
           this.codend.id_municipio = data.id_municipio;
           await this.getAreas();
           await this.getQuarteirao(data.id_area);
@@ -226,6 +272,7 @@ export default {
           this.codend.numero = data.numero;
           this.codend.complemento = data.complemento;
           this.municipio = data.municipio;
+          this.lista();
         },
         (error) => {
           this.message =
@@ -255,6 +302,7 @@ export default {
             this.message = "Endereço alterado.";
             this.type = "success";
             this.caption = "CodEnd";
+            this.lista();
             setTimeout(() => (this.showMessage = false), 3000);
           },
           (error) => {
@@ -309,6 +357,11 @@ export default {
       this.codend.id_usuario = cUser.id;
     }
     this.loadData();
+
+    this.columns = [
+      { title: "CodEnd", field: "codigo", type: "string" },
+      { title: "Endereço", field: "endereco", type: "string" },
+    ]
   },
   created() {
     this.codend.id_codend = this.$route.params.id;

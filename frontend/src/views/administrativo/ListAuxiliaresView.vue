@@ -31,7 +31,7 @@
               </div>
           </header>
           <div class="card-content" >
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
           </div>
         </div>
         <div style="display: none">
@@ -113,6 +113,7 @@ export default {
       myspan2: null,
       isModalVisible: false,
       tipos:[],
+      tableName: 'auxiliares',
       aux: {
         id_auxiliares: 0,
         descricao: '',

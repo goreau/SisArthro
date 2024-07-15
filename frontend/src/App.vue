@@ -256,6 +256,32 @@ export default {
           ],
         },
         {
+          href: "/notifica",
+          title: "Notificação",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-bugs",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/notificas",
+              title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+        {
           href: "/identifica",
           title: "Identificação",
           icon: {
@@ -449,5 +475,12 @@ body {
 .vsm--child {
   padding-left: 2rem;
   color:bisque;
+}
+.right-border {
+    border-right: 2px solid black !important;
+}
+
+.tabulator-col-group{
+  border-right: 2px solid black !important;
 }
 </style>

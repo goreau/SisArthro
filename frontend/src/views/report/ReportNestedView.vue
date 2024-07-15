@@ -199,11 +199,21 @@ export default {
             { title: "Identificação", headerHozAlign:"center", columns:[
               { title: "Município", field: "municipio" },
               { title: "Área", field: "area" },
-              { title: "Quarteirão", field: "quadra" },
+              { title: "Quarteirão", field: "quadra", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                } 
+              },
             ]},
             { title: "Total", headerHozAlign:"center", columns:[
               { title: "Imóveis", field: "imoveis" },
-              { title: "Cães", field: "caes" },
+              { title: "Cães", field: "caes", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                } 
+              },
             ]},
             { title: "Encoleiramento", headerHozAlign:"center", columns:[
               { title: "Encoleirados", field: "encoleirado" },

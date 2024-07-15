@@ -134,6 +134,14 @@
           <footer class="card-footer">
             <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
+          <hr>
+          <div class="card-content">
+            <div class="columns">
+              <div class="column is-6 is-offset-3">
+                <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :exports="false" :tableName="tableName" />
+              </div>
+            </div>            
+          </div>
         </div>
       </div>
     </div>
@@ -147,6 +155,7 @@ import footerCard from "@/components/forms/FooterCard.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import codendService from "@/services/codend.service";
 import territorioService from "@/services/territorio.service";
+import MyTable from "@/components/forms/MyTable.vue";
 import useValidate from "@vuelidate/core";
 import {
   required$,
@@ -158,10 +167,13 @@ import {
 export default {
   data() {
     return {
+      dataTable: [],
+      columns: [],
       area: [],
       quarteirao: [],
       codends: [],
       recent: 0,
+      tableName: 'codendLst',
       codend: {
         id_municipio: 0,
         id_area: 0,
@@ -224,7 +236,8 @@ export default {
     Message,
     Loader,
     CmbMunicipio,
-    footerCard
+    footerCard,
+    MyTable,
   },
   methods: {
     carac(){
@@ -232,6 +245,15 @@ export default {
     },
     animal(){
       this.$router.push(`/editCaninoCodend/${this.recent}`);
+    },
+    lista(){
+      codendService.getListCodendsByQuadra(this.codend.id_quarteirao)
+            .then((response) => {
+                this.dataTable = response.data;
+            })
+            .catch((err) => {
+                console.log(err);
+            })
     },
     create() {
       this.v$.$validate(); // checks all inputs
@@ -245,6 +267,7 @@ export default {
             this.type = "success";
             this.caption = "CodEnd";
             this.recent = response.data.master.id_codend;
+            this.lista();
             setTimeout(() => (this.showMessage = false), 3000);
           },
           (error) => {
@@ -299,6 +322,10 @@ export default {
       this.codend.id_usuario = cUser.id;
     }
     
+    this.columns = [
+      { title: "CodEnd", field: "codigo", type: "string" },
+      { title: "Endereço", field: "endereco", type: "string" },
+    ]
   },
   watch: {
     'codend.id_municipio'(value) {

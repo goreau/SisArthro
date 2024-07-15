@@ -166,7 +166,7 @@
                     <hr>
                     <div class="card-content">
 
-                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="false" />
+                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="false" :tableName="tableName" />
                     </div>
                 </div>
 
@@ -213,6 +213,7 @@ export default {
     data() {
         return {
             dataTable: [],
+            columns: [],
             caracteriza: {
                 ciclo: '1',
                 id_caracterizacao: 0,
@@ -235,6 +236,7 @@ export default {
                 responsavel: '',
                 id_usuario: 0,
             },
+            tableName: 'caracterizaLst',
             v$: useValidate(),
             isLoading: false,
             message: "",

@@ -96,6 +96,19 @@
                           </div>
                         </div>
                         <div class="field column is-2">
+                          <label class="label">Gênero</label>
+                          <div class="control">
+                            <div class="select">
+                              <select class="input" @change="getEspeciesN($event)">
+                                <option value="0">-- Selecione --</option>
+                                <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
+                                  {{ reg.nome }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="field column is-2">
                           <label class="label">Espécie</label>
                           <div class="control">
                             <div class="select">
@@ -232,6 +245,7 @@ export default {
     return {
       capturas: [],
       amostras: [],
+      generos: [],
       especies: [],
       identifica: {
         id_identificacao: 0,
@@ -384,7 +398,28 @@ export default {
           this.amostras = res.data;
         })
         .catch((err) => {
-          this.capturas = [];
+          this.amostras = [];
+        });
+    },
+    getGeneros() {
+      especieService
+        .comboGen()
+        .then((res) => {
+          this.generos = res.data;
+        })
+        .catch((err) => {
+          this.generos = [];
+        });
+    },
+    getEspeciesN(e) {
+      let gen = e.target.value;
+      especieService
+        .comboEsp({gen})
+        .then((res) => {
+          this.especies = res.data;
+        })
+        .catch((err) => {
+          this.especies = [];
         });
     },
     getEspecies() {
@@ -486,7 +521,7 @@ export default {
         this.identifica.dt_identificacao = moment(datepicker.data.startDate).format('YYYY-MM-DD');
       });
     }
-    this.getEspecies();
+    this.getGeneros();
   },
 };
 </script>

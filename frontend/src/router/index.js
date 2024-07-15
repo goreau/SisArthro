@@ -415,7 +415,7 @@ const routes = [
     }
   },
   {
-    path: '/foco_dets/:master',
+    path: '/foco_dets/:master/:quart',
     name: 'foco_dets',
     component: () => import(/* webpackChunkName: "user" */ '../views/foco/ListFocoDetView.vue'),
     meta: {
@@ -499,6 +499,50 @@ const routes = [
       breadcrumb: {
         name: 'Lista Amostras Identificação',
         root: true
+      }
+    }
+  },
+  {
+    path: '/notifica',
+    name: 'notifica',
+    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/NotificacaoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Notificação',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/notificas',
+    name: 'notificas',
+    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/ListNotificaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Notificações',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/editNotifica/:id',
+    name: 'editNotifica',
+    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/EditNotificacaoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Editar Notificação',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/notifica_exame/:master',
+    name: 'notifica_exame',
+    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/NotificaExameView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Notificação - Exames',
+        root: false
       }
     }
   },

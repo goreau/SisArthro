@@ -26,7 +26,7 @@
                           <input class="input" type="password" v-model="password" placeholder="Sua senha">
                       </div>
                   </div>
-                  <a href="#" @click="openCadastro">Ainda não tenho cadastro</a>
+                  <!--<a href="#" @click="openCadastro">Ainda não tenho cadastro</a>-->
                 </div>
               </div>
               <footer class="card-footer">
@@ -60,11 +60,6 @@
         }
       }
     },
-    computed: {
-    /*  loggedIn() {
-        return this.$store.getters['auth/isLogged'];
-      }*/
-    },
     components: {
       Message,
       footerCard
@@ -72,9 +67,6 @@
     created() {
       document.getElementById('main').className = "main_colapsed";
       this.$store.dispatch("auth/logout").then(() => {});
-    /*  if (this.loggedIn) {
-        this.$router.push("/home");
-      }*/
     },
     methods: {
       login() {

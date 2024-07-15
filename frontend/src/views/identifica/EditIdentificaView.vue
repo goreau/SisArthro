@@ -97,6 +97,19 @@
                           </div>
                         </div>
                         <div class="field column is-2">
+                          <label class="label">Gênero</label>
+                          <div class="control">
+                            <div class="select">
+                              <select class="input" @change="getEspeciesN($event)" v-model="genero">
+                                <option value="0">-- Selecione --</option>
+                                <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
+                                  {{ reg.nome }}
+                                </option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="field column is-2">
                           <label class="label">Espécie</label>
                           <div class="control">
                             <div class="select">
@@ -234,7 +247,9 @@ export default {
       Identificas: [],
       capturas: [],
       amostras: [],
+      generos: [],
       especies: [],
+      genero: 0,
       identifica: {
         id_identificacao: 0,
         id_captura: 0,
@@ -350,7 +365,31 @@ export default {
               document.getElementById("login").classList.remove("is-loading");
             });
         } else {
-          identificaService
+          if (this.identifica_det.amostra>0){
+            identificaService
+            .createDet(this.identifica_det)
+            .then(
+              (response) => {
+                this.showMessage = true;
+                this.message = "Identificação inserida!";
+                this.type = "success";
+                this.caption = "Identificação";
+                setTimeout(() => (this.showMessage = false), 3000);
+              },
+              (error) => {
+                this.message = error;
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Identificação";
+                setTimeout(() => (this.showMessage = false), 3000);
+              }
+            )
+            .finally(() => {
+              document.getElementById("login").classList.remove("is-loading");
+            });
+
+          } else {
+            identificaService
             .update(this.identifica)
             .then(
               (response) => {
@@ -371,6 +410,10 @@ export default {
             .finally(() => {
               document.getElementById("login").classList.remove("is-loading");
             });
+          
+          }
+          
+
         }
       } else {
         this.message = "Corrija os erros para enviar as informações";
@@ -422,9 +465,11 @@ export default {
 
       identificaService.getIdentificaDet(this.identifica_det.id_identificacao_det)
         .then(
-          (response) => {
+          async (response) => {
             let data = response.data;
             this.identifica_det.amostra = data.amostra;
+            this.genero = data.id_genero;
+            await this.getEspecies(this.genero);
             this.identifica_det.id_especie = data.id_especie;
             this.identifica_det.macho = data.macho;
             this.identifica_det.femea = data.femea;
@@ -470,9 +515,30 @@ export default {
           this.capturas = [];
         });
     },
-    getEspecies() {
+    getGeneros() {
       especieService
-        .getCombo({})
+        .comboGen()
+        .then((res) => {
+          this.generos = res.data;
+        })
+        .catch((err) => {
+          this.generos = [];
+        });
+    },
+    getEspeciesN(e) {
+      let gen = e.target.value;
+      especieService
+        .comboEsp(gen)
+        .then((res) => {
+          this.especies = res.data;
+        })
+        .catch((err) => {
+          this.especies = [];
+        });
+    },
+    getEspecies(gen) {
+      especieService
+        .comboEsp(gen)
         .then((res) => {
           this.especies = res.data;
         })
@@ -527,7 +593,7 @@ export default {
     this.identifica.id_identificacao = this.$route.params.id;
     this.identifica_det.id_identificacao = this.$route.params.id;
     this.loadData();
-    this.getEspecies();
+    this.getGeneros();
     if (this.$route.params.det) {
       this.identifica_det.id_identificacao_det = this.$route.params.det;
       this.loadDet();

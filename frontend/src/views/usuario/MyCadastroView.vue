@@ -146,7 +146,7 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="login" @cancel="null" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="update" @cancel="null" @aux="details" :cFooter="cFooter" />
           </footer>
         </div>
       </div>
@@ -190,7 +190,7 @@ export default {
       type: "",
       showMessage: false,
       cFooter:{
-          strSubmit:'Entrar',
+          strSubmit:'Salvar',
           strCancel: 'Cancelar',
           strAux:'',
           aux: false
@@ -204,7 +204,7 @@ export default {
         new_password: {required$, minLength: minLength$(4)},
         email: {required$, email$},
       },
-      senha: {sameAs: sameAs$(this.user.password)}
+      senha: {sameAs: sameAs$(this.user.new_password)}
     }
   },
   computed: {

@@ -9,7 +9,7 @@
           </header>
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :exports="true" v-if="id > 0"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :tableName="tableName" :exports="true" v-if="id > 0"/>
           </div>          
         </div>
       </div>
@@ -33,6 +33,7 @@ export default {
       columns: [],
       title: 'Relatórios',
       strFiltro: '',
+      tableName: 'relatorio',
     };
   },
   components: {
@@ -73,6 +74,7 @@ export default {
                         { title: "Umid Fim", field: "umidade_final", type: "string" },
                         { title: "Amostra", field: "amostra", type: "string" },
                         { title: "Qt Potes", field: "quant_potes", type: "string" },
+                        { title: "Resultado", field: "resultado", type: "string" },
                       ];
           break;
         case '102':
@@ -114,17 +116,32 @@ export default {
             {title: "Identificação", headerHozAlign:"center", columns: [
               { title: "Município", field: "municipio" },
               { title: "Área", field: "area" },
-              { title: "Quadra", field: "quadra" },
+              { title: "Quadra", field: "quadra", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                }
+              },
             ]},
             {title: "Quantidades", headerHozAlign:"center", columns: [
               { title: "Imóveis", field: "imoveis" },
               { title: "Cães", field: "caes" },
-              { title: "Coletas", field: "coleta" },
+              { title: "Coletas", field: "coleta", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                }
+              },
             ]},
             {title: "Positivos", headerHozAlign:"center", columns: [
               { title: "Parasitológico", field: "parasito" },
               { title: "DPP", field: "dpp" },
-              { title: "Elisa", field: "elisa" },
+              { title: "Elisa", field: "elisa", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                } 
+              },
             ]},
             {title: "Eutanásia", headerHozAlign:"center", columns: [
               { title: "Eutanasiados", field: "eutanasia" },
@@ -140,18 +157,33 @@ export default {
             {title: "Identificação", headerHozAlign:"center", columns: [
               { title: "Município", field: "municipio" },
               { title: "Área", field: "area" },
-              { title: "Quadra", field: "quadra" },
+              { title: "Quadra", field: "quadra", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                }, 
+              },
             ]},
             {title: "Quantidades", headerHozAlign:"center", columns: [
               { title: "Imóveis", field: "imoveis" },
               { title: "Cães", field: "caes" },
               { title: "Encoleiramentos", field: "coleira" },
-              { title: "Coletas", field: "coleta" },
+              { title: "Coletas", field: "coleta", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                }
+              },
             ]},
             {title: "Exames Laboratoriais", headerHozAlign:"center", columns: [
-              { title: "DPP", field: "dpp" },
-              { title: "Elisa", field: "elisa" },
-              { title: "Res. Final", field: "final" },
+              { title: "DPP Pos", field: "dpp" },
+              { title: "Elisa Pos", field: "elisa" },
+              { title: "Positivos", field: "final", formatter: function(cell, formatterParams, onRendered){
+                    // Adiciona uma classe CSS para a borda direita
+                    cell.getElement().classList.add("right-border");
+                    return cell.getValue();
+                }
+              },
             ]},
             {title: "Eutanásia", headerHozAlign:"center", columns: [
               { title: "Eutanasiados", field: "eutanasia" },
@@ -159,6 +191,377 @@ export default {
               { title: "Recusas", field: "recusa" },
               { title: "Outros", field: "outros" },
             ]}          
+          ];
+          break;
+        case '106':
+          this.title = 'Notificação de Cães';
+          this.columns = [
+            { title: "Município", field: "notificante" },
+            { title: "Código", field: "codigo" },
+            { title: "Unidade", field: "unidade" },
+            { title: "Mun. Cão", field: "mun_cao" },
+            { title: "Deslocamentos", field: "municipio" },
+            { title: "Nome Cão", field: "nome" },
+            { title: "Raça", field: "raca" },
+            { title: "Exames", field: "exames"},
+            { title: "Óbito", field: "obito" },
+            { title: "Sinais", field: "sinais" },
+          ];
+          break;
+        case '107':
+          this.title = 'Extrato de Notificação de Cães';
+          this.columns = [
+            { title: "Município", field: "municipio", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('municipio');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Código", field: "codigo", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('codigo');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Unidade", field: "unidade", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('unidade');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Responsável", field: "vet_resp", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('vet_resp');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Nome Cão", field: "cao", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('cao');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Idade", field: "idade_t", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('idade_t');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Sexo", field: "sexo", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('sexo');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Registro", field: "registro", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('registro');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Reg/Chip", field: "numero", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('numero');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Raça", field: "raca", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('raca');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Sinais", field: "sinais", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('sinais');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Mun. Cão", field: "mun_cao", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('mun_cao');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Tempo Mun.", field: "tempo", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('tempo');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Deslocamentos", field: "deslocamento", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('deslocamento');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Permanência", field: "permanencia", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('permanencia');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Observação", field: "observacao", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('observacao');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Laboratório", field: "laboratorio", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('laboratorio');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Material", field: "material", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('material');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Exame", field: "exame", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('exame');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Resultado", field: "resultado", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('resultado');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Espécie", field: "especie", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('especie');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Repetir", field: "repetir", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue() ? 'S' : 'N';
+              if (prevRow){
+                var previus = prevRow.getCell('repetir');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Óbito", field: "obito", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('obito');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Dt Óbito", field: "dt_obito", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('dt_obito');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Causa Óbito", field: "causa_obito", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('causa_obito');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Especificação", field: "ob_especifica", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('ob_especifica');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Responsável", field: "responsavel", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('responsavel');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
           ];
           break;
         default:

@@ -38,7 +38,7 @@
                                     <div class="select">
                                         <select v-model="inquerito_det.id_canino_det" class="input">
                                         <option value="0">-- Selecione --</option>
-                                        <option v-for="reg in inqueritos" :key="reg.id_canino_det" :value="reg.id_canino_det">
+                                        <option v-for="reg in caninos" :key="reg.id_canino_det" :value="reg.id_canino_det">
                                             {{ reg.animal }}
                                         </option>
                                         </select>
@@ -302,7 +302,7 @@ export default {
                     this.quart = data.id_quarteirao;
                     this.getCodends();
                     this.inquerito_det.id_codend = data.id_codend;
-                    this.getAnimais();
+                  //  this.getAnimais();
                     this.inquerito_det.id_canino_det = data.id_canino_det;
                     this.inquerito_det.id_desfecho = data.id_desfecho;
                     this.inquerito_det.id_situacao = data.id_situacao;

@@ -86,33 +86,11 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="field column is-4">
-                                    <label class="label">Responsável Exame</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Nome "
-                                            v-model="foco.resp_exame"
-                                            :class="{ 'is-danger': v$.foco.resp_exame.$error }" />
-                                        <span class="is-error" v-if="v$.foco.resp_exame.$error">
-                                            {{ v$.foco.resp_exame.$errors[0].$message }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="field column is-4">
-                                    <label class="label">Responsável Eutanásia</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="Nome "
-                                            v-model="foco.resp_eutanasia"
-                                            :class="{ 'is-danger': v$.foco.resp_eutanasia.$error }" />
-                                        <span class="is-error" v-if="v$.foco.resp_eutanasia.$error">
-                                            {{ v$.foco.resp_eutanasia.$errors[0].$message }}
-                                        </span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
                     </footer>
                 </div>
             </div>
@@ -161,8 +139,6 @@ export default {
                 numero: '',
                 dt_foco: '',
                 resp_coleta: '',
-                resp_exame: '',
-                resp_eutanasia: '',
                 id_usuario: 0,
             },
             v$: useValidate(),
@@ -196,15 +172,6 @@ export default {
                     required$,
                     maxLength: maxLength$(40)
                 },
-                resp_exame: {
-                    required$,
-                    maxLength: maxLength$(40)
-                },
-                resp_eutanasia: {
-                    required$,
-                    maxLength: maxLength$(40)
-                },
-                
             },
         };
     },
@@ -220,7 +187,7 @@ export default {
             }
         },
         details(){
-            this.$router.push("/foco_dets/"+this.foco.id_foco);
+            this.$router.push("/foco_dets/"+this.foco.id_foco+'/'+this.foco.id_quarteirao);
         },
         loadData() {
             this.isLoading = true;

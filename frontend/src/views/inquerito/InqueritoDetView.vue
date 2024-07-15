@@ -92,7 +92,7 @@
                                     <div class="control">
                                         <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_dpp = $event" :errclass="{
                                             'is-danger': v$.inquerito_det.res_dpp.$error,
-                                        }" />
+                                        }" :sel="inquerito_det.res_dpp"/>
                                         <span class="is-error" v-if="v$.inquerito_det.res_dpp.$error">
                                             Informe o valor desse campo
                                             {{ v$.inquerito_det.res_dpp.$errors[0].$message }}
@@ -114,7 +114,7 @@
                                     <div class="control">
                                         <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_elisa = $event" :errclass="{
                                             'is-danger': v$.inquerito_det.res_elisa.$error,
-                                        }" />
+                                        }" :sel="inquerito_det.res_elisa" />
                                         <span class="is-error" v-if="v$.inquerito_det.res_elisa.$error">
                                             Informe o valor desse campo
                                             {{ v$.inquerito_det.res_elisa.$errors[0].$message }}
@@ -281,7 +281,7 @@ export default {
                 res_dpp: { minValueF },
                 res_elisa: { minValueF },
                 res_final: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115) },
-                res_coleira: { minValue: combo$(1) },
+                res_coleira: { requiredIf: requiredIf$(this.inquerito_det.coleira_ciclo >0)},//minValue: combo$(1) },
                 id_desfecho: { minValue: combo$(1) },
                 coleira_ciclo: { integer$ },
             },
@@ -489,6 +489,12 @@ export default {
         'inquerito_det.id_codend'(value) {
             this.getAnimais();
         },
+        'inquerito_det.id_situacao'(value){
+            if (value == 1173){
+                this.inquerito_det.res_dpp = 1123;
+                this.inquerito_det.res_elisa = 1123;
+            }
+        }
     }
 };
 </script>

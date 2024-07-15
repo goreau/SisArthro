@@ -1,7 +1,7 @@
 <template>
   <div class="control">
     <div class="select">
-      <select @change="onChange($event)" class="input" :class="errclass">
+      <select @change="onChange($event)" class="input" :class="errclass" :id="tipo">
         <option value="0">-- Selecione --</option>
         <option
           v-for="aux in auxiliares"

@@ -14,7 +14,7 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
           </div>
         </div>
         <div style="display: none">
@@ -81,6 +81,7 @@ export default {
       myspan: null,
       myspan2: null,
       isModalVisible: false,
+      tableName: 'genero',
       genero: {
         id_genero: 0,
         nome: '',
