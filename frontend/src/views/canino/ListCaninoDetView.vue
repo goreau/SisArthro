@@ -102,13 +102,13 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Tipo", field: "tipo", type: "string" },
-      { title: "Nome", field: "nome", type: "string" },
-      { title: "Ano Nasc", field: "nascimento", type: "string" },
-      { title: "Raça", field: "raca", type: "string" },
-      { title: "Sexo", field: "sexo", type: "string" },
+      { title: "Tipo", field: "tipo", type: "string", minWidth: 200 },
+      { title: "Nome", field: "nome", type: "string", minWidth: 200 },
+      { title: "Ano Nasc", field: "nascimento", type: "string", minWidth: 200, responsive: 2, },
+      { title: "Raça", field: "raca", type: "string", minWidth: 200 },
+      { title: "Sexo", field: "sexo", type: "string", minWidth: 200, responsive: 3 },
       {
-        title: "Ações",
+        title: "Ações", responsive: 0, minWidth: 200,
         formatter: (cell, formatterParams) => {
           const row = cell.getRow().getData();
 

@@ -90,12 +90,12 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Municipio", field: "municipio", type: "string" },
-      { title: "Quarteirao", field: "quarteirao", type: "string" },
-      { title: "Código", field: "codigo", type: "string" },
-      { title: "Endereço", field: "endereco", type: "string" },
+      { title: "Municipio", field: "municipio", type: "string", minWidth: 200, responsive:1, },
+      { title: "Quarteirao", field: "quarteirao", type: "string", minWidth: 200, responsive: 3, },
+      { title: "Código", field: "codigo", type: "string", minWidth: 200, responsive: 2, },
+      { title: "Endereço", field: "endereco", type: "string", minWidth: 300, responsive: 1, },
       {
-        title: "Ações",
+        title: "Ações", minWidth: 350, responsive: 0,
         formatter: (cell, formatterParams) => {
           const row = cell.getRow().getData();
 
@@ -141,7 +141,8 @@ export default {
           btCaract.style.cssText = "height: fit-content; margin-left: 1rem;";
           btCaract.classList.add("button", "is-info", "is-outlined");
           btCaract.innerHTML = this.myspan1.innerHTML;
-          btCaract.addEventListener("click", () => {
+          
+          btCaract.addEventListener("click", () => { 
             this.$router.push(`/caracteriza/${row.id_codend}/0`);
           });
 
@@ -152,6 +153,7 @@ export default {
           btAnimal.style.cssText = "height: fit-content; margin-left: 1rem;";
           btAnimal.classList.add("button", "is-success", "is-outlined");
           btAnimal.innerHTML = this.myspan3.innerHTML;
+
           btAnimal.addEventListener("click", () => {
             this.$router.push(`/editCaninoCodend/${row.id_codend}`);
           });

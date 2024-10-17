@@ -106,15 +106,15 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Codend", field: "codend", type: "string" },
-            { title: "Animal", field: "nome", type: "string" },
-            { title: "Resultado", field: "resultado", type: "string" },
-            { title: "Desfecho", field: "desfecho", type: "string" },
+            { title: "Codend", field: "codend", type: "string", minWidth: 200, responsive:1, },
+            { title: "Animal", field: "nome", type: "string", minWidth: 200, responsive:1, },
+            { title: "Resultado", field: "resultado", type: "string", minWidth: 200, responsive:2, },
+            { title: "Desfecho", field: "desfecho", type: "string", minWidth: 200, responsive:3, },
             {
                 title: "Data", field: "dt_desfecho", type: "string", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
-                },
+                }, minWidth: 200, responsive:4,
                 formatter:function(cell, formatterParams, onRendered){
                         var value = cell.getValue();
                         value = moment(value).format("DD/MM/YYYY");
@@ -122,7 +122,7 @@ export default {
                     }
             },
             {
-                title: "Ações",
+                title: "Ações", minWidth: 200, responsive:0,
                 formatter: (cell, formatterParams) => {
                     const row = cell.getRow().getData();
 

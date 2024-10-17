@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     showMenu() {
-      this.hide = this.$route.path === "/"  || this.$route.path === "/login";
+      this.hide = this.$route.path === "/"  || this.$route.path === "/login" || this.$route.path === "/forgot" || this.$route.path === "/reset";
       return !this.hide;
     },
   },

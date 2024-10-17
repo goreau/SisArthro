@@ -36,7 +36,7 @@
                                     <div class="control">
                                         <CmbAuxiliares :tipo="8" @selValue="caracteriza.tipo_imovel = $event"
                                         :sel="caracteriza.tipo_imovel"
-                                            :errclass="{ 'is-danger': v$.caracteriza.tipo_imovel.$error }" />
+                                            :errclass="{ 'is-danger': v$.caracteriza.tipo_imovel.$error }"/>
                                         <span class="is-error" v-if="v$.caracteriza.tipo_imovel.$error">
                                             {{ v$.caracteriza.tipo_imovel.$errors[0].$message }}
                                         </span>
@@ -44,59 +44,58 @@
                                 </div>
                                 <div class="column is-2">
                                     <label class="label">Vegetação</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" v-model="caracteriza.vegetacao">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" v-model="caracteriza.vegetacao">
                                         <label for="vegetacao"></label>
-                                    </div>                           
+                                    </div>                         
                                 </div>
                                 <div class="field column is-2">
                                     <label class="label">Mat. Orgânica</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" v-model="caracteriza.mat_organica">
-                                        <label for="mat_organica"></label>
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" v-model="caracteriza.mat_organica">
                                     </div>
                                 </div>
                             </div>
                             <div class="columns has-text-centered">
                                 <div class="field column is-1 is-offset-1">
                                     <label class="label">Galinha</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" v-model="caracteriza.galinha">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" v-model="caracteriza.galinha">
                                         <label for="galinha"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cão</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" v-model="caracteriza.cao">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" v-model="caracteriza.cao">
                                         <label for="cao"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Porco</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" v-model="caracteriza.porco">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" v-model="caracteriza.porco">
                                         <label for="porco"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cavalo</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" v-model="caracteriza.cavalo">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" v-model="caracteriza.cavalo">
                                         <label for="cavalo"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Coelho</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" v-model="caracteriza.coelho">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" v-model="caracteriza.coelho">
                                         <label for="coelho"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Outros</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" v-model="caracteriza.outros">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" v-model="caracteriza.outros">
                                         <label for="outros"></label>
                                     </div>
                                 </div>
@@ -236,6 +235,7 @@ export default {
                 responsavel: '',
                 id_usuario: 0,
             },
+            mytpimovel: 0,
             tableName: 'caracterizaLst',
             v$: useValidate(),
             isLoading: false,
@@ -274,7 +274,6 @@ export default {
                 ciclo: { required$, minValue: 1, integer$},
                 ano_identifica: {
                     requiredIf: requiredIf$(this.caracteriza.num_cao_pos > 0),
-
                 }
             },
         };
@@ -303,6 +302,25 @@ export default {
         MyTable,
     },
     methods: {
+       /* restart(){
+            this.caracteriza.ciclo = '1';
+            this.caracteriza.id_caracterizacao = 0;
+            this.caracteriza.id_codend = 0;
+            this.caracteriza.situacao = 0;
+            this.caracteriza.tipo_imovel = 0;
+            this.caracteriza.vegetacao = 0;
+            this.caracteriza.mat_organica = 0;
+            this.caracteriza.galinha = 0;
+            this.caracteriza.cao = 0;
+            this.caracteriza.porco = 0;
+            this.caracteriza.cavalo = 0;
+            this.caracteriza.coelho = 0;
+            this.caracteriza.outros = 0;
+            this.caracteriza.ot_especifica = '';
+            this.caracteriza.num_cao = 0;
+            this.caracteriza.num_cao_pos = 0;
+            this.caracteriza.ano_identifica = 0;
+        },*/
         back(){
             this.$router.push(`/codends/${this.caracteriza.id_codend}`);
         },
@@ -351,6 +369,9 @@ export default {
         create() {
             this.v$.$validate(); // checks all inputs
             if (!this.v$.$error) {
+                let preserv = {resp: this.caracteriza.responsavel, date: this.caracteriza.dt_caracterizacao };
+                localStorage.setItem('preserv', JSON.stringify(preserv));
+
                 document.getElementById('login').classList.add('is-loading');
 
                   caracterizaService.create(this.caracteriza).then(
@@ -360,6 +381,7 @@ export default {
                         this.type = "success";
                         this.caption = "Caracterização";
                         setTimeout(() => (this.showMessage = false), 3000);
+                       // this.restart();
                         location.reload();
                     },
                     (error) => {
@@ -397,6 +419,14 @@ export default {
             this.id_user = this.currentUser.id;
         }
 
+        var obj = localStorage.getItem('preserv');
+        if (obj) {
+            let preserv = JSON.parse(obj);
+
+            this.caracteriza.dt_caracterizacao = preserv.date == '' ? '' : moment(String(preserv.date)).format('DD/MM/YYYY');
+            this.caracteriza.responsavel = preserv.resp;
+        }
+
         this.myspan = document.getElementsByName("coisa")[0];
         this.myspan2 = document.getElementsByName("coisa2")[0];
 
@@ -412,19 +442,19 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "CodEnd", field: "codigo", type: "string" },
-            { title: "Ciclo", field: "ciclo", type: "string" },
+            { title: "CodEnd", field: "codigo", type: "string", minWidth: 250, responsive: 1, },
+            { title: "Ciclo", field: "ciclo", type: "string", minWidth: 200, responsive:3, },
             {
                 title: "Data", field: "dt_caracterizacao", type: "string", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
-                }
+                }, minWidth: 200, responsive: 2,
             },
-            { title: "Situação", field: "situacao", type: "string" },
-            { title: "Tipo Imóvel", field: "tipo_imovel", type: "string" },
-            { title: "Soma", field: "soma", type: "string" },
+            { title: "Situação", field: "situacao", type: "string", minWidth: 200, responsive:1, },
+            { title: "Tipo Imóvel", field: "tipo_imovel", type: "string", minWidth: 200, responsive:3, },
+            { title: "Soma", field: "soma", type: "string", minWidth: 200, responsive:1, },
             {
-                title: "Ações",
+                title: "Ações", minWidth: 200, responsive:0,
                 formatter: (cell, formatterParams) => {
                     const row = cell.getRow().getData();
 
@@ -483,6 +513,7 @@ export default {
         const options = {
             type: "date",
             dateFormat: "dd/MM/yyyy",
+            startDate: this.caracteriza.dt_caracterizacao,
             showHeader: false,
             color: "info",
             allowInput: true,
@@ -517,7 +548,45 @@ export default {
         this.caracteriza.id_codend = this.$route.params.master;
         this.caracteriza.id_caracteriza = this.$route.params.id;
     },
+    watch: {
+        mytpimovel(value){
+
+            this.caracteriza.tipo_imovel = value;
+            //document.getElementById("vegetacao").focus();
+            const checkbox = this.$refs.vegetacao;
+            if (checkbox) {
+                checkbox.focus(); // Tenta focar o checkbox
+                console.warn("Checkbox focado!");
+            } else {
+                console.warn("Checkbox não encontrado!");
+            }
+           // this.$refs.vegetacao.$el.focus();
+            
+        },
+        
+    }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.checkmark {
+    width: 2rem;
+    height: 2rem;
+    -webkit-appearance: none; /* Remove o estilo padrão */
+    appearance: none; /* Remove o estilo padrão */
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+}
+.checkmark:checked::after {
+  content: '✔';
+  color: #00d1b2;
+  font-size: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>

@@ -27,3 +27,5 @@ export const between$ = (min, max) => helpers.withMessage(({ $params}) => `O val
 export const requiredIf$ = (cond) => helpers.withMessage('Informe o valor desse campo.', requiredIf(cond))
 
 export const minValueIf = (value, vm) => helpers.withMessage('Informe o valor desse campo.', minValueF(value, vm))
+
+export const integerOrNull$ =  helpers.withMessage('Informe um número inteiro para esse campo.', (value) => (value === null || integer(value)))

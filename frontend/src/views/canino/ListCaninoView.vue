@@ -98,14 +98,15 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Município", field: "municipio", type: "string" },
-            { title: "Quarteirão", field: "quadra", type: "string" },
-            { title: "Codend", field: "codend", type: "string" },
+            { title: "Município", field: "municipio", type: "string", minWidth: 250 },
+            { title: "Quarteirão", field: "quadra", type: "string", minWidth: 200 },
+            { title: "Codend", field: "codend", type: "string", minWidth: 200 },
             {
                 title: "Data", field: "dt_canino", type: "string", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 },
+                minWidth: 200, responsive:2,
                 formatter:function(cell, formatterParams, onRendered){
                         var value = cell.getValue();
                         value = moment(value).format("DD/MM/YYYY");
@@ -113,7 +114,7 @@ export default {
                     }
             },
             {
-                title: "Ações",
+                title: "Ações", responsive:0, minWidth: 200,
                 formatter: (cell, formatterParams) => {
                     const row = cell.getRow().getData();
 

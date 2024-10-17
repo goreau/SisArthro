@@ -30,6 +30,26 @@ class AuthService {
       })
     }
 
+    forgot(data) {
+      return axios.post(`/forgot`,data )
+      .then(response => {
+        return response;
+      },
+      (error) => {
+        throw new Error(error.data);
+      })
+    }  
+
+    reset(data) {
+      return axios.post(`/reset`, data )
+      .then(response => {
+        return response;
+      },
+      (error) => {
+        throw new Error(error.data);
+      })
+    }  
+
     list() {
      /* var headers = authHeader();
       headers['Content-Type'] = "application/json";

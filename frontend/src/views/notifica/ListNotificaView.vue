@@ -98,23 +98,23 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Código", field: "codigo", type: "string" },
-            { title: "Município", field: "municipio", type: "string" },
-            { title: "Notificante", field: "unidade", type: "string" },
+            { title: "Código", field: "codigo", type: "string", minWidth: 200, responsive:2, },
+            { title: "Município", field: "municipio", type: "string", minWidth: 250, responsive:1, },
+            { title: "Notificante", field: "unidade", type: "string", minWidth: 250, responsive:3, },
             {
                 title: "Data", field: "dt_notifica", type: "string", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
-                },
+                }, minWidth: 200, responsive:4,
                 formatter:function(cell, formatterParams, onRendered){
                         var value = cell.getValue();
                         value = moment(value).format("DD/MM/YYYY");
                         return value;
                     }
             },
-            { title: "Cão", field: "nome", type: "string" },
+            { title: "Cão", field: "nome", type: "string", minWidth: 200, responsive:1, },
             {
-                title: "Ações",
+                title: "Ações", minWidth: 200, responsive:0,
                 formatter: (cell, formatterParams) => {
                     const row = cell.getRow().getData();
 

@@ -93,11 +93,11 @@ export default {
           .finally(() => this.isLoading = false);
 
       this.columns = [
-          {title: 'Nome', field: 'name', type: 'string'},
-          {title: 'Login', field: 'username', type: 'string'},
-          {title: 'Município', field: 'municipio', type: 'string'},
-          {title: 'Nivel', field: 'role', type: 'string'},
-          {title: 'Ações',  
+          {title: 'Nome', field: 'name', type: 'string', minWidth: 200, responsive:2,},
+          {title: 'Login', field: 'username', type: 'string', minWidth: 200, responsive:1,},
+          {title: 'Município', field: 'municipio', type: 'string', minWidth: 200, responsive:1,},
+          {title: 'Nivel', field: 'role', type: 'string', minWidth: 200, responsive:3,},
+          {title: 'Ações', minWidth: 200, responsive:0, 
             formatter: (cell, formatterParrams) =>{
               const row = cell.getRow().getData();
 

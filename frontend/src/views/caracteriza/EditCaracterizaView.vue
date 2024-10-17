@@ -44,15 +44,15 @@
                                 </div>
                                 <div class="column is-2">
                                     <label class="label">Vegetação</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" v-model="caracteriza.vegetacao">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" v-model="caracteriza.vegetacao">
                                         <label for="vegetacao"></label>
                                     </div>                           
                                 </div>
                                 <div class="field column is-2">
                                     <label class="label">Mat. Orgânica</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" v-model="caracteriza.mat_organica">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" v-model="caracteriza.mat_organica">
                                         <label for="mat_organica"></label>
                                     </div>
                                 </div>
@@ -60,43 +60,43 @@
                             <div class="columns has-text-centered">
                                 <div class="field column is-1 is-offset-1">
                                     <label class="label">Galinha</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" v-model="caracteriza.galinha">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" v-model="caracteriza.galinha">
                                         <label for="galinha"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cão</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" v-model="caracteriza.cao">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" v-model="caracteriza.cao">
                                         <label for="cao"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Porco</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" v-model="caracteriza.porco">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" v-model="caracteriza.porco">
                                         <label for="porco"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cavalo</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" v-model="caracteriza.cavalo">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" v-model="caracteriza.cavalo">
                                         <label for="cavalo"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Coelho</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" v-model="caracteriza.coelho">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" v-model="caracteriza.coelho">
                                         <label for="coelho"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Outros</label>
-                                    <div class="field">                                       
-                                        <input class="is-checkradio is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" v-model="caracteriza.outros">
+                                    <div class="field checkbox">                                       
+                                        <input class="checkmark is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" v-model="caracteriza.outros">
                                         <label for="outros"></label>
                                     </div>
                                 </div>
@@ -258,10 +258,13 @@ export default {
                     minValue: combo$(1)
                 },
                 dt_caracterizacao: { required$, },
-                ciclo: { required$, minValue: 1, integer$}
+                ciclo: { required$, minValue: 1, integer$},
+                ano_identifica: {
+                    requiredIf: requiredIf$(this.caracteriza.num_cao_pos > 0),
+                }
             },
         };
-        if (this.caracteriza.num_cao_pos > 0){
+       /* if (this.caracteriza.num_cao_pos > 0){
             valid['ano_identifica']={
                 required$,
                 minValue: minValue$(2000),
@@ -269,7 +272,7 @@ export default {
                 maxLength: maxLength$(4),
                 minLength: minLength$(4)
             };
-        };
+        };*/
         return valid;
     },
     computed: {
@@ -463,4 +466,25 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.checkmark {
+    width: 2rem;
+    height: 2rem;
+    -webkit-appearance: none; /* Remove o estilo padrão */
+    appearance: none; /* Remove o estilo padrão */
+    background-color: white;
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+}
+.checkmark:checked::after {
+    content: '✔';
+    color: #00d1b2;
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>

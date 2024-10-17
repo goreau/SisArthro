@@ -26,6 +26,7 @@
                           <input class="input" type="password" v-model="password" placeholder="Sua senha">
                       </div>
                   </div>
+                  <a href="#/forgot">Esqueci minha senha</a>
                   <!--<a href="#" @click="openCadastro">Ainda não tenho cadastro</a>-->
                 </div>
               </div>

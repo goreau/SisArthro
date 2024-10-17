@@ -85,6 +85,16 @@ const routes = [
     }
   },
   {
+    path: '/forgot',
+    name: 'forgot',
+    component: () => import('../views/usuario/ForgotView.vue'), 
+  },
+  {
+    path: '/reset/:token',
+    name: 'reset',
+    component: () => import('../views/usuario/ResetView.vue'), 
+  },
+  {
     path: '/localidade',
     name: 'localidade',
     component: () => import(/* webpackChunkName: "user" */ '../views/localidade/LocalidadeView.vue'),

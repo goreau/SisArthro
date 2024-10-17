@@ -88,11 +88,11 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Amostra", field: "amostra", type: "string" },
-      { title: "Espécie", field: "especie", type: "string" },
-      { title: "Pool", field: "pool", type: "string" },
+      { title: "Amostra", field: "amostra", type: "string", minWidth: 200, responsive:2, },
+      { title: "Espécie", field: "especie", type: "string", minWidth: 200, responsive:2, },
+      { title: "Pool", field: "pool", type: "string", minWidth: 200, responsive:2, },
       {
-        title: "Ações",
+        title: "Ações", minWidth: 200, responsive:0,
         formatter: (cell, formatterParams) => {
           const row = cell.getRow().getData();
 

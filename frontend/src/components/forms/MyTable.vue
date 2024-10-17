@@ -13,7 +13,7 @@
       <div class="columns">
         <div class="column is-3">
           <div class="select">
-            <select v-model="form.column" class="input">
+            <select v-model="form.field" class="input">
               <option value="0">-- Coluna --</option>
               <option
                 v-for="(item, index) in columns"
@@ -28,7 +28,7 @@
         <div class="column is-3">
           <div class="field">
             <div class="select">
-              <select v-model="form.operator" class="input">
+              <select v-model="form.type" class="input">
                 <option value="0">-- Comparador --</option>
                 <option value="=">igual a</option>
                 <option value=">">maior que</option>
@@ -97,12 +97,16 @@
       <font-awesome-icon icon="fa-solid fa-file-pdf" />
     </button>
   </div>
+  <Loader v-if="isLoading" />
   <div ref="table" class="is-striped"></div>
+  <div ref="tableExp" style="display: none;" ></div>
 </template>
 
 <script>
 import { TabulatorFull as Tabulator } from "tabulator-tables"; //import Tabulator library
+import {ResponsiveLayoutModule} from 'tabulator-tables';
 import lang from "./lang";
+import Loader from "@/components/general/Loader.vue";
 
 
 export default {
@@ -110,40 +114,64 @@ export default {
     return {
       tabulator: null, //variable to hold your table
       form: {
-        column: "0",
-        operator: "0",
+        field: "0",
+        type: "0",
         value: "",
-        type: "string",
+        typed: "string",
       },
+      initial: 1,
+      isLoading: false,
       filter: false,
+      arrFilter:[],
       cbColumns: []
     };
+  },
+  components: {
+    Loader,
   },
   methods: {
     setFilter() {
       let obj = this.form;
 
-      const col = this.columns.filter((v) => v.field === obj.column, obj);
-      obj.type = col[0].type;
+      const col = this.columns.filter((v) => v.field === obj.field, obj);
+      obj.typed = col[0].type;
 
-      this.tabulator.setFilter(obj.column, obj.operator, obj.value);
+      this.arrFilter.push({field: obj.field, type: obj.type, value: obj.value});
 
-      localStorage.setItem(this.tableName, JSON.stringify(obj));
+      this.tabulator.setFilter(this.arrFilter);//obj.column, obj.operator, obj.value);
 
+      localStorage.setItem(this.tableName, JSON.stringify(this.arrFilter));//obj));
     },
     clearFilter() {
-      this.form.column = "0";
-      this.form.operator = "0";
+      this.isLoading = true;
+      this.form.field = "0";
+      this.form.type = "0";
       this.form.value = "";
+
+      this.arrFilter = [];
 
       this.tabulator.clearFilter();
       localStorage.removeItem(this.tableName);
+
+      let name = this.tableName + '_page';
+      localStorage.removeItem(name);
+
+      this.isLoading = false;
     },
     download_csv() {
-      this.tabulator.download("csv", "data.csv");
+      if (this.expColumns == undefined){
+        this.tabulator.download("csv", "data.csv");
+      } else {
+        this.tabulatorExp.download("csv", "data.csv");
+      }
+      
     },
     download_xlsx() {
-      this.tabulator.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
+      if (this.expColumns == undefined){
+        this.tabulator.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
+      } else {
+        this.tabulatorExp.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
+      }
     },
     download_pdf() {
       this.tabulator.download("pdf", "data.pdf", {
@@ -152,34 +180,80 @@ export default {
       });
     },
     download_json() {
-      this.tabulator.download("json", "data.json");
+      if (this.expColumns == undefined || this.expColumns.lenght == 0){
+        this.tabulator.download("json", "data.json");
+      } else {
+        this.tabulatorExp.download("json", "data.json");
+      }
+      
     },
     toggleFilter(e) {
       this.filter = e.target.checked;
     },
   },
-  props: ["tableData", "columns","filtered","exports","tableName"],
+  props: ["tableData", "columns","filtered","exports","tableName", "expColumns"],
   watch: {
     tableData(value) {
+      this.isLoading = true;
       this.tabulator = new Tabulator(this.$refs.table, {
         langs: lang,
         locale: "pt-br",
         data: value, //link data to table
+        responsiveLayout: true,
         layout: "fitColumns",
         placeholder:"Nenhum registro atende aos critérios escolhidos!",
         reactiveData: true, //enable data reactivity
         columns: this.columns, //define table columns
         pagination: "local",
         paginationSize: 10,
+        paginationInitialPage: this.initial,
+        dataLoader: true,
+        dataLoaderLoading: "<div style='display:inline-block; border:4px solid #333; border-radius:10px; background:#fff; font-weight:bold; font-size:16px; color:#000; padding:10px 20px;'>Carregando</div>",
         paginationSizeSelector: [5, 10, 15, 20],
         movableColumns: true,
         paginationCounter: "rows",
       });
       this.cbColumns = this.columns.filter( el => el.title !== "Ações");
-      if (this.filter && this.filtered){
-        this.tabulator.setFilter(this.form.column, this.form.operator, this.form.value);
+
+      if (this.filter){
+        this.tabulator.setFilter(this.arrFilter);//this.form.column, this.form.operator, this.form.value);
       }
+
+      if (this.expColumns != undefined){
+ //       if (this.expColumns.lenght > 0){
+          this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
+            langs: lang,
+            locale: "pt-br",
+            layout: "fitColumns",
+            heigth: 10,
+            data: this.tableData,
+            columns: this.expColumns,
+          });
+ //       }
+      }
+      this.tabulator.on("pageLoaded", (function(pageno){
+        this.initial = pageno;
+        let name = this.tableName + '_page';
+        localStorage.setItem(name, this.initial);
+      }).bind(this));
+      this.tabulator.setPageToRow(this.initial);
+
+      this.isLoading = false;
     },
+    expColumns(value){
+      if (this.tableData != undefined){
+        if(this.tableData.lenght > 0){
+          this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
+              langs: lang,
+              locale: "pt-br",
+              layout: "fitColumns",
+              heigth: 10,
+              data: this.tableData,
+              columns: value,
+          });
+        }
+      }
+    }
   },
   mounted() {
     let externalScript = document.createElement("script");
@@ -189,12 +263,24 @@ export default {
     );
     document.head.appendChild(externalScript);
 
-    if (this.filtered){
-      var obj = localStorage.getItem(this.tableName);
-      if (obj) {
-        this.form = JSON.parse(obj);
+    let stFilter = JSON.parse(localStorage.getItem(this.tableName));
+    
+    if (stFilter) {
+      if (Array.isArray(stFilter)){
+        this.arrFilter = stFilter;
+        var obj = stFilter[0];
+        this.form = obj;//JSON.parse(obj);
         this.filter = true;
-      }
+      } else {
+        localStorage.removeItem(this.tableName);
+      }  
+    }
+
+    let name = this.tableName + '_page';
+    let pg = localStorage.getItem(name);
+
+    if (pg){
+      this.initial = pg;
     }
 
     let externalScript1 = document.createElement("script");

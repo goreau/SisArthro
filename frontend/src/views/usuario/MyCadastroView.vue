@@ -143,6 +143,9 @@
                   </span>
                 </div>
               </div>
+              <div class="columns">
+                <div class="column is-1 is-offset-11 vs">{{ version }}</div>
+              </div>
             </div>
           </div>
           <footer class="card-footer">
@@ -182,6 +185,7 @@ export default {
         id_usuario: 1,
       },
       senha: '',
+      version: '15.08',
       v$: useValidate(),
       municipio:'',
       isLoading: false,

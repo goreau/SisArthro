@@ -92,15 +92,15 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Municipio", field: "municipio", type: "string" },
-      { title: "Código", field: "codigo", type: "string" },
-      { title: "Nome", field: "nome", type: "string" },
+      { title: "Municipio", field: "municipio", type: "string", minWidth: 250, responsive:1, },
+      { title: "Código", field: "codigo", type: "string", minWidth: 200, responsive:2, },
+      { title: "Nome", field: "nome", type: "string", minWidth: 200, responsive:1, },
       { title: "Data", field: "data", type: "string", sorter: "date", sorterParams:{
           format:"dd/MM/yyyy",
           alignEmptyValues:"top",
-      }},
+      }, minWidth: 200, responsive:4,},
       {
-        title: "Ações",
+        title: "Ações", minWidth: 200, responsive:0,
         formatter: (cell, formatterParams) => {
           const row = cell.getRow().getData();
 

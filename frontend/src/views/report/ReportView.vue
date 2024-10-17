@@ -9,7 +9,7 @@
           </header>
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :tableName="tableName" :exports="true" v-if="id > 0"/>
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :tableName="tableName" :exports="true" :expColumns="expColumns" v-if="id > 0"/>
           </div>          
         </div>
       </div>
@@ -31,6 +31,7 @@ export default {
       dataTable: [],
       isLoading: false,
       columns: [],
+      expColumns: [],
       title: 'Relatórios',
       strFiltro: '',
       tableName: 'relatorio',
@@ -46,6 +47,21 @@ export default {
         case '101':
           this.title = 'Extrato de Capturas';
           this.columns = [
+                        { title: "Município", field: "municipio", type: "string" },
+                        { title: "Data", field: "dt_captura", type: "string" },
+                        { title: "Execução", field: "execucao", type: "string" },
+                        { title: "Zona", field: "zona", type: "string" },
+                        { title: "Agravo", field: "agravo", type: "string" },
+                        { title: "Atividade", field: "atividade", type: "string" },
+                        { title: "Quadra", field: "fant_quart", type: "string" },
+                        { title: "Codend", field: "codend", type: "string" },
+                        { title: "Método", field: "metodo", type: "string" },
+                        { title: "Ambiente", field: "ambiente", type: "string" },
+                        { title: "Local Capt", field: "local_captura", type: "string" },
+                        { title: "No Arm", field: "num_arm", type: "string" },
+                        { title: "Amostra", field: "amostra", type: "string" },
+                      ];
+            this.expColumns = [
                         { title: "Município", field: "municipio", type: "string" },
                         { title: "Data", field: "dt_captura", type: "string" },
                         { title: "Execução", field: "execucao", type: "string" },
@@ -75,7 +91,7 @@ export default {
                         { title: "Amostra", field: "amostra", type: "string" },
                         { title: "Qt Potes", field: "quant_potes", type: "string" },
                         { title: "Resultado", field: "resultado", type: "string" },
-                      ];
+                      ];      
           break;
         case '102':
           this.title = 'Extrato de Identificações';
@@ -108,6 +124,29 @@ export default {
             { title: "Ano Ident.", field: "ano_identifica" },
             { title: "Soma", field: "soma" },
                         
+          ];
+          this.expColumns = [
+            { title: "Município", field: "municipio" },
+            { title: "Área", field: "fant_area" },
+            { title: "Quadra", field: "quadra" },
+            { title: "CodEnd", field: "codend" },
+            { title: "Quadrante", field: "quadrante" },
+            { title: "Endereço", field: "endereco" },
+            { title: "Situação", field: "situacao" },
+            { title: "Tipo Imóvel", field: "tipo_imovel" },
+            { title: "Vegetação", field: "vegetacao" },
+            { title: "Mat. Org.", field: "mat_organica" },
+            { title: "Galinha", field: "galinha" },
+            { title: "Cão", field: "cao" },
+            { title: "Porco", field: "porco" },
+            { title: "Cavalo", field: "cavalo" },
+            { title: "Coelho", field: "coelho" },
+            { title: "Outros", field: "outros" },
+            { title: "Especific.", field: "ot_especifica" },
+            { title: "Nº Cães", field: "num_cao" },
+            { title: "Nº Caes Pos", field: "num_cao_pos" },
+            { title: "Ano Ident.", field: "ano_identifica" },
+            { title: "Soma", field: "soma" },           
           ];
           break;
         case '104':
@@ -211,6 +250,179 @@ export default {
         case '107':
           this.title = 'Extrato de Notificação de Cães';
           this.columns = [
+            { title: "Município", field: "municipio", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('municipio');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Código", field: "codigo", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('codigo');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Nome Cão", field: "cao", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('cao');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Sexo", field: "sexo", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('sexo');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Raça", field: "raca", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('raca');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Sinais", field: "sinais", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('sinais');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Mun. Cão", field: "mun_cao", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('mun_cao');
+                var cao = prevRow.getCell('cao');
+                var atual = row.getCell('cao');
+                if (previus.getValue() == val && cao.getValue() == atual.getValue()) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Tempo Mun.", field: "tempo", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('tempo');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+            { title: "Material", field: "material", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('material');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Exame", field: "exame", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('exame');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Resultado", field: "resultado", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('resultado');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Espécie", field: "especie", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('especie');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            },},
+            { title: "Óbito", field: "obito", formatter: function(cell, formatterParams, onRendered){
+              var row = cell.getRow();
+              var prevRow = row.getPrevRow();
+              var val = cell.getValue();
+              if (prevRow){
+                var previus = prevRow.getCell('obito');
+                if (previus.getValue() == val) {
+                  val = '...';
+                }
+              }
+    
+              return val;
+            }, },
+          ];
+          this.expColumns = [
             { title: "Município", field: "municipio", formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
@@ -360,7 +572,9 @@ export default {
               var val = cell.getValue();
               if (prevRow){
                 var previus = prevRow.getCell('mun_cao');
-                if (previus.getValue() == val) {
+                var cao = prevRow.getCell('cao');
+                var atual = row.getCell('cao');
+                if (previus.getValue() == val && cao.getValue() == atual.getValue()) {
                   val = '...';
                 }
               }

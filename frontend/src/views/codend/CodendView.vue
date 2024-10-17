@@ -83,7 +83,7 @@
                 </div>
               </div>
               <div class="columns">
-                <div class="field column is-6">
+                <div class="field column is-4">
                   <label class="label">Logradouro</label>
                   <div class="control has-icons">
                     <input
@@ -128,6 +128,21 @@
                     </span>
                   </div>
                 </div>
+                <div class="field column is-2">
+                  <label class="label">Quadrante</label>
+                  <div class="control">
+                    <input
+                      class="input"
+                      type="text"
+                      placeholder="Quadrante"
+                      v-model="codend.quadrante"
+                      :class="{ 'is-danger': v$.codend.quadrante.$error }"
+                    />
+                    <span class="is-error" v-if="v$.codend.quadrante.$error">
+                      {{ v$.codend.quadrante.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -161,7 +176,8 @@ import {
   required$,
   combo$,
   minLength$,
-  maxLength$
+  maxLength$,
+  integer$
 } from "../../components/forms/validators.js";
 
 export default {
@@ -184,6 +200,7 @@ export default {
         numero: '',
         complemento: '',
         id_usuario: 0,
+        quadrante: ''
       },
       v$: useValidate(),
       municipio:'',
@@ -223,6 +240,9 @@ export default {
         },
         id_quarteirao: {
           minValue: combo$(1)
+        },
+        quadrante:{
+          integer$
         }
       },
     };
@@ -256,6 +276,9 @@ export default {
             })
     },
     create() {
+      if (this.codend.quadrante == ''){
+         this.codend.quadrante = 0;         
+      }
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById('login').classList.add('is-loading');

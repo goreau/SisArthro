@@ -241,6 +241,8 @@ export default {
             { title: "Área", field: "fant_area", type: "string" },
             { title: "Quadra", field: "fant_quart", type: "string" },
             { title: "Codend", field: "codend", type: "string" },
+            { title: "PC", field: "pc", type: "string" },
+            { title: "Coordenaddas", field: "coordenadas", type: "string" },
             { title: "Método", field: "metodo", type: "string" },
             { title: "Ambiente", field: "ambiente", type: "string" },
             { title: "Local Capt", field: "local_captura", type: "string" },

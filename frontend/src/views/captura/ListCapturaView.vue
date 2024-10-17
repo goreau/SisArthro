@@ -102,16 +102,16 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Número", field: "codigo", type: "string" },
-      { title: "Atividade", field: "atividade", type: "string" },
-      { title: "Agravo", field: "agravo", type: "string" },
-      { title: "Município", field: "municipio", type: "string" },
-      { title: "Data", field: "dt_captura", type: "string", sorter: "date", sorterParams:{
+      { title: "Número", field: "codigo", type: "string", minWidth: 200 },
+      { title: "Atividade", field: "atividade", type: "string", minWidth: 200, responsive:1, },
+      { title: "Agravo", field: "agravo", type: "string", minWidth: 200, responsive:1, },
+      { title: "Município", field: "municipio", type: "string", minWidth: 250, responsive:1, },
+      { title: "Data", field: "dt_captura", type: "string", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
           format:"dd/MM/yyyy",
           alignEmptyValues:"top",
       }},
       {
-        title: "Ações",
+        title: "Ações", minWidth: 200, responsive:0,
         formatter: (cell, formatterParams) => {
           const row = cell.getRow().getData();
 

@@ -414,7 +414,7 @@ export default {
     getEspeciesN(e) {
       let gen = e.target.value;
       especieService
-        .comboEsp({gen})
+        .comboEsp(gen)
         .then((res) => {
           this.especies = res.data;
         })

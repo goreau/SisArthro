@@ -471,21 +471,26 @@ export default {
       } 
     },
     prepare(){
-      this.captura_det.temp_inicio = this.captura_det.temp_inicio == "" ? '0' : this.captura_det.temp_inicio;
-      this.captura_det.temp_final = this.captura_det.temp_final == "" ? '0' : this.captura_det.temp_final;
-      this.captura_det.umidade_inicio = this.captura_det.umidade_inicio == "" ? '0' : this.captura_det.umidade_inicio;
-      this.captura_det.umidade_final = this.captura_det.umidade_final == "" ? '0' : this.captura_det.umidade_final;
-      this.captura_det.altura = this.captura_det.altura == "" ? '0' : this.captura_det.altura;
+      this.captura_det.temp_inicio = this.captura_det.temp_inicio == "" ? '0' : this.forceChangeComma(this.captura_det.temp_inicio);
+      this.captura_det.temp_final = this.captura_det.temp_final == "" ? '0' : this.forceChangeComma(this.captura_det.temp_final);
+      this.captura_det.umidade_inicio = this.captura_det.umidade_inicio == "" ? '0' : this.forceChangeComma(this.captura_det.umidade_inicio);
+      this.captura_det.umidade_final = this.captura_det.umidade_final == "" ? '0' : this.forceChangeComma(this.captura_det.umidade_final);
+      this.captura_det.altura = this.captura_det.altura == "" ? '0' : this.forceChangeComma(this.captura_det.altura);
       this.captura_det.amostra = this.captura_det.amostra == "" ? '0' : this.captura_det.amostra;
       this.captura_det.quant_potes = this.captura_det.quant_potes == "" ? '0' : this.captura_det.quant_potes;
       this.captura_det.num_arm = this.captura_det.num_arm == "" ? '0' : this.captura_det.num_arm;
 
-      this.captura_det.latitude.replace(',','.');
+      this.captura_det.latitude = this.forceChangeComma(this.captura_det.latitude);
+      this.captura_det.longitude = this.forceChangeComma(this.captura_det.longitude);
+
+    /*  this.captura_det.latitude.replace(',','.');
       this.captura_det.longitude.replace(',','.');
       this.captura_det.temp_inicio.replace(',','.');
       this.captura_det.temp_final.replace(',','.');
       this.captura_det.umidade_inicio.replace(',','.');
       this.captura_det.umidade_final.replace(',','.');
+      this.captura_det.altura.replace(',','.');*/
+
 
       if (this.captura_det.area == '') {
           this.captura_det.area = '0';
@@ -497,11 +502,11 @@ export default {
       }
     },
     create() {
+      this.prepare();
+
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
-        
-        this.prepare();
 
         capturaService
           .createDet(this.captura_det)
@@ -579,6 +584,10 @@ export default {
     changeComma(e) {
       let str = e.target.value;
       e.target.value = str.replace(/,/g , ".")
+    },
+    forceChangeComma(str){
+      if (typeof str != 'string') return str;
+      return str.replace(/,/g , ".");
     }
   },
   mounted() {},
