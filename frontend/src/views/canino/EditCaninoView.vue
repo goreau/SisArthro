@@ -366,8 +366,10 @@ export default {
       }
     },
     prepare() {
-      this.canino.latitude.replace(',', '.');
-      this.canino.longitude.replace(',', '.');
+      if(isNaN(this.canino.latitude)){
+        this.canino.latitude.replace(',', '.');
+        this.canino.longitude.replace(',', '.');
+      } 
     },
     details(){
       this.$router.push("/canino_dets/"+this.canino.id_canino);

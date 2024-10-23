@@ -60,6 +60,7 @@ export default {
                         { title: "Local Capt", field: "local_captura", type: "string" },
                         { title: "No Arm", field: "num_arm", type: "string" },
                         { title: "Amostra", field: "amostra", type: "string" },
+                        { title: "Espécie", field: "especie", type: "string" },
                       ];
             this.expColumns = [
                         { title: "Município", field: "municipio", type: "string" },
@@ -90,7 +91,13 @@ export default {
                         { title: "Umid Fim", field: "umidade_final", type: "string" },
                         { title: "Amostra", field: "amostra", type: "string" },
                         { title: "Qt Potes", field: "quant_potes", type: "string" },
-                        { title: "Resultado", field: "resultado", type: "string" },
+                        { title: "Espécie", field: "especie", type: "string" },
+                        { title: "Pool", field: "pool", type: "string" },
+                        { title: "Macho", field: "macho", type: "string" },
+                        { title: "Fêmea", field: "femea", type: "string" },
+                        { title: "Fêmea Ing", field: "femea_ing", type: "string" },
+                        { title: "Larva", field: "larva", type: "string" },
+                        { title: "Ninfa", field: "ninfa", type: "string" },
                       ];      
           break;
         case '102':

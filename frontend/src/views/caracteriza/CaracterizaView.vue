@@ -366,6 +366,23 @@ export default {
             field.addEventListener('click', changed)
             field.addEventListener('keyup', changed)
         },
+        getDateFormat(dateString) {
+            // Define os padrões para os formatos de data
+            const formats = {
+                "YYYY-MM-DD": /^\d{4}-\d{2}-\d{2}$/,
+                "DD/MM/YYYY": /^\d{2}\/\d{2}\/\d{4}$/,
+                "MM-DD-YYYY": /^\d{2}-\d{2}-\d{4}$/
+            };
+
+            // Verifica qual padrão a string de data corresponde
+            for (const format in formats) {
+                if (formats[format].test(dateString)) {
+                    return format;
+                }
+            }
+
+            return "Formato desconhecido";
+        },
         create() {
             this.v$.$validate(); // checks all inputs
             if (!this.v$.$error) {
@@ -423,7 +440,15 @@ export default {
         if (obj) {
             let preserv = JSON.parse(obj);
 
-            this.caracteriza.dt_caracterizacao = preserv.date == '' ? '' : moment(String(preserv.date)).format('DD/MM/YYYY');
+            let format = this.getDateFormat(preserv.date);
+            if (format == 'YYYY-MM-DD'){
+                this.caracteriza.dt_caracterizacao = preserv.date == '' ? '' : moment(String(preserv.date)).format('DD/MM/YYYY');
+            } else {
+                let partes = preserv.date.split('/');
+                preserv.date = partes.reverse().join('-');
+                this.caracteriza.dt_caracterizacao = moment(String(preserv.date)).format('DD/MM/YYYY');
+            }
+            
             this.caracteriza.responsavel = preserv.resp;
         }
 
