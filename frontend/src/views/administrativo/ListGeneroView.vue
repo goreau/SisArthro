@@ -167,8 +167,8 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Nome", field: "nome", type: "string" },
-      { title: "Tipo", field: "tipo", type: "string" },
+      { title: "Nome", field: "nome" },
+      { title: "Tipo", field: "tipo" },
       {
         title: "Ações",
         formatter: (cell, formatterParams) => {

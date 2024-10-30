@@ -104,9 +104,9 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Município", field: "municipio", type: "string", minWidth: 250, responsive:1, },
-      { title: "Captura", field: "codigo", type: "string", minWidth: 200, responsive:1, },
-      { title: "Data", field: "dt_identificacao", type: "string", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
+      { title: "Município", field: "municipio", minWidth: 250, responsive:1, },
+      { title: "Captura", field: "codigo", minWidth: 200, responsive:1, },
+      { title: "Data", field: "dt_identificacao", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
           format:"dd/MM/yyyy",
           alignEmptyValues:"top",
       }},

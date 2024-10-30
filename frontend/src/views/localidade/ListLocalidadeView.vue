@@ -92,10 +92,10 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Municipio", field: "municipio", type: "string", minWidth: 250, responsive:1, },
-      { title: "Código", field: "codigo", type: "string", minWidth: 200, responsive:2, },
-      { title: "Nome", field: "nome", type: "string", minWidth: 200, responsive:1, },
-      { title: "Data", field: "data", type: "string", sorter: "date", sorterParams:{
+      { title: "Municipio", field: "municipio", minWidth: 250, responsive:1, },
+      { title: "Código", field: "codigo", minWidth: 200, responsive:2, },
+      { title: "Nome", field: "nome", minWidth: 200, responsive:1, },
+      { title: "Data", field: "data", sorter: "date", sorterParams:{
           format:"dd/MM/yyyy",
           alignEmptyValues:"top",
       }, minWidth: 200, responsive:4,},

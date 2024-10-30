@@ -582,11 +582,11 @@ export default {
         
 
         this.columns = [
-            { title: "Número", field: "numero", type: "string", widthGrow: 1 },
-            { title: "Tipo", field: "fant_tipo", type: "string", widthGrow: 3 },
-            { title: "Exame", field: "fant_exame", type: "string", widthGrow: 2 },
-            { title: "Resultado", field: "fant_result", type: "string", widthGrow: 2 },
-            { title: "Espécie", field: "especie", type: "string", widthGrow: 2 },
+            { title: "Número", field: "numero", widthGrow: 1 },
+            { title: "Tipo", field: "fant_tipo", widthGrow: 3 },
+            { title: "Exame", field: "fant_exame", widthGrow: 2 },
+            { title: "Resultado", field: "fant_result", widthGrow: 2 },
+            { title: "Espécie", field: "especie", widthGrow: 2 },
             { title: "Repetir", field: "repetir", formatter: "tickCross", hozAlign: "center", widthGrow: 1 },
             { title: "Ações", widthGrow: 2,
                 formatter: (cell, formatterParams) => {

@@ -102,11 +102,11 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Quadra", field: "quadra", type: "string", minWidth: 200, responsive:1, },
-      { title: "CodEnd", field: "codend", type: "string", minWidth: 200, responsive:2, },
-      { title: "Método", field: "metodo", type: "string", minWidth: 200, responsive:1, },
-      { title: "Local", field: "local", type: "string", minWidth: 200, responsive:1, },
-      { title: "Amostra", field: "amostra", type: "string", minWidth: 200, responsive:3, },
+      { title: "Quadra", field: "quadra", minWidth: 200, responsive:1, },
+      { title: "CodEnd", field: "codend", minWidth: 200, responsive:2, },
+      { title: "Método", field: "metodo", minWidth: 200, responsive:1, },
+      { title: "Local", field: "local", minWidth: 200, responsive:1, },
+      { title: "Amostra", field: "amostra", minWidth: 200, responsive:3, },
       {
         title: "Ações", minWidth: 200, responsive:0,
         formatter: (cell, formatterParams) => {

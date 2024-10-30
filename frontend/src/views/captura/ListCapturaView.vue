@@ -102,11 +102,11 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Número", field: "codigo", type: "string", minWidth: 200 },
-      { title: "Atividade", field: "atividade", type: "string", minWidth: 200, responsive:1, },
-      { title: "Agravo", field: "agravo", type: "string", minWidth: 200, responsive:1, },
-      { title: "Município", field: "municipio", type: "string", minWidth: 250, responsive:1, },
-      { title: "Data", field: "dt_captura", type: "string", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
+      { title: "Número", field: "codigo", minWidth: 200 },
+      { title: "Atividade", field: "atividade", minWidth: 200, responsive:1, },
+      { title: "Agravo", field: "agravo", minWidth: 200, responsive:1, },
+      { title: "Município", field: "municipio", minWidth: 250, responsive:1, },
+      { title: "Data", field: "dt_captura", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
           format:"dd/MM/yyyy",
           alignEmptyValues:"top",
       }},

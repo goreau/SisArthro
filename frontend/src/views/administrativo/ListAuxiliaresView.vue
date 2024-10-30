@@ -216,8 +216,8 @@ export default {
     // this.myspan.innerHTML='<p>teste</p>';;
 
     this.columns = [
-      { title: "Código", field: "codigo", type: "string" },
-      { title: "Nome", field: "descricao", type: "string" },
+      { title: "Código", field: "codigo" },
+      { title: "Nome", field: "descricao" },
       {
         title: "Ações",
         formatter: (cell, formatterParams) => {

@@ -575,9 +575,9 @@ export default {
         this.startCalendar();
         
         this.columns = [
-        { title: "Tipo Amostra", field: "paras_fant_tipo", type: "string" },
-            { title: "Data Exame", field: "paras_dt_ex", type: "string" },
-            { title: "Resultado", field: "paras_fant_result", type: "string" },
+        { title: "Tipo Amostra", field: "paras_fant_tipo" },
+            { title: "Data Exame", field: "paras_dt_ex" },
+            { title: "Resultado", field: "paras_fant_result" },
             {
                 title: "Ações",
                 formatter: (cell, formatterParams) => {

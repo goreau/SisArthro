@@ -9,17 +9,13 @@
         </label>
       </div>
     </div>
-    <div class="column is-10" :style="{visibility: filter ? 'visible' : 'hidden'}">
+    <div class="column is-10" :style="{ visibility: filter ? 'visible' : 'hidden' }">
       <div class="columns">
         <div class="column is-3">
           <div class="select">
             <select v-model="form.field" class="input">
               <option value="0">-- Coluna --</option>
-              <option
-                v-for="(item, index) in columns"
-                :key="index"
-                :value="item.field"
-              >
+              <option v-for="(item, index) in columns" :key="index" :value="item.field">
                 {{ item.title }}
               </option>
             </select>
@@ -41,12 +37,7 @@
         </div>
         <div class="column is-3">
           <div class="field has-addons">
-            <input
-              type="text"
-              class="input"
-              v-model="form.value"
-              placeholder="Valor a filtrar"
-            />
+            <input type="text" class="input" v-model="form.value" placeholder="Valor a filtrar" />
             <div class="control">
               <a class="button is-info" @click="setFilter">
                 <span class="icon is-small">
@@ -59,8 +50,8 @@
         <div class="column is-1">
           <button class="button is-success is-outlined" title="Limpar" @click="clearFilter">
             <span class="icon is-small">
-                  <font-awesome-icon icon="fa-solid fa-broom" />
-                </span>
+              <font-awesome-icon icon="fa-solid fa-broom" />
+            </span>
           </button>
         </div>
       </div>
@@ -68,43 +59,27 @@
   </div>
 
   <div class="has-text-right" v-if="exports">
-    <button
-      id="download-csv"
-      class="button is-link is-outlined is-small"
-      @click="download_csv"
-    >
+    <button id="download-csv" class="button is-link is-outlined is-small" @click="download_csv">
       <font-awesome-icon icon="fa-solid fa-file-csv" />
     </button>
-    <button
-      id="download-json"
-      class="button is-info is-outlined is-small"
-      @click="download_json"
-    >
+    <button id="download-json" class="button is-info is-outlined is-small" @click="download_json">
       <font-awesome-icon icon="fa-solid fa-file-lines" />
     </button>
-    <button
-      id="download-xlsx"
-      class="button is-success is-outlined is-small"
-      @click="download_xlsx"
-    >
+    <button id="download-xlsx" class="button is-success is-outlined is-small" @click="download_xlsx">
       <font-awesome-icon icon="fa-solid fa-file-excel" />
     </button>
-    <button
-      id="download-pdf"
-      class="button is-danger is-outlined is-small"
-      @click="download_pdf"
-    >
+    <button id="download-pdf" class="button is-danger is-outlined is-small" @click="download_pdf">
       <font-awesome-icon icon="fa-solid fa-file-pdf" />
     </button>
   </div>
   <Loader v-if="isLoading" />
   <div ref="table" class="is-striped"></div>
-  <div ref="tableExp" style="display: none;" ></div>
+  <div ref="tableExp" style="display: none;"></div>
 </template>
 
 <script>
 import { TabulatorFull as Tabulator } from "tabulator-tables"; //import Tabulator library
-import {ResponsiveLayoutModule} from 'tabulator-tables';
+import { ResponsiveLayoutModule } from 'tabulator-tables';
 import lang from "./lang";
 import Loader from "@/components/general/Loader.vue";
 
@@ -122,7 +97,7 @@ export default {
       initial: 1,
       isLoading: false,
       filter: false,
-      arrFilter:[],
+      arrFilter: [],
       cbColumns: []
     };
   },
@@ -136,7 +111,7 @@ export default {
       const col = this.columns.filter((v) => v.field === obj.field, obj);
       obj.typed = col[0].type;
 
-      this.arrFilter.push({field: obj.field, type: obj.type, value: obj.value});
+      this.arrFilter.push({ field: obj.field, type: obj.type, value: obj.value });
 
       this.tabulator.setFilter(this.arrFilter);//obj.column, obj.operator, obj.value);
 
@@ -159,15 +134,15 @@ export default {
       this.isLoading = false;
     },
     download_csv() {
-      if (this.expColumns == undefined){
+      if (this.expColumns == undefined) {
         this.tabulator.download("csv", "data.csv");
       } else {
         this.tabulatorExp.download("csv", "data.csv");
       }
-      
+
     },
     download_xlsx() {
-      if (this.expColumns == undefined){
+      if (this.expColumns == undefined) {
         this.tabulator.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
       } else {
         this.tabulatorExp.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
@@ -180,18 +155,18 @@ export default {
       });
     },
     download_json() {
-      if (this.expColumns == undefined || this.expColumns.lenght == 0){
+      if (this.expColumns == undefined || this.expColumns.lenght == 0) {
         this.tabulator.download("json", "data.json");
       } else {
         this.tabulatorExp.download("json", "data.json");
       }
-      
+
     },
     toggleFilter(e) {
       this.filter = e.target.checked;
     },
   },
-  props: ["tableData", "columns","filtered","exports","tableName", "expColumns"],
+  props: ["tableData", "columns", "filtered", "exports", "tableName", "expColumns"],
   watch: {
     tableData(value) {
       this.isLoading = true;
@@ -201,7 +176,7 @@ export default {
         data: value, //link data to table
         responsiveLayout: true,
         layout: "fitColumns",
-        placeholder:"Nenhum registro atende aos critérios escolhidos!",
+        placeholder: "Nenhum registro atende aos critérios escolhidos!",
         reactiveData: true, //enable data reactivity
         columns: this.columns, //define table columns
         pagination: "local",
@@ -213,43 +188,47 @@ export default {
         movableColumns: true,
         paginationCounter: "rows",
       });
-      this.cbColumns = this.columns.filter( el => el.title !== "Ações");
+      this.cbColumns = this.columns.filter(el => el.title !== "Ações");
 
-      if (this.filter){
+      if (this.filter) {
         this.tabulator.setFilter(this.arrFilter);//this.form.column, this.form.operator, this.form.value);
       }
 
-      if (this.expColumns != undefined){
- //       if (this.expColumns.lenght > 0){
+      if (this.expColumns != undefined) {
+        //       if (this.expColumns.lenght > 0){
+        this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
+          langs: lang,
+          locale: "pt-br",
+          layout: "fitColumns",
+          heigth: 10,
+          data: this.tableData,
+          columns: this.expColumns,
+        });
+        //       }
+      }
+      let me = this;
+      this.tabulator.on("tableBuilt", function () {
+        me.tabulator.on("pageLoaded", (function (pageno) {
+          me.initial = pageno;
+          let name = me.tableName + '_page';
+          localStorage.setItem(name, me.initial);
+        }).bind(this));
+      //  me.tabulator.setPageToRow(me.initial);
+      });
+
+
+      this.isLoading = false;
+    },
+    expColumns(value) {
+      if (this.tableData != undefined) {
+        if (this.tableData.lenght > 0) {
           this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
             langs: lang,
             locale: "pt-br",
             layout: "fitColumns",
             heigth: 10,
             data: this.tableData,
-            columns: this.expColumns,
-          });
- //       }
-      }
-      this.tabulator.on("pageLoaded", (function(pageno){
-        this.initial = pageno;
-        let name = this.tableName + '_page';
-        localStorage.setItem(name, this.initial);
-      }).bind(this));
-      this.tabulator.setPageToRow(this.initial);
-
-      this.isLoading = false;
-    },
-    expColumns(value){
-      if (this.tableData != undefined){
-        if(this.tableData.lenght > 0){
-          this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
-              langs: lang,
-              locale: "pt-br",
-              layout: "fitColumns",
-              heigth: 10,
-              data: this.tableData,
-              columns: value,
+            columns: value,
           });
         }
       }
@@ -264,23 +243,23 @@ export default {
     document.head.appendChild(externalScript);
 
     let stFilter = JSON.parse(localStorage.getItem(this.tableName));
-    
+
     if (stFilter) {
-      if (Array.isArray(stFilter)){
+      if (Array.isArray(stFilter)) {
         this.arrFilter = stFilter;
         var obj = stFilter[0];
         this.form = obj;//JSON.parse(obj);
         this.filter = true;
       } else {
         localStorage.removeItem(this.tableName);
-      }  
+      }
     }
 
     let name = this.tableName + '_page';
     let pg = localStorage.getItem(name);
 
-    if (pg){
-      this.initial = pg;
+    if (pg) {
+      this.initial = parseInt(pg);
     }
 
     let externalScript1 = document.createElement("script");
@@ -346,15 +325,15 @@ export default {
   transition: 0.4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: #2a455a;
 }
 
-input:focus + .slider {
+input:focus+.slider {
   box-shadow: 0 0 1px #2a455a;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   -webkit-transform: translateX(1rem);
   -ms-transform: translateX(1rem);
   transform: translateX(1rem);

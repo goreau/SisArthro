@@ -98,11 +98,11 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Código", field: "codigo", type: "string", minWidth: 200, responsive:2, },
-            { title: "Município", field: "municipio", type: "string", minWidth: 250, responsive:1, },
-            { title: "Notificante", field: "unidade", type: "string", minWidth: 250, responsive:3, },
+            { title: "Código", field: "codigo", minWidth: 200, responsive:2, },
+            { title: "Município", field: "municipio", minWidth: 250, responsive:1, },
+            { title: "Notificante", field: "unidade", minWidth: 250, responsive:3, },
             {
-                title: "Data", field: "dt_notifica", type: "string", sorter: "date", sorterParams: {
+                title: "Data", field: "dt_notifica", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 }, minWidth: 200, responsive:4,
@@ -112,7 +112,7 @@ export default {
                         return value;
                     }
             },
-            { title: "Cão", field: "nome", type: "string", minWidth: 200, responsive:1, },
+            { title: "Cão", field: "nome", minWidth: 200, responsive:1, },
             {
                 title: "Ações", minWidth: 200, responsive:0,
                 formatter: (cell, formatterParams) => {

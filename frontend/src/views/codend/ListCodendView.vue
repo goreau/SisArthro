@@ -90,10 +90,10 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Municipio", field: "municipio", type: "string", minWidth: 200, responsive:1, },
-      { title: "Quarteirao", field: "quarteirao", type: "string", minWidth: 200, responsive: 3, },
-      { title: "Código", field: "codigo", type: "string", minWidth: 200, responsive: 2, },
-      { title: "Endereço", field: "endereco", type: "string", minWidth: 300, responsive: 1, },
+      { title: "Municipio", field: "municipio", minWidth: 200, responsive:1, },
+      { title: "Quarteirao", field: "quarteirao", minWidth: 200, responsive: 3, },
+      { title: "Código", field: "codigo", minWidth: 200, responsive: 2, },
+      { title: "Endereço", field: "endereco", minWidth: 300, responsive: 1, },
       {
         title: "Ações", minWidth: 350, responsive: 0,
         formatter: (cell, formatterParams) => {

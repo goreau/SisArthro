@@ -748,9 +748,9 @@ export default {
         this.myspan2 = document.getElementsByName("coisa2")[0];
 
         this.columns = [
-            { title: "Município/UF", field: "municipio", type: "string" },
-            { title: "Zona", field: "zona", type: "string" },
-            { title: "Permanência", field: "permanencia", type: "string" },
+            { title: "Município/UF", field: "municipio" },
+            { title: "Zona", field: "zona" },
+            { title: "Permanência", field: "permanencia" },
             {
                 title: "Ações",
                 formatter: (cell, formatterParams) => {

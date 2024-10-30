@@ -102,11 +102,11 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Tipo", field: "tipo", type: "string", minWidth: 200 },
-      { title: "Nome", field: "nome", type: "string", minWidth: 200 },
-      { title: "Ano Nasc", field: "nascimento", type: "string", minWidth: 200, responsive: 2, },
-      { title: "Raça", field: "raca", type: "string", minWidth: 200 },
-      { title: "Sexo", field: "sexo", type: "string", minWidth: 200, responsive: 3 },
+      { title: "Tipo", field: "tipo", minWidth: 200 },
+      { title: "Nome", field: "nome", minWidth: 200 },
+      { title: "Ano Nasc", field: "nascimento", minWidth: 200, responsive: 2, },
+      { title: "Raça", field: "raca", minWidth: 200 },
+      { title: "Sexo", field: "sexo", minWidth: 200, responsive: 3 },
       {
         title: "Ações", responsive: 0, minWidth: 200,
         formatter: (cell, formatterParams) => {

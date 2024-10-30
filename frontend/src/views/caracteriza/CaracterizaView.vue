@@ -467,17 +467,17 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "CodEnd", field: "codigo", type: "string", minWidth: 250, responsive: 1, },
-            { title: "Ciclo", field: "ciclo", type: "string", minWidth: 200, responsive:3, },
+            { title: "CodEnd", field: "codigo", minWidth: 250, responsive: 1, },
+            { title: "Ciclo", field: "ciclo", minWidth: 200, responsive:3, },
             {
-                title: "Data", field: "dt_caracterizacao", type: "string", sorter: "date", sorterParams: {
+                title: "Data", field: "dt_caracterizacao", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 }, minWidth: 200, responsive: 2,
             },
-            { title: "Situação", field: "situacao", type: "string", minWidth: 200, responsive:1, },
-            { title: "Tipo Imóvel", field: "tipo_imovel", type: "string", minWidth: 200, responsive:3, },
-            { title: "Soma", field: "soma", type: "string", minWidth: 200, responsive:1, },
+            { title: "Situação", field: "situacao", minWidth: 200, responsive:1, },
+            { title: "Tipo Imóvel", field: "tipo_imovel", minWidth: 200, responsive:3, },
+            { title: "Soma", field: "soma", minWidth: 200, responsive:1, },
             {
                 title: "Ações", minWidth: 200, responsive:0,
                 formatter: (cell, formatterParams) => {

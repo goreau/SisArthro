@@ -106,12 +106,12 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Codend", field: "codend", type: "string", minWidth: 200, responsive:1, },
-            { title: "Animal", field: "nome", type: "string", minWidth: 200, responsive:1, },
-            { title: "Resultado", field: "resultado", type: "string", minWidth: 200, responsive:2, },
-            { title: "Desfecho", field: "desfecho", type: "string", minWidth: 200, responsive:3, },
+            { title: "Codend", field: "codend", minWidth: 200, responsive:1, },
+            { title: "Animal", field: "nome", minWidth: 200, responsive:1, },
+            { title: "Resultado", field: "resultado", minWidth: 200, responsive:2, },
+            { title: "Desfecho", field: "desfecho", minWidth: 200, responsive:3, },
             {
-                title: "Data", field: "dt_desfecho", type: "string", sorter: "date", sorterParams: {
+                title: "Data", field: "dt_desfecho", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 }, minWidth: 200, responsive:4,

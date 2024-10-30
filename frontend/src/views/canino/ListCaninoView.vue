@@ -98,11 +98,11 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Município", field: "municipio", type: "string", minWidth: 250 },
-            { title: "Quarteirão", field: "quadra", type: "string", minWidth: 200 },
-            { title: "Codend", field: "codend", type: "string", minWidth: 200 },
+            { title: "Município", field: "municipio", minWidth: 250 },
+            { title: "Quarteirão", field: "quadra", minWidth: 200 },
+            { title: "Codend", field: "codend", minWidth: 200 },
             {
-                title: "Data", field: "dt_canino", type: "string", sorter: "date", sorterParams: {
+                title: "Data", field: "dt_canino", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 },

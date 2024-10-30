@@ -346,8 +346,8 @@ export default {
     }
     
     this.columns = [
-      { title: "CodEnd", field: "codigo", type: "string" },
-      { title: "Endereço", field: "endereco", type: "string" },
+      { title: "CodEnd", field: "codigo" },
+      { title: "Endereço", field: "endereco" },
     ]
   },
   watch: {
