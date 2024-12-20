@@ -42,8 +42,8 @@ class CodendService {
   }
 
 
-  getCodends(filter) {
-    return axios.get(`/codends/${filter}`)
+  getCodends(mun, filter) {
+    return axios.get(`/codends/${mun}/${filter}`)
     .then(response => {
         return {data: response.data};
     },

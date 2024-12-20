@@ -13,6 +13,27 @@
               <span>Novo</span>
             </button>
           </header>
+          <div class="columns">
+                <div class="field column is-3 is-offset-3">
+                  <label class="label">Município</label>
+                  <div class="control">
+                    <CmbListaMun
+                        :tabela="tableName"
+                        :id_prop="currentUser.id"
+                        @selMun="filtMun = $event"
+                      />
+                  </div>
+              </div>
+              <div class="field column is-1 is-offset-2">
+                  <label class="label">&nbsp;</label>
+                  <div class="control">
+                    <button class="button is-link is-fullwidth" @click="loadData">
+                      <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
+                      Carregar
+                    </button>
+                  </div>
+              </div>
+          </div>
           <div class="card-content">
             <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
           </div>
@@ -42,11 +63,13 @@ import codendService from "@/services/codend.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
+import CmbListaMun from "@/components/forms/CmbListaMun.vue";
 
 export default {
   name: "ListaEndereços",
   data() {
     return {
+      filtMun: 0,
       dataTable: [],
       isLoading: false,
       columns: [],
@@ -61,6 +84,7 @@ export default {
     MyTable,
     Loader,
     ConfirmDialog,
+    CmbListaMun,
   },
   methods: {
     newEnd() {
@@ -79,7 +103,7 @@ export default {
       };
     },
     loadData(filter){
-    codendService.getCodends(filter)
+      codendService.getCodends(this.filtMun,filter)
       .then((response) => {
         this.dataTable = response.data;
         this.isLoading = false;
@@ -180,8 +204,8 @@ export default {
     this.myspan3 = document.getElementsByName("coisa3")[0];
     //document.createElement('span');
     // this.myspan.innerHTML='<p>teste</p>';;
-
-    this.isLoading = true;
+//
+   // this.isLoading = true;
 
     if (this.$route.params.quart){
       var cd = this.$route.params.quart;
@@ -189,7 +213,7 @@ export default {
       .then(
         async (response) => {
           let data = response.data[0];
-          this.loadData(data.id_quarteirao);
+          this.loadData(data.id_municipio, data.id_quarteirao);
         },
         (error) => {
           console.log(error);
@@ -197,7 +221,7 @@ export default {
         }
       );
     } else {
-      this.loadData(0);
+     // this.loadData(0);
     }
     
   },

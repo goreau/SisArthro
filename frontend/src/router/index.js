@@ -644,6 +644,50 @@ const routes = [
       }
     }
   },
+  {
+    path: '/pendlistcaracteriza/:id',
+    name: 'pendlistcaracteriza',
+    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/ListPendenciaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Caracterização - Pendência',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/pendcaracteriza',
+    name: 'pendcaracteriza',
+    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/CaracterizacaoPendenciaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Caracterização - Pendência',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/pendlistcanino/:id',
+    name: 'pendlistcanino',
+    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/ListPendenciaCaninoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Canino - Pendência',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/pendcanino',
+    name: 'pendcanino',
+    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/CaracterizacaoPendenciaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Canino - Pendência',
+        root: true
+      }
+    }
+  },
 ]
 
 const router = createRouter({

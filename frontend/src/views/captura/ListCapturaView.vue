@@ -21,6 +21,27 @@
               :type="type"
               :caption="caption"
             />
+            <div class="columns">
+                <div class="field column is-3 is-offset-3">
+                  <label class="label">Município</label>
+                  <div class="control">
+                    <CmbListaMun
+                        :tabela="tableName"
+                        :id_prop="currentUser.id"
+                        @selMun="filtMun = $event"
+                      />
+                  </div>
+              </div>
+              <div class="field column is-1 is-offset-2">
+                  <label class="label">&nbsp;</label>
+                  <div class="control">
+                    <button class="button is-link is-fullwidth" @click="loadData">
+                      <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
+                      Carregar
+                    </button>
+                  </div>
+              </div>
+          </div>
             <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :table-name="tableName"/>
           </div>
         </div>
@@ -44,11 +65,13 @@ import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Message from "@/components/general/Message.vue";
+import CmbListaMun from "@/components/forms/CmbListaMun.vue";
 
 export default {
   name: "ListaCapturas",
   data() {
     return {
+      filtMun: 0,
       dataTable: [],
       tableName: 'captura',
       isLoading: false,
@@ -66,6 +89,8 @@ export default {
     MyTable,
     Loader,
     ConfirmDialog,
+    Message,
+    CmbListaMun
   },
   methods: {
     newCapt() {
@@ -73,6 +98,18 @@ export default {
     },
     editCapt(id) {
       this.$router.push(`/editCapt/${id}`);
+    },
+    loadData(){
+      this.isLoading = true;
+      capturaService.getCapturas(this.filtMun)
+      .then((response) => {
+        this.dataTable = response.data;
+        this.isLoading = false;
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => (this.isLoading = false));
     },
     getFormat(row) {
       return {
@@ -90,16 +127,7 @@ export default {
     this.myspan = document.getElementsByName("coisa")[0];
     this.myspan2 = document.getElementsByName("coisa2")[0];
     
-    this.isLoading = true;
-    capturaService.getCapturas({})
-      .then((response) => {
-        this.dataTable = response.data;
-        this.isLoading = false;
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => (this.isLoading = false));
+    
 
     this.columns = [
       { title: "Número", field: "codigo", minWidth: 200 },

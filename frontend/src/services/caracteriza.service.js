@@ -51,6 +51,46 @@ class CaracterizaService {
         return error.response.data;
     })
   } 
+
+  getListPendencia() {
+    return axios.get(`/listpendcaracteriza`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getPendencias(quart) {
+    return axios.get(`/pendcaracteriza/${quart}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getListRisco() {
+    return axios.get(`/listriscocaracteriza`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getRiscos(quart) {
+    return axios.get(`/riscocaracteriza/${quart}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
 }
 
 export default new CaracterizaService();

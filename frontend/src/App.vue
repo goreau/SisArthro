@@ -381,7 +381,68 @@ export default {
             },
           ],
         },
-
+        {
+          href: "",
+          title: "Gerenciais",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-screwdriver-wrench",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/pendlistcaracteriza/1",
+              title: "Caracterização - Pendência",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/pendlistcaracteriza/2",
+              title: "Caracterização - Risco",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/pendlistcanino/1",
+              title: "Canino - Pendência",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/pendlistcanino/2",
+              title: "Canino - Inquérito",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ]
+        },
         {
           href: "/report",
           title: "Relatórios",

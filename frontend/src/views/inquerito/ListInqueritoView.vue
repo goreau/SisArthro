@@ -142,7 +142,7 @@ export default {
                             okButton: 'Confirmar',
                         })
                         if (ok) {
-                            caninoService.delete(row.id_inquerito)
+                            inqueritoService.delete(row.id_inquerito)
                                 .then(() => {
                                     location.reload();
                                 })

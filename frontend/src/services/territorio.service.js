@@ -33,6 +33,16 @@ class TerritorioService {
     })
   } 
 
+  getListaMun(tabela) {
+    return axios.get(`/listamun/${tabela}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
   getAreas(id) {
     return axios.get(`/area/${id}`)
     .then(response => {

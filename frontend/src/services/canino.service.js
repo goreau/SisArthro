@@ -203,7 +203,46 @@ class CaninoService {
     })
   } 
 
+  getListPendencia() {
+    return axios.get(`/listpendcanino`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
 
+  getPendencias(quart) {
+    return axios.get(`/pendcanino/${quart}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+
+  getListInquerito() {
+    return axios.get(`/listinqcanino`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getInquerito(quart) {
+    return axios.get(`/inqcanino/${quart}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
 }
 
 export default new CaninoService();
