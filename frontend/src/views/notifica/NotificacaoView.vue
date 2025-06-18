@@ -559,6 +559,10 @@ export default {
                 document.getElementById('login').classList.add('is-loading');
 
                 this.notifica.deslocamentos = this.teste;
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
 
                 notificaService.create(this.notifica).then(
                     (response) => {
@@ -569,7 +573,7 @@ export default {
                         this.notifica.codigo = response.data.master.codigo
                         setTimeout(() => {
                             this.showMessage = false;
-                            this.$router.push("/notifica_det/" + response.data.master.id_notifica)
+                            this.$router.push("/notifica_exame/" + response.data.master.id_notificacao)
                         }, 5000);
                     },
                     (error) => {

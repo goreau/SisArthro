@@ -96,6 +96,52 @@
                       </div>
                     </div>
                   </div>
+                  <section class="section" v-show="noAgravo.indexOf(tipo_relat) != -1">
+                    <div class="columns">
+                      <div class="field column is-full">
+                        <label class="label">Agravo</label>
+                        <div class="control">
+                          <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event" :sel="filter.agravo"/>
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                  <section class="section" v-show="noSexo.indexOf(tipo_relat) != -1">
+                    <div class="columns">
+                      <div class="field column is-full">
+                        <fieldset class="fieldset">
+                          <legend>Tipo de Amostra {{ filter.sexo }}</legend>
+                
+                        <div class="columns">
+                          <div class="column is-3">
+                            <label class="radio">
+                              <input type="radio" name="sexo" value="9" v-model="filter.sexo" />
+                                Todas
+                            </label>
+                          </div>
+                          <div class="column is-3">
+                            <label class="radio">
+                              <input type="radio" name="sexo" value="1" v-model="filter.sexo" />
+                                Machos
+                            </label>
+                          </div>
+                          <div class="column is-3">
+                            <label class="radio">
+                              <input type="radio" name="sexo" value="2" v-model="filter.sexo" />
+                                Fêmeas
+                            </label>
+                          </div>
+                          <div class="column is-3">
+                            <label class="radio">
+                              <input type="radio" name="sexo" value="3" v-model="filter.sexo" />
+                                Fêmeas Ingurgitadas
+                            </label>
+                          </div>
+                        </div>
+                        </fieldset>
+                      </div>
+                    </div>
+                  </section>
                   <section class="section" v-show="noDate.indexOf(tipo_relat) == -1">
                     <div class="columns">
                       <div class="column is-half">
@@ -150,6 +196,7 @@ import CmbTerritorio from "@/components/forms/CmbTerritorio.vue"
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
 import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
+import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 
 export default {
   data() {
@@ -161,6 +208,8 @@ export default {
         id_municipio: 0,
         dt_inicio: "",
         dt_final: "",
+        agravo: "",
+        sexo: '9',
       },
       ini_date: '',
       fim_date: '',
@@ -172,6 +221,8 @@ export default {
       type: "",
       showMessage: false,
       noDate: new Array('103'),
+      noAgravo: new Array('1','2','101','102'),
+      noSexo: new Array('1','2','101','102'),
     };
   },
   computed: {
@@ -184,11 +235,13 @@ export default {
     Loader,
     CmbTerritorio,
     CmbMunicipio,
+    CmbAuxiliares,
   },
   methods: {
     processar() {
-      localStorage.setItem('filter', JSON.stringify(this.filter));
+      localStorage.setItem('filterRelArthro', JSON.stringify(this.filter));
 
+      
       if (this.tipo_relat > 100) {
         this.$router.push(`/report/${this.tipo_relat}`);
       } else {
@@ -216,7 +269,7 @@ export default {
       this.id_usuario = cUser.id;
     }
 
-    var obj = localStorage.getItem('filter');
+    var obj = localStorage.getItem('filterRelArthro');
     if (obj) {
       this.filter = JSON.parse(obj);
 
@@ -254,6 +307,10 @@ export default {
       element.bulmaCalendar.on('select', datepicker => {
         this.filter.dt_inicio = moment(datepicker.data.startDate).format('YYYY-MM-DD');
       });
+
+      element.bulmaCalendar.on('clear', datepicker => {
+          this.filter.dt_inicio = '';
+      });
     }
 
     options = {
@@ -275,6 +332,10 @@ export default {
       // bulmaCalendar instance is available as element.bulmaCalendar
       element2.bulmaCalendar.on('select', datepicker => {
         this.filter.dt_final = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+      });
+
+      element2.bulmaCalendar.on('clear', datepicker => {
+          this.filter.dt_final = '';
       });
     }
 
@@ -333,5 +394,27 @@ section {
 
 .linha label {
   padding-top: 1rem !important;
+}
+
+.fieldset {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
+  color: #4a4a4a;
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
+
+.fieldset>legend {
+  color: #363636;
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #fff;
+  padding: 0 5px;
+  width: max-content;
+  border: 0 none
 }
 </style>

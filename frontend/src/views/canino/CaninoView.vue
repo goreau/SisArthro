@@ -169,12 +169,14 @@ import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
 import {
   required$,
+  requiredIf$,
   combo$,
   maxLength$,
   minLength$,
   decimal$,
 } from "../../components/forms/validators.js";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
+import CoordenadaMixin from "@/mixins/CoordenadaMixin.js";
 
 
 export default {
@@ -185,6 +187,9 @@ export default {
     CmbAuxiliares,
     footerCard
   },
+  mixins: [
+    CoordenadaMixin,
+  ],
   data() {
     return {
       area: [],
@@ -216,7 +221,8 @@ export default {
         strSubmit: 'Salvar',
         strCancel: 'Cancelar',
         strAux: '',
-        aux: false
+        aux: false,
+        disabled: false
       }
     };
   },
@@ -224,8 +230,7 @@ export default {
     return {
       canino: {
         proprietario: {
-          required$,
-          minLength: minLength$(3),
+          requiredIf: requiredIf$(this.canino.id_situacao == 700),
           maxLength: maxLength$(40)
         },
         telefone: {
@@ -268,12 +273,13 @@ export default {
       }
     },
     changeComma(e) {
-      let str = e.target.value;
-      e.target.value = str.replace(/,/g, ".");
+      //this.latitude = this.formatarCoordenada(this.latitude);
+      let str = this.formatarCoordenada(e.target.value);
+      
       if (e.target.name == 'latitude'){
-        this.canino.latitude = e.target.value;
+        this.canino.latitude = str;
       } else if (e.target.name == 'longitude'){
-        this.canino.longitude = e.target.value;
+        this.canino.longitude = str;
       }
     },
     prepare() {
@@ -281,7 +287,7 @@ export default {
       this.canino.longitude.replace(',', '.');
     },
     create() {
-      this.prepare();
+     // this.prepare();
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById('login').classList.add('is-loading');
@@ -447,6 +453,9 @@ export default {
       let fant_q = this.quarteirao.filter(item => item.id_quarteirao === value);
       this.canino.fant_quart = fant_q[0].numero;
       this.getCodends();
+    },
+    'canino.id_situacao'(value) {
+      this.cFooter.disabled = value !== 700;
     }
   },
 };

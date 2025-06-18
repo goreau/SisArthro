@@ -62,7 +62,7 @@
                               v-model="identifica.responsavel" />
                           </div>
                         </div>
-                        <div class="field column is-6">
+                        <div class="field column is-3">
                           <label class="label">Data</label>
                           <div class="control" v-if="identifica_det.id_identificacao_det > 0">
                             <input type="date" class="input" v-model="identifica.dt_identificacao" readonly>
@@ -70,6 +70,12 @@
                           <div class="control" v-else>
                             <input type="date" id="dtIdent">
                           </div>
+                        </div>
+                        <div class="field column is-3">
+                          <label class="label">&nbsp;</label>
+                          <button class="button is-outlined is-success" @click="update">
+                            Atualizar
+                          </button>
                         </div>
 
                       </div>
@@ -286,6 +292,8 @@ export default {
     return {
       identifica: {
         id_captura: { required: required$, minValue: combo$(1) },
+        responsavel: { maxLength: maxLength$(50) },
+        dt_identificacao: { required: required$ },
       },
       identifica_det: {
         amostra: { required: required$, minValue: combo$(1) },
@@ -337,8 +345,48 @@ export default {
     details() {
       this.$router.push("/identifica_dets/" + this.identifica.id_identificacao);
     },
+    update() {
+      this.v$.identifica.$validate(); // checks all inputs
+      if (!this.v$.identifica.$error) {
+
+        identificaService
+          .update(this.identifica)
+          .then(
+            (response) => {
+              this.message = "Identificação alterada com sucesso.";
+              this.showMessage = true;
+              this.type = "success";
+              this.caption = "Identificação";
+              setTimeout(() => (this.showMessage = false), 3000);
+            },
+            (error) => {
+              this.message = error;
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Identificação";
+              setTimeout(() => (this.showMessage = false), 3000);
+            }
+          )
+          .catch((err) => {
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Identificação";
+              setTimeout(() => (this.showMessage = false), 3000);
+          })
+          .finally(() => {
+            document.getElementById("btAbreId").classList.remove("is-loading");
+          });
+      } else {
+        this.message = "Corrija os erros para enviar as informações";
+        this.showMessage = true;
+        this.type = "alert";
+        this.caption = "Captura";
+        setTimeout(() => (this.showMessage = false), 3000);
+      }
+    },
     createDet() {
-      this.v$.$validate(); // checks all inputs
+      this.v$.identifica_det.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 

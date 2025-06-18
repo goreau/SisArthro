@@ -4,7 +4,7 @@
             <div class="column is-11">
                 <div class="card">
                     <header class="card-header">
-                        <p class="card-header-title is-centered">Animais Cadastradas</p>
+                        <p class="card-header-title is-centered">Investigações de Foco Cadastradas</p>
                         <button class="button is-primary is-outlined" @click="newCapt">
                             <span class="icon">
                                 <font-awesome-icon icon="fa-solid fa-plus-circle" />
@@ -102,7 +102,7 @@ export default {
             { title: "Quarteirão", field: "quadra", minWidth: 200, responsive: 2, },
             { title: "Número", field: "numero", minWidth: 200, responsive: 1, },
             {
-                title: "Data", field: "dt_canino", sorter: "date", sorterParams: {
+                title: "Data", field: "dt_foco", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 },

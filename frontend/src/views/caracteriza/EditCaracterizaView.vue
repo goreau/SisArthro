@@ -20,6 +20,24 @@
                                         </span>
                                     </div>
                                 </div>
+                                <div class="field column is-6">
+                                    <label class="label">CodLoc - Localidade</label>
+                                    <div class="control">
+                                        <CmbLocalidade :id_mun="id_municipio"
+                                            :sel="caracteriza.cod_loc"
+                                            @selLoc="caracteriza.cod_loc = $event" />
+                                    </div>
+                                </div>
+                                <div class="field column is-1"><label class="label">OU</label></div>
+                                <div class="field column is-3">
+                                        <label class="label">ATL</label>
+                                        <div class="control has-icons">
+                                            <input type="text" class="input" name="" id=""
+                                                v-model="caracteriza.atl">
+                                        </div>
+                                </div>
+                            </div>
+                            <div class="columns has-text-centered">
                                 <div class="field column is-3">
                                     <label class="label">Situação do Imóvel</label>
                                     <div class="control">
@@ -45,14 +63,14 @@
                                 <div class="column is-2">
                                     <label class="label">Vegetação</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" v-model="caracteriza.vegetacao">
+                                        <input class="checkmark is-large is-info" id="vegetacao" type="checkbox" name="vegetacao" true-value="1" false-value="0" v-model="caracteriza.vegetacao">
                                         <label for="vegetacao"></label>
                                     </div>                           
                                 </div>
                                 <div class="field column is-2">
                                     <label class="label">Mat. Orgânica</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" v-model="caracteriza.mat_organica">
+                                        <input class="checkmark is-large is-info" id="mat_organica" type="checkbox" name="mat_organica" true-value="1" false-value="0" v-model="caracteriza.mat_organica">
                                         <label for="mat_organica"></label>
                                     </div>
                                 </div>
@@ -61,42 +79,42 @@
                                 <div class="field column is-1 is-offset-1">
                                     <label class="label">Galinha</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" v-model="caracteriza.galinha">
+                                        <input class="checkmark is-large is-info" id="galinha" type="checkbox" name="galinha" true-value="1" false-value="0" v-model="caracteriza.galinha">
                                         <label for="galinha"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cão</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" v-model="caracteriza.cao">
+                                        <input class="checkmark is-large is-info" id="cao" type="checkbox" name="cao" true-value="1" false-value="0" v-model="caracteriza.cao">
                                         <label for="cao"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Porco</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" v-model="caracteriza.porco">
+                                        <input class="checkmark is-large is-info" id="porco" type="checkbox" name="porco" true-value="1" false-value="0" v-model="caracteriza.porco">
                                         <label for="porco"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Cavalo</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" v-model="caracteriza.cavalo">
+                                        <input class="checkmark is-large is-info" id="cavalo" type="checkbox" name="cavalo" true-value="1" false-value="0" v-model="caracteriza.cavalo">
                                         <label for="cavalo"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Coelho</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" v-model="caracteriza.coelho">
+                                        <input class="checkmark is-large is-info" id="coelho" type="checkbox" name="coelho" true-value="1" false-value="0" v-model="caracteriza.coelho">
                                         <label for="coelho"></label>
                                     </div>
                                 </div>
                                 <div class="field column is-1">
                                     <label class="label">Outros</label>
                                     <div class="field checkbox">                                       
-                                        <input class="checkmark is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" v-model="caracteriza.outros">
+                                        <input class="checkmark is-large is-info" id="outros" type="checkbox" name="outros" true-value="1" false-value="0" v-model="caracteriza.outros">
                                         <label for="outros"></label>
                                     </div>
                                 </div>
@@ -182,7 +200,9 @@ import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import footerCard from "@/components/forms/FooterCard.vue";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
+import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 import caracterizaService from "@/services/caracteriza.service";
+import codendService from '@/services/codend.service';
 import moment from 'moment';
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
 import "bulma-calendar/dist/css/bulma-calendar.min.css";
@@ -202,6 +222,7 @@ export default {
     data() {
         return {
             dataTable: [],
+            id_municipio: 0,
             caracteriza: {
                 ciclo: 1,
                 id_caracterizacao: 0,
@@ -223,6 +244,8 @@ export default {
                 dt_caracterizacao: '',
                 responsavel: '',
                 id_usuario: 0,
+                cod_loc: 0,
+                atl:'',
             },
             v$: useValidate(),
             isLoading: false,
@@ -285,6 +308,7 @@ export default {
         Loader,
         footerCard,
         CmbAuxiliares,
+        CmbLocalidade,
     },
     methods: {
         setDate($event) {
@@ -293,6 +317,12 @@ export default {
             }
         },
         startCalendar(){
+            codendService.getCodend(this.caracteriza.id_codend).then(
+                async (response) => {
+                    let data = response.data[0];
+                    this.id_municipio = data.id_municipio;
+                },
+            );
             const options = {
                 type: "date",
                 dateFormat: "dd/MM/yyyy",
@@ -388,6 +418,8 @@ export default {
                     this.caracteriza.ano_identifica = data.ano_identifica;
                     this.caracteriza.dt_caracterizacao = data.dt_caracterizacao;
                     this.caracteriza.responsavel = data.responsavel;
+                    this.caracteriza.cod_loc = data.cod_loc;
+                    this.caracteriza.atl = data.atl;
                     this.startCalendar();
                 },
                 (error) => {
@@ -404,6 +436,8 @@ export default {
                     setTimeout(() => (this.showMessage = false), 3000);
                 }
             );
+
+            
 
             this.isLoading = false;
 
@@ -463,6 +497,18 @@ export default {
         this.caracteriza.id_caracterizacao = this.$route.params.id;
         this.loadData();
     },
+    watch: {
+        'caracteriza.cod_loc'(value) {
+           if (value > 0){
+              this.caracteriza.atl = '';
+           }                     
+        },
+        'caracteriza.atl'(value){
+            if (value != ''){
+              this.caracteriza.cod_loc = 0;
+            }  
+        }
+    }
 };
 </script>
 

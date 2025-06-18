@@ -327,7 +327,7 @@ export default {
   },
   created() {
     this.id = this.$route.params.id;
-    this.filter = localStorage.getItem('filter');
+    this.filter = localStorage.getItem('filterRelArthro');
   },
 };
 </script>

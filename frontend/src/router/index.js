@@ -612,6 +612,28 @@ const routes = [
     }
   },
   {
+    path: '/refactor',
+    name: 'refactor',
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/RefactorCodendView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Adm - Refatorar Codends',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/coords',
+    name: 'coords',
+    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/ListCoordenadasView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Adm - Lista Coordenadas',
+        root: true
+      }
+    }
+  },
+  {
     path: '/report',
     name: 'report',
     component: () => import(/* webpackChunkName: "user" */ '../views/report/MainReportView.vue'),
@@ -640,6 +662,83 @@ const routes = [
     meta: {
       breadcrumb: {
         name: 'Relatórios',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/indicadores',
+    name: 'indicadores',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainIndicadoresView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Indicadores',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/mapas',
+    name: 'mapas',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainMapasView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Mapas',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/mapa/:id',
+    name: 'mapa',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/MapaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Mapa',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/cluster',
+    name: 'cluster',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/ClusterView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Cluster',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/clusterCaptura',
+    name: 'clustercaptura',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/CapturasClusterView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Cluster Capturas',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/indicadores/:id',
+    name: 'indicadores_id',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/IndicadoresView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Indicadores',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/indicadoresVetor/:id',
+    name: 'indicadoresvetor_id',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/IndicadoresVetorView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Indicadores',
         root: true
       }
     }

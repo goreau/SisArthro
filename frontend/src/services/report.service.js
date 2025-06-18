@@ -12,6 +12,28 @@ class ReportService {
     })
   } 
 
+  getMapa(id, filter) {
+    filter = JSON.parse(filter);
+    return axios.post(`/mapa/${id}`,filter)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getIndic(id, filter) {
+    filter = JSON.parse(filter);
+    return axios.post(`/indicadores/${id}`,filter)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
   getExport(id, filter) {
     filter = JSON.parse(filter);
     return axios.post(`/export/${id}`, filter)

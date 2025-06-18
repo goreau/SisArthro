@@ -490,7 +490,7 @@ export default {
             this.getAnimais();
         },
         'inquerito_det.id_situacao'(value){
-            if (value == 1173){
+            if (value != 1115){
                 this.inquerito_det.res_dpp = 1123;
                 this.inquerito_det.res_elisa = 1123;
             }

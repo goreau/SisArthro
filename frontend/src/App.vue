@@ -2,15 +2,10 @@
   <Header />
   <div class="cont_total">
     <div class="cont_menu" v-if="showMenu">
-      <sidebar-menu
-        :menu="menu"
-        :relative="true"
-        @update:collapsed="onToggleCollapse"
-        :showOneChild="true"
-      />
+      <sidebar-menu :menu="menu" :relative="true" @update:collapsed="onToggleCollapse" :showOneChild="true" />
     </div>
     <div class="main" id="main">
-      
+
       <router-view />
     </div>
   </div>
@@ -29,7 +24,7 @@ export default {
     Header,
     SidebarMenu,
     Footer,
-    
+
   },
   methods: {
     onToggleCollapse(collapsed) {
@@ -40,16 +35,48 @@ export default {
         dv.className = "main";
       }
     },
+    updateMenuAccess() {
+      this.menu = this.menu.map((item) => {
+        if (item.child) {
+          // Percorre os subitens (child) e aplica a lógica
+          item.child = item.child.map((subItem) => {
+            if (subItem.href === '/refactor') {
+              // Desabilita o subitem 'refactor' se o nível de acesso for maior que 1, ou seja, só habilita para administrador
+              //  subItem.disabled = this.currentUser.role > 1;
+            }
+            return subItem;
+          });
+        }
+        // Se não for um item com subitens, mantém o item original
+        return item;
+      });
+    }
   },
   mounted() {
     if (this.hide) {
       this.onToggleCollapse(true);
     }
+    /* let cUser = this.currentUser;
+     if (cUser) {
+       this.menu = this.menu.map((item) => {
+         if (item.path === '/refactor') {
+           // Desabilita o item 'Relatórios' se o nível de acesso for menor que 3
+           item.disabled = cUser.role > 1;
+         }
+         return item;
+       });
+     }*/
+  },
+  created() {
+    this.updateMenuAccess();
   },
   computed: {
     showMenu() {
-      this.hide = this.$route.path === "/"  || this.$route.path === "/login" || this.$route.path === "/forgot" || this.$route.path === "/reset";
+      this.hide = this.$route.path === "/" || this.$route.path === "/login" || this.$route.path === "/forgot" || this.$route.path === "/reset";
       return !this.hide;
+    },
+    currentUser() {
+      return this.$store.getters["auth/loggedUser"];
     },
   },
   data() {
@@ -379,6 +406,32 @@ export default {
                 },
               },
             },
+            {
+              href: "/refactor",
+              title: "Refatorar Codend",
+              disabled: true,
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-repeat",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/coords",
+              title: "Conferir Coordenadas",
+              disabled: false,
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-map-marker",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
           ],
         },
         {
@@ -444,18 +497,56 @@ export default {
           ]
         },
         {
-          href: "/report",
-          title: "Relatórios",
+          href: "",
+          title: "Consultas",
           icon: {
             element: "font-awesome-icon",
-            class: "small",
             attributes: {
               icon: "fa-solid fa-file-lines",
-              transform: "shrink-10",
+              size: "lg",
+              transform: "shrink-8",
             },
-            // text: ''
           },
+          child: [
+            {
+              href: "/report",
+              title: "Relatórios",
+              icon: {
+                element: "font-awesome-icon",
+                class: "small",
+                attributes: {
+                  icon: "fa-solid fa-file-lines",
+                  transform: "shrink-10",
+                },
+              },
+            },
+            {
+              href: "/indicadores",
+              title: "Indicadores",
+              icon: {
+                element: "font-awesome-icon",
+                class: "small",
+                attributes: {
+                  icon: "fa-solid fa-hand-point-up",
+                  transform: "shrink-10",
+                },
+              },
+            },
+            {
+              href: "/mapas",
+              title: "Mapas",
+              icon: {
+                element: "font-awesome-icon",
+                class: "small",
+                attributes: {
+                  icon: "fa-solid fa-map-location-dot",
+                  transform: "shrink-10",
+                },
+              },
+            },
+          ]
         },
+
       ],
     };
   },
@@ -473,38 +564,48 @@ export default {
   margin: 0;
   box-sizing: border-box;
 }
+
 .main-container {
   margin: 5rem;
   min-height: 40rem;
 }
-iframe#webpack-dev-server-client-overlay{display:none!important}
+
+iframe#webpack-dev-server-client-overlay {
+  display: none !important
+}
+
 html,
 body {
   height: 100%;
   width: 100%;
   margin: 0;
 }
+
 #app {
   height: 100%;
 }
+
 .main {
   margin-left: 290px;
   width: calc(100% - 290px);
   height: calc(100% - 7rem);
   margin-top: 4rem;
 }
+
 .main_colapsed {
   margin-left: 65px;
   width: calc(100% - 65px);
   height: calc(100% - 7rem);
   //   border:1px solid green;
 }
+
 .cont_total {
   width: 100%;
   height: calc(100%);
 
   ///  border:1px solid red;
 }
+
 .cont_menu {
   position: fixed;
   height: calc(100% - 7rem);
@@ -533,15 +634,17 @@ body {
   color: red;
   padding-left: 1rem;
 }
+
 .vsm--child {
   padding-left: 2rem;
-  color:bisque;
-}
-.right-border {
-    border-right: 2px solid black !important;
+  color: bisque;
 }
 
-.tabulator-col-group{
+.right-border {
+  border-right: 2px solid black !important;
+}
+
+.tabulator-col-group {
   border-right: 2px solid black !important;
 }
 </style>

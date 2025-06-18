@@ -11,19 +11,19 @@ export const auth = {
   actions: {
     login({ commit }, user) {
       return AuthService.login(user).then(
-        user => {
-          if(user.token){
-            commit('loginSuccess', user);
-            return Promise.resolve(user);
+        response => {
+          if(response && response.token){
+            commit('loginSuccess', response);
+            return Promise.resolve(response);
           } else {
             commit('loginFailure');
-            return Promise.reject(user.message);
+            return Promise.reject(response?.message || 'Falha no login.');
           }
           
         },
         error => {
           commit('loginFailure');
-          return Promise.reject(error);
+          return Promise.reject(error?.message || 'Erro de comunicação com o servidor.');
         }
       );
     },

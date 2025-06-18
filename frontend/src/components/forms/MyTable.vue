@@ -174,7 +174,7 @@ export default {
         langs: lang,
         locale: "pt-br",
         data: value, //link data to table
-        responsiveLayout: true,
+        responsiveLayout: 'hide',
         layout: "fitColumns",
         placeholder: "Nenhum registro atende aos critérios escolhidos!",
         reactiveData: true, //enable data reactivity
@@ -235,6 +235,10 @@ export default {
     }
   },
   mounted() {
+    window.addEventListener("resize", () => {
+      this.tabela.redraw(true);
+    });
+    
     let externalScript = document.createElement("script");
     externalScript.setAttribute(
       "src",

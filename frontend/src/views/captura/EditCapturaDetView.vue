@@ -99,10 +99,11 @@
                     <input
                       class="input"
                       type="text"
+                      name="latitude"
                       placeholder="° decimais"
                       v-model="captura_det.latitude"
                       :class="{ 'is-danger': v$.captura_det.latitude.$error }"
-                      @blur="changeComma($event)"
+                      @blur="changeCoords($event)"
                     />
                     <span
                       class="is-error"
@@ -118,10 +119,11 @@
                     <input
                       class="input"
                       type="text"
+                      name="longitude"
                       placeholder="° decimais"
                       v-model="captura_det.longitude"
                       :class="{ 'is-danger': v$.captura_det.longitude.$error }"
-                      @blur="changeComma($event)"
+                      @blur="changeCoords($event)"
                     />
                     <span
                       class="is-error"
@@ -348,6 +350,20 @@
               </div>
               <!---->
               <div class="columns">
+                <div class="field column is-one-fifth">
+                  <label class="label">Situação</label>
+                  <div class="control">
+                    <CmbAuxiliares
+                      :tipo="26"
+                      :sel="captura_det.situacao"
+                      @selValue="captura_det.situacao = $event"
+                      :errclass="{ 'is-danger': v$.captura_det.situacao.$error }"
+                    />
+                    <span class="is-error" v-if="v$.captura_det.situacao.$error">
+                      {{ v$.captura_det.situacao.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
                 <div class="field column is-one-fifth has-text-centered">
                   <label class="label">Nº da Amostra</label>
                   <div class="control">
@@ -417,6 +433,7 @@ import {
   maxLength$,
   integer$,
 } from "../../components/forms/validators.js";
+ import CoordenadaMixin from "@/mixins/CoordenadaMixin.js";
 
 export default {
   components: {
@@ -425,6 +442,9 @@ export default {
     CmbAuxiliares,
     footerCard,
   },
+  mixins: [
+    CoordenadaMixin,
+  ],
   data() {
     return {
       master: {},
@@ -457,6 +477,7 @@ export default {
         temp_final: "",
         umidade_inicio: "",
         umidade_final: "",
+        situacao: 0,
         amostra: "",
         quant_potes: "",
       },
@@ -491,6 +512,7 @@ export default {
         temp_final: { maxValue: maxValue$(50) },
         umidade_inicio: { maxValue: maxValue$(100) },
         umidade_final: { maxValue: maxValue$(100) },
+        situacao: { minValue: combo$(1) },
         amostra: { maxLength: maxLength$(10) },
         quant_potes: { integer$ },
       },
@@ -612,6 +634,7 @@ export default {
           this.captura_det.temp_final = data.temp_final;
           this.captura_det.umidade_inicio = data.umidade_inicio;
           this.captura_det.umidade_final = data.umidade_final;
+          this.captura_det.situacao = data.situacao;
           this.captura_det.amostra = data.amostra;
           this.captura_det.quant_potes = data.quant_potes;
           this.getAreas();
@@ -673,6 +696,17 @@ export default {
         .catch((err) => {
           this.codends = [];
         });
+    },
+    changeCoords(e) {
+      //this.latitude = this.formatarCoordenada(this.latitude);
+      let str = this.formatarCoordenada(e.target.value);
+      e.target.value = str;
+      if (e.target.name == 'latitude'){
+        this.captura_det.latitude = str;
+      } else if (e.target.name == 'longitude'){
+        this.captura_det.longitude = str;
+      }
+      
     },
     changeComma(e) {
       let str = e.target.value;

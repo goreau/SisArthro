@@ -47,23 +47,25 @@ export default {
         case '101':
           this.title = 'Extrato de Capturas';
           this.columns = [
-                        { title: "Município", field: "municipio" },
-                        { title: "Data", field: "dt_captura" },
-                        { title: "Execução", field: "execucao" },
-                        { title: "Zona", field: "zona" },
-                        { title: "Agravo", field: "agravo" },
-                        { title: "Atividade", field: "atividade" },
-                        { title: "Quadra", field: "fant_quart" },
-                        { title: "Codend", field: "codend" },
-                        { title: "Método", field: "metodo" },
-                        { title: "Ambiente", field: "ambiente" },
-                        { title: "Local Capt", field: "local_captura" },
-                        { title: "No Arm", field: "num_arm" },
-                        { title: "Amostra", field: "amostra" },
-                        { title: "Espécie", field: "especie" },
+                        { title: "Município", field: "municipio", responsive: 0, minWidth: 250 },
+                        { title: "Número", field: "numcapt", responsive: 0, minWidth: 200 },
+                        { title: "Data", field: "dt_captura", responsive: 0, minWidth: 180 },
+                        { title: "Execução", field: "execucao", responsive: 2, minWidth: 100 },
+                        { title: "Zona", field: "zona", responsive: 1, minWidth: 150 },
+                        { title: "Agravo", field: "agravo", responsive: 0, minWidth: 200 },
+                        { title: "Atividade", field: "atividade", responsive: 0, minWidth: 250 },
+                        { title: "Quadra", field: "fant_quart", responsive: 0, minWidth: 150 },
+                        { title: "Codend", field: "codend", responsive: 1, minWidth: 150 },
+                        { title: "Método", field: "metodo", responsive: 0, minWidth: 200 },
+                        { title: "Ambiente", field: "ambiente", responsive: 1, minWidth: 150 },
+                        { title: "Local Capt", field: "local_captura", responsive: 2, minWidth: 150 },
+                        { title: "No Arm", field: "num_arm", responsive: 2, minWidth: 100 },
+                        { title: "Amostra", field: "amostra", responsive: 0, minWidth: 150 },
+                        { title: "Espécie", field: "especie", responsive: 1, minWidth: 200 },
                       ];
             this.expColumns = [
                         { title: "Município", field: "municipio" },
+                        { title: "Número", field: "numcapt" },
                         { title: "Data", field: "dt_captura" },
                         { title: "Execução", field: "execucao" },
                         { title: "Zona", field: "zona" },
@@ -77,6 +79,7 @@ export default {
                         { title: "Área", field: "fant_area" },
                         { title: "Quadra", field: "fant_quart" },
                         { title: "Codend", field: "codend" },
+                        { title: "Coordenadas", field: "coordenadas" },
                         { title: "Método", field: "metodo" },
                         { title: "Ambiente", field: "ambiente" },
                         { title: "Local Capt", field: "local_captura" },
@@ -103,33 +106,34 @@ export default {
         case '102':
           this.title = 'Extrato de Identificações';
           this.columns = [
-            { title: "Município", field: "municipio" },
-            { title: "Data Captura", field: "dt_captura" },
-            { title: "Data Identificação", field: "dt_identificacao" },
-            { title: "Responsável", field: "responsavel" },
-            { title: "Amostra", field: "amostra" },
-            { title: "Espécie", field: "especie" },
-            { title: "Macho", field: "macho" },
-            { title: "Fêmea", field: "femea" },
-            { title: "Fêmea Ing", field: "femea_ing" },
-            { title: "Larva", field: "larva" },
-            { title: "Ninfa", field: "ninfa" },
-            { title: "No Pool", field: "pool" },
+            { title: "Município", field: "municipio", responsive: 0, minWidth: 250 },
+            { title: "Número", field: "numcapt", responsive: 0, minWidth: 200 },
+            { title: "Data Captura", field: "dt_captura", responsive: 0, minWidth: 180 },
+            { title: "Data Identificação", field: "dt_identificacao", responsive: 0, minWidth: 180 },
+            { title: "Responsável", field: "responsavel", responsive: 2, minWidth: 250 },
+            { title: "Amostra", field: "amostra", responsive: 0, minWidth: 150 },
+            { title: "Espécie", field: "especie", responsive: 0, minWidth: 200 },
+            { title: "Macho", field: "macho", responsive: 1, minWidth: 100 },
+            { title: "Fêmea", field: "femea", responsive: 1, minWidth: 100},
+            { title: "Fêmea Ing", field: "femea_ing", responsive: 1, minWidth: 100 },
+            { title: "Larva", field: "larva", responsive: 1, minWidth: 100 },
+            { title: "Ninfa", field: "ninfa", responsive: 1, minWidth: 100 },
+            { title: "No Pool", field: "pool", responsive: 0, minWidth: 200 },
                         
           ];
           break;
         case '103':
           this.title = 'Extrato de Caracterizações';
           this.columns = [
-            { title: "Município", field: "municipio" },
-            { title: "Quadra", field: "quadra" },
-            { title: "CodEnd", field: "codend" },
-            { title: "Situação", field: "situacao" },
-            { title: "Tipo Imóvel", field: "tipo_imovel" },
-            { title: "Nº Cães", field: "num_cao" },
-            { title: "Nº Caes Pos", field: "num_cao_pos" },
-            { title: "Ano Ident.", field: "ano_identifica" },
-            { title: "Soma", field: "soma" },
+            { title: "Município", field: "municipio", responsive: 0, minWidth: 250 },
+            { title: "Quadra", field: "quadra", responsive: 0, minWidth: 150 },
+            { title: "CodEnd", field: "codend", responsive: 0, minWidth: 150 },
+            { title: "Situação", field: "situacao", responsive: 1, minWidth: 150 },
+            { title: "Tipo Imóvel", field: "tipo_imovel", responsive: 1, minWidth: 150 },
+            { title: "Nº Cães", field: "num_cao", responsive: 0, minWidth: 150 },
+            { title: "Nº Caes Pos", field: "num_cao_pos", responsive: 0, minWidth: 150 },
+            { title: "Ano Ident.", field: "ano_identifica", responsive: 1, minWidth: 150 },
+            { title: "Soma", field: "soma", responsive: 0, minWidth: 150 },
                         
           ];
           this.expColumns = [
@@ -242,35 +246,36 @@ export default {
         case '106':
           this.title = 'Notificação de Cães';
           this.columns = [
-            { title: "Município", field: "notificante" },
-            { title: "Código", field: "codigo" },
-            { title: "Unidade", field: "unidade" },
-            { title: "Mun. Cão", field: "mun_cao" },
-            { title: "Deslocamentos", field: "municipio" },
-            { title: "Nome Cão", field: "nome" },
-            { title: "Raça", field: "raca" },
-            { title: "Exames", field: "exames"},
-            { title: "Óbito", field: "obito" },
-            { title: "Sinais", field: "sinais" },
+            { title: "Município", field: "notificante", responsive: 0, minWidth: 250 },
+            { title: "Código", field: "codigo", responsive: 0, minWidth: 150 },
+            { title: "Unidade", field: "unidade", responsive: 1, minWidth: 200 },
+            { title: "Mun. Cão", field: "mun_cao", responsive: 0, minWidth: 250 },
+            { title: "Deslocamentos", field: "municipio", responsive: 1, minWidth: 250 },
+            { title: "Nome Cão", field: "nome", responsive: 0, minWidth: 200 },
+            { title: "Raça", field: "raca", responsive: 1, minWidth: 200 },
+            { title: "Exames", field: "exames", responsive: 1, minWidth: 250},
+            { title: "Óbito", field: "obito", responsive: 0, minWidth: 100 },
+            { title: "Sinais", field: "sinais", responsive: 0, minWidth: 200 },
           ];
           break;
         case '107':
           this.title = 'Extrato de Notificação de Cães';
           this.columns = [
-            { title: "Município", field: "municipio", formatter: function(cell, formatterParams, onRendered){
-              var row = cell.getRow();
-              var prevRow = row.getPrevRow();
-              var val = cell.getValue();
-              if (prevRow){
-                var previus = prevRow.getCell('municipio');
-                if (previus.getValue() == val) {
-                  val = '...';
+            { title: "Município", field: "municipio", responsive: 0, minWidth: 250, 
+              formatter: function(cell, formatterParams, onRendered){
+                var row = cell.getRow();
+                var prevRow = row.getPrevRow();
+                var val = cell.getValue();
+                if (prevRow){
+                  var previus = prevRow.getCell('municipio');
+                  if (previus.getValue() == val) {
+                    val = '...';
+                  }
                 }
-              }
-    
-              return val;
-            },},
-            { title: "Código", field: "codigo", formatter: function(cell, formatterParams, onRendered){
+      
+                return val;
+              },},
+            { title: "Código", field: "codigo", responsive: 0, minWidth: 150, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -283,7 +288,7 @@ export default {
     
               return val;
             }, },
-            { title: "Nome Cão", field: "cao", formatter: function(cell, formatterParams, onRendered){
+            { title: "Nome Cão", field: "cao", responsive: 0, minWidth: 150, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -296,7 +301,7 @@ export default {
     
               return val;
             }, },
-            { title: "Sexo", field: "sexo", formatter: function(cell, formatterParams, onRendered){
+            { title: "Sexo", field: "sexo", responsive: 1, minWidth: 100, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -309,7 +314,7 @@ export default {
     
               return val;
             }, },
-            { title: "Raça", field: "raca", formatter: function(cell, formatterParams, onRendered){
+            { title: "Raça", field: "raca", responsive: 1, minWidth: 250, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -322,7 +327,7 @@ export default {
     
               return val;
             }, },
-            { title: "Sinais", field: "sinais", formatter: function(cell, formatterParams, onRendered){
+            { title: "Sinais", field: "sinais", responsive: 1, minWidth: 250, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -335,7 +340,7 @@ export default {
     
               return val;
             }, },
-            { title: "Mun. Cão", field: "mun_cao", formatter: function(cell, formatterParams, onRendered){
+            { title: "Mun. Cão", field: "mun_cao", responsive: 1, minWidth: 250, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -350,7 +355,7 @@ export default {
     
               return val;
             }, },
-            { title: "Tempo Mun.", field: "tempo", formatter: function(cell, formatterParams, onRendered){
+            { title: "Tempo Mun.", field: "tempo", responsive: 1, minWidth: 100, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -363,7 +368,7 @@ export default {
     
               return val;
             }, },
-            { title: "Material", field: "material", formatter: function(cell, formatterParams, onRendered){
+            { title: "Material", field: "material", responsive: 1, minWidth: 150, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -376,7 +381,7 @@ export default {
     
               return val;
             },},
-            { title: "Exame", field: "exame", formatter: function(cell, formatterParams, onRendered){
+            { title: "Exame", field: "exame", responsive: 0, minWidth: 250, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -389,7 +394,7 @@ export default {
     
               return val;
             },},
-            { title: "Resultado", field: "resultado", formatter: function(cell, formatterParams, onRendered){
+            { title: "Resultado", field: "resultado", responsive: 0, minWidth: 250, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -402,7 +407,7 @@ export default {
     
               return val;
             },},
-            { title: "Espécie", field: "especie", formatter: function(cell, formatterParams, onRendered){
+            { title: "Espécie", field: "especie", responsive: 1, minWidth: 150, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -415,7 +420,7 @@ export default {
     
               return val;
             },},
-            { title: "Óbito", field: "obito", formatter: function(cell, formatterParams, onRendered){
+            { title: "Óbito", field: "obito", responsive: 0, minWidth: 150, formatter: function(cell, formatterParams, onRendered){
               var row = cell.getRow();
               var prevRow = row.getPrevRow();
               var val = cell.getValue();
@@ -808,7 +813,7 @@ export default {
   },
   created() {
     this.id = this.$route.params.id;
-    this.filter = localStorage.getItem('filter');
+    this.filter = localStorage.getItem('filterRelArthro');
   },
 };
 </script>

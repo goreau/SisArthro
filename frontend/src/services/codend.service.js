@@ -81,6 +81,36 @@ class CodendService {
         return error.response.data;
     })
   }
+
+  refactor(filter){
+    return axios.post(`/refactor`,filter)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  }
+
+  getMuns() {
+    return axios.get(`/codendMuns`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
+
+  getQuarts(mun) {
+    return axios.get(`/codendQuarts/${mun}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  } 
 }
 
 export default new CodendService();

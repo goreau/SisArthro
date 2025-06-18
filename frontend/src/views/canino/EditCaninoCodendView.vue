@@ -170,6 +170,7 @@ import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
 import {
   required$,
+  requiredIf$,
   combo$,
   maxLength$,
   minLength$,
@@ -226,8 +227,7 @@ export default {
     return {
       canino: {
         proprietario: {
-          required$,
-          minLength: minLength$(3),
+          requiredIf: requiredIf$(this.canino.id_situacao == 700),
           maxLength: maxLength$(40)
         },
         telefone: {
@@ -564,6 +564,9 @@ export default {
       if (this.area.length > 0) {
         this.setFantArea(value);
       }
+    },
+    'canino.id_situacao'(value) {
+      this.cFooter.disabled = value !== 700;
     },
     "area"(value) {
       if (this.canino.id_area > 0) {

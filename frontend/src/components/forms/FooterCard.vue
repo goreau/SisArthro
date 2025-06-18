@@ -11,7 +11,7 @@
       </div>
       <div class="column is-4" v-if="cFooter.aux">
         <div class="control">
-          <button class="button is-link aux-btn is-fullwidth" @click="$emit('aux')">
+          <button class="button is-link aux-btn is-fullwidth" :disabled="cFooter.disabled" @click="$emit('aux')">
             <span class="btico"><font-awesome-icon icon="fa-solid fa-list" /></span>
             {{ cFooter.strAux }}
           </button>
