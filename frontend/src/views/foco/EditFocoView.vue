@@ -66,7 +66,18 @@
                                         {{ v$.foco.dt_foco.$errors[0].$message }}
                                     </span>
                                 </div>
-                                <div class="field column is-2 is-offset-6">
+                                <div class="field column is-3 is-offset-1">
+                                    <label class="label">Localidade(ATL)</label>
+                                    <div class="control">
+                                        <CmbLocalidade :id_mun="foco.id_municipio" :sel="foco.id_localidade"
+                                            @selLoc="foco.id_localidade = $event"
+                                            :errclass="{ 'is-danger': v$.foco.id_localidade.$error }" />
+                                        <span class="is-error" v-if="v$.foco.id_localidade.$error">
+                                            {{ v$.foco.id_localidade.$errors[0].$message }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="field column is-2 is-offset-2">
                                     <label class="label">Número</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Preenc. Automático"
@@ -113,15 +124,17 @@ import {
     required$,
     combo$,
     maxLength$,
-    integer$,
 } from "../../components/forms/validators.js";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
+import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
+
 export default {
     components: {
         Loader,
         Message,
         CmbMunicipio,
         CmbAuxiliares,
+        CmbLocalidade,
         footerCard
     },
     data() {
@@ -135,6 +148,7 @@ export default {
                 id_area: 0,
                 fant_area: '',
                 id_quarteirao: 0,
+                id_localidade: 0,
                 fant_quart: '',
                 numero: '',
                 dt_foco: '',
@@ -165,6 +179,9 @@ export default {
                     minValue: combo$(1)
                 },
                 id_quarteirao: {
+                    minValue: combo$(1)
+                },
+                id_localidade: {
                     minValue: combo$(1)
                 },
                 dt_foco: { required$, },
@@ -200,6 +217,7 @@ export default {
                     await this.getQuarteirao(data.id_area);
                     this.foco.id_area = data.id_area;
                     this.foco.id_quarteirao = data.id_quarteirao;
+                    this.foco.id_localidade = data.id_localidade;
 
                     this.foco.resp_coleta = data.resp_coleta;
                     this.foco.resp_exame = data.resp_exame;

@@ -66,7 +66,18 @@
                                         {{ v$.foco.dt_foco.$errors[0].$message }}
                                     </span>
                                 </div>
-                                <div class="field column is-2 is-offset-6">
+                                <div class="field column is-3 is-offset-1">
+                                    <label class="label">Localidade(ATL)</label>
+                                    <div class="control">
+                                        <CmbLocalidade :id_mun="foco.id_municipio"
+                                            @selLoc="foco.id_localidade = $event"
+                                            :errclass="{ 'is-danger': v$.foco.id_localidade.$error }" />
+                                        <span class="is-error" v-if="v$.foco.id_localidade.$error">
+                                            {{ v$.foco.id_localidade.$errors[0].$message }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="field column is-2 is-offset-2">
                                     <label class="label">Número</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="Preenc. Automático"
@@ -74,12 +85,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="columns">   
+                            <div class="columns">
                                 <div class="field column is-4 is-offset-4">
                                     <label class="label">Responsável Coleta</label>
                                     <div class="control">
-                                        <input class="input" type="text" placeholder="Nome "
-                                            v-model="foco.resp_coleta"
+                                        <input class="input" type="text" placeholder="Nome " v-model="foco.resp_coleta"
                                             :class="{ 'is-danger': v$.foco.resp_coleta.$error }" />
                                         <span class="is-error" v-if="v$.foco.resp_coleta.$error">
                                             {{ v$.foco.resp_coleta.$errors[0].$message }}
@@ -113,15 +123,17 @@ import {
     required$,
     combo$,
     maxLength$,
-    integer$,
 } from "../../components/forms/validators.js";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
+import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
+
 export default {
     components: {
         Loader,
         Message,
         CmbMunicipio,
         CmbAuxiliares,
+        CmbLocalidade,
         footerCard
     },
     data() {
@@ -134,6 +146,7 @@ export default {
                 id_area: 0,
                 fant_area: '',
                 id_quarteirao: 0,
+                id_localidade: 0,
                 fant_quart: '',
                 numero: '',
                 dt_foco: '',
@@ -166,11 +179,14 @@ export default {
                 id_quarteirao: {
                     minValue: combo$(1)
                 },
+                id_localidade: {
+                    minValue: combo$(1)
+                },
                 dt_foco: { required$, },
                 resp_coleta: {
                     required$,
                     maxLength: maxLength$(40)
-                },               
+                },
             },
         };
     },
@@ -293,44 +309,44 @@ export default {
         },
     },
     mounted() {
-    let cUser = this.currentUser;
-    if (cUser) {
-      this.foco.id_usuario = cUser.id;
-    }
+        let cUser = this.currentUser;
+        if (cUser) {
+            this.foco.id_usuario = cUser.id;
+        }
 
-    const options = {
-      type: "date",
-      dateFormat: "dd/MM/yyyy",
-      showHeader: false,
-      color: "info",
-      allowInput: true,
-      cancelLabel: 'Cancelar',
-      showClearButton: false,
-      todayLabel: 'Hoje',
-      maxDate: new Date(),
-    };
+        const options = {
+            type: "date",
+            dateFormat: "dd/MM/yyyy",
+            showHeader: false,
+            color: "info",
+            allowInput: true,
+            cancelLabel: 'Cancelar',
+            showClearButton: false,
+            todayLabel: 'Hoje',
+            maxDate: new Date(),
+        };
 
-    var calini = bulmaCalendar.attach('#dtFoco', options);
+        var calini = bulmaCalendar.attach('#dtFoco', options);
 
-    const element = document.querySelector('#dtFoco');
+        const element = document.querySelector('#dtFoco');
 
-    const input = document.querySelector('.datetimepicker-dummy-input');
-    input.removeAttribute('readonly');
-    input.setAttribute('value', "__/__/____");
-    input.setAttribute('data-mask', "__/__/____");
-    this.applyDataMask(input);
+        const input = document.querySelector('.datetimepicker-dummy-input');
+        input.removeAttribute('readonly');
+        input.setAttribute('value', "__/__/____");
+        input.setAttribute('data-mask', "__/__/____");
+        this.applyDataMask(input);
 
-    input.addEventListener('blur', () => {
-      this.foco.dt_foco = moment(input.value).format('YYYY-MM-DD');
-    })
+        input.addEventListener('blur', () => {
+            this.foco.dt_foco = moment(input.value).format('YYYY-MM-DD');
+        })
 
-    if (element) {
-      // bulmaCalendar instance is available as element.bulmaCalendar
-      element.bulmaCalendar.on('select', datepicker => {
-        this.foco.dt_foco = moment(datepicker.data.startDate).format('YYYY-MM-DD');
-      });
-    }
-  },
+        if (element) {
+            // bulmaCalendar instance is available as element.bulmaCalendar
+            element.bulmaCalendar.on('select', datepicker => {
+                this.foco.dt_foco = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+            });
+        }
+    },
     watch: {
         'foco.id_municipio'(value) {
             this.getAreas(value);

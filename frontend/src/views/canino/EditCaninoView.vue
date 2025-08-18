@@ -82,8 +82,9 @@
                 <div class="field column is-2">
                   <label class="label">Longitude</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude" name="longitude"
-                      :class="{ 'is-danger': v$.canino.longitude.$error }" @blur="changeComma($event)" />
+                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude"
+                      name="longitude" :class="{ 'is-danger': v$.canino.longitude.$error }"
+                      @blur="changeComma($event)" />
                     <span class="is-error" v-if="v$.canino.longitude.$error">
                       {{ v$.canino.longitude.$errors[0].$message }}
                     </span>
@@ -94,7 +95,7 @@
                   <div class="control">
                     <CmbAuxiliares :tipo="11" @selValue="canino.id_situacao = $event" :errclass="{
                       'is-danger': v$.canino.id_situacao.$error,
-                    }" :sel="canino.id_situacao"/>
+                    }" :sel="canino.id_situacao" />
                     <span class="is-error" v-if="v$.canino.id_situacao.$error">
                       {{ v$.canino.id_situacao.$errors[0].$message }}
                     </span>
@@ -144,6 +145,15 @@
                   </div>
                 </div>
               </div>
+              <hr>
+              <div class="columns is-centered">             
+                    <h5>Animais Cadastrados</h5>
+              </div>
+              <div class="columns">
+                <div class="column is-10 is-offset-1">
+                  <MySimpleTable :tableData="dataTable" :columns="columns" />
+                </div>
+              </div>
             </div>
           </div>
           <footer class="card-footer">
@@ -177,6 +187,7 @@ import {
 } from "../../components/forms/validators.js";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import CoordenadaMixin from "@/mixins/CoordenadaMixin.js";
+import MySimpleTable from "@/components/forms/MySimpleTable.vue";
 
 
 export default {
@@ -185,7 +196,8 @@ export default {
     Message,
     CmbMunicipio,
     CmbAuxiliares,
-    footerCard
+    footerCard,
+    MySimpleTable,
   },
   mixins: [
     CoordenadaMixin,
@@ -225,7 +237,9 @@ export default {
         strAux: 'Animais',
         aux: true,
         disabled: false
-      }
+      },
+      dataTable: [],
+      columns: [],
     };
   },
   validations() {
@@ -269,18 +283,25 @@ export default {
     },
   },
   methods: {
+    lista() {
+      caninoService.getCaninosByCodend(this.canino.id_codend)
+        .then((response) => {
+          this.dataTable = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+    },
     setDate($event) {
       if ($event) {
         this.canino.dt_canino = moment(String($event)).format('YYYY-MM-DD');
       }
     },
     edit() {
-     // this.prepare();
+      // this.prepare();
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById('login').classList.add('is-loading');
-
-        
 
         caninoService.edit(this.canino).then(
           (response) => {
@@ -289,8 +310,8 @@ export default {
             this.type = "success";
             this.caption = "Animais";
             setTimeout(() => {
-              this.showMessage = false; 
-             // this.$router.push("/canino_det/"+response.data.master.id_canino)
+              this.showMessage = false;
+              // this.$router.push("/canino_det/"+response.data.master.id_canino)
             }, 5000);
           },
           (error) => {
@@ -342,6 +363,7 @@ export default {
           this.canino.longitude = data.longitude;
           this.municipio = data.municipio;
           this.startCalendar();
+          this.lista();
         },
         (error) => {
           this.message =
@@ -358,26 +380,27 @@ export default {
         }
       );
 
+      
 
       this.isLoading = false;
     },
     changeComma(e) {
       let str = this.formatarCoordenada(e.target.value);
-      
-      if (e.target.name == 'latitude'){
+
+      if (e.target.name == 'latitude') {
         this.canino.latitude = str;
-      } else if (e.target.name == 'longitude'){
+      } else if (e.target.name == 'longitude') {
         this.canino.longitude = str;
       }
     },
     prepare() {
-      if(isNaN(this.canino.latitude)){
+      if (isNaN(this.canino.latitude)) {
         this.canino.latitude.replace(',', '.');
         this.canino.longitude.replace(',', '.');
-      } 
+      }
     },
-    details(){
-      this.$router.push("/canino_dets/"+this.canino.id_canino);
+    details() {
+      this.$router.push("/canino_dets/" + this.canino.id_canino);
     },
     applyDataMask(field) {
       var mask = field.dataset.mask.split('');
@@ -498,9 +521,14 @@ export default {
       this.canino.id_usuario = cUser.id;
     }
 
-
-
     this.loadData();
+
+    this.columns = [
+      { title: "Tipo", field: "tipo", minWidth: 200 },
+      { title: "Nome", field: "nome", minWidth: 200 },
+      { title: "Raça", field: "raca", minWidth: 200 },
+      { title: "Sexo", field: "sexo", minWidth: 200, responsive: 3 },
+    ]
   },
   created() {
     this.canino.id_canino = this.$route.params.id;

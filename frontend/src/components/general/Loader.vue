@@ -1,47 +1,52 @@
-<template>         
-    <div class="loader-wrapper is-active">
-      <div class="loader is-loading"></div>
-    </div>     
-  </template>
-  
-  <script>
-  export default {
-  
+<template>
+  <div v-if="active" class="loader-wrapper">
+    <div class="loader"></div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'AppLoader',
+  props: {
+    active: {
+      type: Boolean,
+      default: false,
+    },
+  },
+};
+</script>
+
+<style scoped>
+.loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s;
+}
+
+.loader {
+  width: 5rem;
+  height: 5rem;
+  border: 6px solid #4860c9;
+  border-top: 6px solid transparent;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  </script>
-  
-  <style scoped>
-  .loader-wrapper {
-    position: absolute;
-    top: 25%;
-    left: 25%;
-    height: 50%;
-    width: 50%;
-    background: #fff;
-    opacity: 1;
-    z-index: 10;
-    transition: opacity .3s;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 6px;
+
+  100% {
+    transform: rotate(360deg);
   }
-    
-  .loader {
-      animation: spinAround 500ms infinite linear;
-      border: 12px solid rgb(72, 96, 201);
-      border-radius: 9999px;
-      border-right-color: transparent;
-      border-top-color: transparent;
-      content: "";
-      display: block;
-      height: 10em;
-      position: relative;
-      width: 10em;
-      margin-top: -15rem;
-  }
-  
-  .is-loading {
-    position: relative;
-  }
-  </style>
+}
+</style>

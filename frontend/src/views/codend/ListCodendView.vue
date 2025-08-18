@@ -2,7 +2,6 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        <Loader v-if="isLoading" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Endereços Cadastrados</p>
@@ -61,7 +60,6 @@
 <script>
 import codendService from "@/services/codend.service";
 import MyTable from "@/components/forms/MyTable.vue";
-import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import CmbListaMun from "@/components/forms/CmbListaMun.vue";
 
@@ -71,7 +69,6 @@ export default {
     return {
       filtMun: 0,
       dataTable: [],
-      isLoading: false,
       columns: [],
       tableName: 'codend',
       myspan: null,
@@ -82,7 +79,6 @@ export default {
   },
   components: {
     MyTable,
-    Loader,
     ConfirmDialog,
     CmbListaMun,
   },
@@ -106,18 +102,19 @@ export default {
       codendService.getCodends(this.filtMun,filter)
       .then((response) => {
         this.dataTable = response.data;
-        this.isLoading = false;
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => (this.isLoading = false));
+      .finally(() => {});
 
     this.columns = [
       { title: "Municipio", field: "municipio", minWidth: 200, responsive:1, },
-      { title: "Quarteirao", field: "quarteirao", minWidth: 200, responsive: 3, },
+      { title: "Quarteirao", field: "quarteirao", minWidth: 200, responsive: 4, },
       { title: "Código", field: "codigo", minWidth: 200, responsive: 2, },
       { title: "Endereço", field: "endereco", minWidth: 300, responsive: 1, },
+      { title: "Localidade", field: "localidade", minWidth: 200, responsive: 3, },
+      { title: "Responsável", field: "owner", minWidth: 200, responsive: 3, },
       {
         title: "Ações", minWidth: 350, responsive: 0,
         formatter: (cell, formatterParams) => {
@@ -205,7 +202,6 @@ export default {
     //document.createElement('span');
     // this.myspan.innerHTML='<p>teste</p>';;
 //
-   // this.isLoading = true;
 
     if (this.$route.params.quart){
       var cd = this.$route.params.quart;

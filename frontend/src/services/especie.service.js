@@ -93,8 +93,8 @@ class EspecieService {
     })
   } 
 
-  getEspecies(filter) {
-    return axios.get(`/especies/${filter}`)
+  getEspecies() {
+    return axios.get(`/especies`)
     .then(response => {
         return {data: response.data};
     },

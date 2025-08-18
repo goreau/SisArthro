@@ -13,7 +13,6 @@
             </button>
           </header>
           <div class="card-content">
-            <Loader v-if="isLoading" />
             <Message
               v-if="showMessage"
               @do-close="closeMessage"
@@ -62,7 +61,6 @@
 <script>
 import capturaService from "@/services/captura.service";
 import MyTable from "@/components/forms/MyTable.vue";
-import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Message from "@/components/general/Message.vue";
 import CmbListaMun from "@/components/forms/CmbListaMun.vue";
@@ -74,7 +72,6 @@ export default {
       filtMun: 0,
       dataTable: [],
       tableName: 'captura',
-      isLoading: false,
       message: "",
       caption: "",
       type: "",
@@ -87,7 +84,6 @@ export default {
   },
   components: {
     MyTable,
-    Loader,
     ConfirmDialog,
     Message,
     CmbListaMun
@@ -100,16 +96,14 @@ export default {
       this.$router.push(`/editCapt/${id}`);
     },
     loadData(){
-      this.isLoading = true;
       capturaService.getCapturas(this.filtMun)
       .then((response) => {
         this.dataTable = response.data;
-        this.isLoading = false;
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => (this.isLoading = false));
+      .finally(() => {});
     },
     getFormat(row) {
       return {

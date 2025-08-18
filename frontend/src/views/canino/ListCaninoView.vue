@@ -13,7 +13,6 @@
                         </button>
                     </header>
                     <div class="card-content">
-                        <Loader v-if="isLoading" />
                         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
                             :caption="caption" />
                         <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName" />
@@ -36,9 +35,7 @@
 <script>
 import caninoService from "@/services/canino.service";
 import MyTable from "@/components/forms/MyTable.vue";
-import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
-import Message from "@/components/general/Message.vue";
 import moment from 'moment';
 
 export default {
@@ -46,7 +43,6 @@ export default {
     data() {
         return {
             dataTable: [],
-            isLoading: false,
             message: "",
             caption: "",
             type: "",
@@ -60,7 +56,6 @@ export default {
     },
     components: {
         MyTable,
-        Loader,
         ConfirmDialog,
     },
     methods: {
@@ -86,27 +81,26 @@ export default {
         this.myspan = document.getElementsByName("coisa")[0];
         this.myspan2 = document.getElementsByName("coisa2")[0];
 
-        this.isLoading = true;
         caninoService.getCaninos({})
             .then((response) => {
                 this.dataTable = response.data;
-                this.isLoading = false;
             })
             .catch((err) => {
                 console.log(err);
             })
-            .finally(() => (this.isLoading = false));
+            .finally(() => {});
 
         this.columns = [
             { title: "Município", field: "municipio", minWidth: 250 },
-            { title: "Quarteirão", field: "quadra", minWidth: 200 },
-            { title: "Codend", field: "codend", minWidth: 200 },
+            { title: "Localidade", field: "localidade",minWidth: 250},
+            { title: "Quarteirão", field: "quadra", minWidth: 150 },
+            { title: "Codend", field: "codend", minWidth: 150 },
             {
                 title: "Data", field: "dt_canino", sorter: "date", sorterParams: {
                     format: "dd/MM/yyyy",
                     alignEmptyValues: "top",
                 },
-                minWidth: 200, responsive:2,
+                minWidth: 150, responsive:2,
                 formatter:function(cell, formatterParams, onRendered){
                         var value = cell.getValue();
                         value = moment(value).format("DD/MM/YYYY");

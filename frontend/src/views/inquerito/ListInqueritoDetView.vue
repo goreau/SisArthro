@@ -56,6 +56,7 @@ export default {
             myspan: null,
             myspan2: null,
             master: 0,
+            coleira: false,
             quart: 0,
             id_user: 0
         };
@@ -67,7 +68,7 @@ export default {
     },
     methods: {
         newCapt() {
-            this.$router.push(`/inquerito_det/${this.master}/${this.quart}`);
+            this.$router.push(`/inquerito_det/${this.master}/${this.quart}/${this.coleira}`);
         },
         editCapt(id) {
             this.$router.push(`/editInqueritoDet/${id}`);
@@ -181,6 +182,7 @@ export default {
     },
     created() {
         this.master = this.$route.params.master;
+        this.coleira = this.$route.params.tipo;
     },
 };
 </script>

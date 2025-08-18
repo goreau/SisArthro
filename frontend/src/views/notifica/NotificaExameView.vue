@@ -610,7 +610,7 @@ export default {
                     btDel.classList.add("button", "is-danger", "is-outlined");
                     btDel.innerHTML = this.myspan2.innerHTML;
                     btDel.addEventListener("click", async () => {
-                        this.delAn = mostra(idx - 1);
+                        this.delAmostra(idx - 1);
                     });
 
                     const buttonHolder = document.createElement("span");

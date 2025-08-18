@@ -23,10 +23,10 @@
                                     <label class="label">Cod End</label>
                                     <div class="select">
                                         <select v-model="inquerito_det.id_codend" class="input">
-                                        <option value="0">-- Selecione --</option>
-                                        <option v-for="reg in codends" :key="reg.id_codend" :value="reg.id_codend">
-                                            {{ reg.codigo }}
-                                        </option>
+                                            <option value="0">-- Selecione --</option>
+                                            <option v-for="reg in codends" :key="reg.id_codend" :value="reg.id_codend">
+                                                {{ reg.codigo }}
+                                            </option>
                                         </select>
                                     </div>
                                     <span class="is-error" v-if="v$.inquerito_det.id_codend.$error">
@@ -37,10 +37,11 @@
                                     <label class="label">Animal</label>
                                     <div class="select">
                                         <select v-model="inquerito_det.id_canino_det" class="input">
-                                        <option value="0">-- Selecione --</option>
-                                        <option v-for="reg in caninos" :key="reg.id_canino_det" :value="reg.id_canino_det">
-                                            {{ reg.animal }}
-                                        </option>
+                                            <option value="0">-- Selecione --</option>
+                                            <option v-for="reg in caninos" :key="reg.id_canino_det"
+                                                :value="reg.id_canino_det">
+                                                {{ reg.animal }}
+                                            </option>
                                         </select>
                                     </div>
                                     <span class="is-error" v-if="v$.inquerito_det.id_canino_det.$error">
@@ -50,9 +51,10 @@
                                 <div class="field column is-3">
                                     <label class="label">Situação</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="15" @selValue="inquerito_det.id_situacao = $event" :errclass="{
-                                            'is-danger': v$.inquerito_det.id_situacao.$error,
-                                        }" />
+                                        <CmbAuxiliares :tipo="15" @selValue="inquerito_det.id_situacao = $event"
+                                            :errclass="{
+                                                'is-danger': v$.inquerito_det.id_situacao.$error,
+                                            }" />
                                         <span class="is-error" v-if="v$.inquerito_det.id_situacao.$error">
                                             {{ v$.inquerito_det.id_situacao.$errors[0].$message }}
                                         </span>
@@ -92,12 +94,12 @@
                                     <div class="control">
                                         <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_dpp = $event" :errclass="{
                                             'is-danger': v$.inquerito_det.res_dpp.$error,
-                                        }" :sel="inquerito_det.res_dpp"/>
+                                        }" :sel="inquerito_det.res_dpp" />
                                         <span class="is-error" v-if="v$.inquerito_det.res_dpp.$error">
                                             Informe o valor desse campo
                                             {{ v$.inquerito_det.res_dpp.$errors[0].$message }}
                                         </span>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="field column is-2">
@@ -112,9 +114,10 @@
                                 <div class="field column is-3">
                                     <label class="label">Resultado</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_elisa = $event" :errclass="{
-                                            'is-danger': v$.inquerito_det.res_elisa.$error,
-                                        }" :sel="inquerito_det.res_elisa" />
+                                        <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_elisa = $event"
+                                            :errclass="{
+                                                'is-danger': v$.inquerito_det.res_elisa.$error,
+                                            }" :sel="inquerito_det.res_elisa" />
                                         <span class="is-error" v-if="v$.inquerito_det.res_elisa.$error">
                                             Informe o valor desse campo
                                             {{ v$.inquerito_det.res_elisa.$errors[0].$message }}
@@ -124,9 +127,10 @@
                                 <div class="field column is-2">
                                     <label class="label">Resultado Final</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="19" @selValue="inquerito_det.res_final = $event" :errclass="{
-                                            'is-danger': v$.inquerito_det.res_final.$error,
-                                        }" />
+                                        <CmbAuxiliares :tipo="19" @selValue="inquerito_det.res_final = $event"
+                                            :errclass="{
+                                                'is-danger': v$.inquerito_det.res_final.$error,
+                                            }" />
                                         <span class="is-error" v-if="v$.inquerito_det.res_final.$error">
                                             {{ v$.inquerito_det.res_final.$errors[0].$message }}
                                         </span>
@@ -135,22 +139,12 @@
                             </div>
                             <!----->
                             <div class="columns">
-                                <div class="column is-7 has-text-centered cabeca">Coleira</div>
-                                <div class="column is-5 has-text-centered cabeca">
+                                <div class="column is-5 has-text-centered cabeca">Coleira</div>
+                                <div class="column is-6 is-offset-1 has-text-centered cabeca">
                                     Desfecho
                                 </div>
                             </div>
                             <div class="columns">
-                                <div class="field column is-3">
-                                    <label class="label">Ciclo</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="" v-model="inquerito_det.coleira_ciclo"
-                                            :class="{ 'is-danger': v$.inquerito_det.coleira_ciclo.$error }" />
-                                        <span class="is-error" v-if="v$.inquerito_det.coleira_ciclo.$error">
-                                            {{ v$.inquerito_det.coleira_ciclo.$errors[0].$message }}
-                                        </span>
-                                    </div>
-                                </div>
                                 <div class="field column is-2">
                                     <label class="label">Data Troca</label>
                                     <div class="control">
@@ -160,28 +154,30 @@
                                         {{ v$.inquerito_det.dt_coleira.$errors[0].$message }}
                                     </span>
                                 </div>
-                                <div class="field column is-2">
+                                <div class="field column is-3">
                                     <label class="label">Situacao</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="17" @selValue="inquerito_det.res_coleira = $event" :errclass="{
-                                            'is-danger': v$.inquerito_det.res_coleira.$error,
-                                        }" />
+                                        <CmbAuxiliares :tipo="17" @selValue="inquerito_det.res_coleira = $event"
+                                            :ativo="hasColeira" :errclass="{
+                                                'is-danger': v$.inquerito_det.res_coleira.$error,
+                                            }" />
                                         <span class="is-error" v-if="v$.inquerito_det.res_coleira.$error">
                                             {{ v$.inquerito_det.res_coleira.$errors[0].$message }}
                                         </span>
                                     </div>
-                                </div>    
-                                <div class="field column is-3">
+                                </div>
+                                <div class="field column is-4 is-offset-1">
                                     <label class="label">Código</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="18" @selValue="inquerito_det.id_desfecho = $event" :errclass="{
-                                            'is-danger': v$.inquerito_det.id_desfecho.$error,
-                                        }" />
+                                        <CmbAuxiliares :tipo="18" @selValue="inquerito_det.id_desfecho = $event"
+                                            :errclass="{
+                                                'is-danger': v$.inquerito_det.id_desfecho.$error,
+                                            }" />
                                         <span class="is-error" v-if="v$.inquerito_det.id_desfecho.$error">
                                             {{ v$.inquerito_det.id_desfecho.$errors[0].$message }}
                                         </span>
                                     </div>
-                                </div>    
+                                </div>
                                 <div class="field column is-2">
                                     <label class="label">Data</label>
                                     <div class="control">
@@ -190,9 +186,10 @@
                                     <span class="is-error" v-if="v$.inquerito_det.dt_desfecho.$error">
                                         {{ v$.inquerito_det.dt_desfecho.$errors[0].$message }}
                                     </span>
-                                </div>                            
-                            </div>                           
+                                </div>
+                            </div>
                         </div>
+                        {{ hasColeira }}
                         <footer class="card-footer">
                             <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
                         </footer>
@@ -210,11 +207,11 @@ import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import inqueritoService from "@/services/inquerito.service";
 import codendService from "@/services/codend.service";
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
-import "bulma-calendar/dist/css/bulma-calendar.min.css"; 
+import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
 import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
-import { required$, combo$, integer$, requiredIf$ } from "../../components/forms/validators.js";
+import { required$, combo$, requiredIf$ } from "../../components/forms/validators.js";
 
 
 export default {
@@ -227,25 +224,25 @@ export default {
     data() {
         return {
             master: {},
-            quart:{},
+            quart: {},
+            hasColeira: false,
             codends: [],
             caninos: [],
             inquerito_det: {
                 id_inquerito: 0,
-                id_codend: 0, 
-                id_canino_det: 0, 
-                id_situacao: 0, 
-                dt_coleta: "",
-                dt_dpp: '', 
+                id_codend: 0,
+                id_canino_det: 0,
+                id_situacao: 0,
+                dt_coleta: null,
+                dt_dpp: null,
                 res_dpp: 0,
                 dt_elisa: "",
                 res_elisa: 0,
                 res_final: 0,
-                coleira_ciclo: 0,
                 dt_coleira: '',
                 res_coleira: 0,
-                id_desfecho: 0, 
-                dt_desfecho: ''
+                id_desfecho: 0,
+                dt_desfecho: null
             },
             v$: useValidate(),
             isLoading: false,
@@ -262,36 +259,36 @@ export default {
         };
     },
     validations() {
-        const minValueF = (value, vm) =>{
-            if (vm.id_situacao == 1115){
-                return value>0; 
-            } 
+        const minValueF = (value, vm) => {
+            if (vm.id_situacao == 1115) {
+                return value > 0;
+            }
             return true;
         };
         return {
             inquerito_det: {
                 dt_coleta: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115)},
-                dt_dpp: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_dpp != 1123) },
-                dt_elisa: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_elisa != 1123) },
+                dt_dpp: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_dpp > 0 && this.inquerito_det.res_dpp != 1123) },
+                dt_elisa: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_elisa > 0 && this.inquerito_det.res_elisa != 1123) },
                 dt_coleira: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_coleira == 1124) },
-                dt_desfecho: { required$ },
+                dt_desfecho: { requiredIf: requiredIf$(this.inquerito_det.id_desfecho > 0) },
                 id_codend: { minValue: combo$(1) },
                 id_situacao: { minValue: combo$(1) },
                 id_canino_det: { minValue: combo$(1) },
-                res_dpp: { minValueF },
-                res_elisa: { minValueF },
+                res_dpp: {  },
+                res_elisa: {  },
                 res_final: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115) },
-                res_coleira: { requiredIf: requiredIf$(this.inquerito_det.coleira_ciclo >0)},//minValue: combo$(1) },
-                id_desfecho: { minValue: combo$(1) },
-                coleira_ciclo: { integer$ },
+                res_coleira: { requiredIf: requiredIf$(this.hasColeira)},
+                id_desfecho: { requiredIf: requiredIf$((this.inquerito_det.res_dpp + this.inquerito_det.res_elisa) > 0) },
             },
         };
     },
     methods: {
         details() {
-            this.$router.push("/inquerito_dets/" + this.inquerito_det.id_inquerito);
+            this.$router.push(`/inquerito_dets/${this.inquerito_det.id_inquerito}/${this.hasColeira}`);
         },
-        create() {           
+        create() {
+            this.v$.inquerito_det.id_situacao.$touch()
             this.v$.$validate(); // checks all inputs
             console.log(this.v$);
             if (!this.v$.$error) {
@@ -336,21 +333,21 @@ export default {
         },
         getCodends() {
             codendService.getCodendsByQuadra(this.quart)
-            .then((res) => {
-                this.codends = res.data;
-            })
-            .catch((err) => {
-                this.codends = [];
-            })
+                .then((res) => {
+                    this.codends = res.data;
+                })
+                .catch((err) => {
+                    this.codends = [];
+                })
         },
         getAnimais() {
             codendService.getAnimalByCodend(this.inquerito_det.id_codend)
-            .then((res) => {
-                this.caninos = res.data;
-            })
-            .catch((err) => {
-                this.caninos = [];
-            })
+                .then((res) => {
+                    this.caninos = res.data;
+                })
+                .catch((err) => {
+                    this.caninos = [];
+                })
         },
         applyDataMask(field) {
             var mask = field.dataset.mask.split('');
@@ -402,12 +399,13 @@ export default {
                 todayLabel: 'Hoje',
                 maxDate: new Date(),
             };
-            
+
             var calcol = bulmaCalendar.attach('#dtColeta', options);
             var caldpp = bulmaCalendar.attach('#dtDpp', options);
             var calel = bulmaCalendar.attach('#dtElisa', options);
-            var calcole = bulmaCalendar.attach('#dtColeira', options);
             var caldesf = bulmaCalendar.attach('#dtDesfecho', options);
+            var calcole = bulmaCalendar.attach('#dtColeira', options);
+
 
             const element = document.querySelector('#dtColeta');
             const element1 = document.querySelector('#dtDpp');
@@ -423,7 +421,7 @@ export default {
                 this.applyDataMask(input[i]);
 
                 input[i].addEventListener('blur', (e) => {
-                    switch(i){
+                    switch (i) {
                         case 0:
                             this.inquerito_det.dt_coleta = moment(e.value).format('YYYY-MM-DD');
                             break;
@@ -440,11 +438,11 @@ export default {
                             this.inquerito_det.dt_desfecho = moment(e.value).format('YYYY-MM-DD');
                             break;
                     }
-                    
+
                 })
 
             }
-            
+
 
             if (element) {
                 // bulmaCalendar instance is available as element.bulmaCalendar
@@ -469,6 +467,11 @@ export default {
                 element3.bulmaCalendar.on('select', datepicker => {
                     this.inquerito_det.dt_coleira = moment(datepicker.data.startDate).format('YYYY-MM-DD');
                 });
+                if (this.hasColeira == false) {
+                    element3.parentNode.parentNode.getElementsByTagName("button")[0].hidden = true;
+                    //Hide the button to clear the date
+                    element3.parentNode.parentNode.parentNode.style.cssText += 'pointer-events: none;';
+                }
             }
             if (element4) {
                 // bulmaCalendar instance is available as element.bulmaCalendar
@@ -478,19 +481,20 @@ export default {
             }
         }
     },
-    mounted() {this.startCalendar();},
+    mounted() { this.startCalendar(); },
     created() {
         this.inquerito_det.id_inquerito = this.$route.params.master;
         this.quart = this.$route.params.quart;
-        
+        this.hasColeira = this.$route.params.coleira=='true';
+
         this.getCodends();
     },
     watch: {
         'inquerito_det.id_codend'(value) {
             this.getAnimais();
         },
-        'inquerito_det.id_situacao'(value){
-            if (value != 1115){
+        'inquerito_det.id_situacao'(value) {
+            if (value != 1115) {
                 this.inquerito_det.res_dpp = 1123;
                 this.inquerito_det.res_elisa = 1123;
             }

@@ -13,7 +13,6 @@
                         </button>
                     </header>
                     <div class="card-content">
-                        <Loader v-if="isLoading" />
                         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
                             :caption="caption" />
                         <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"  :table-name="tableName"/>
@@ -36,9 +35,7 @@
 <script>
 import notificaService from "@/services/notifica.service";
 import MyTable from "@/components/forms/MyTable.vue";
-import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
-import Message from "@/components/general/Message.vue";
 import moment from 'moment';
 
 export default {
@@ -47,7 +44,6 @@ export default {
         return {
             dataTable: [],
             tableName: 'notifica',
-            isLoading: false,
             message: "",
             caption: "",
             type: "",
@@ -60,7 +56,6 @@ export default {
     },
     components: {
         MyTable,
-        Loader,
         ConfirmDialog,
     },
     methods: {
@@ -86,16 +81,14 @@ export default {
         this.myspan = document.getElementsByName("coisa")[0];
         this.myspan2 = document.getElementsByName("coisa2")[0];
 
-        this.isLoading = true;
         notificaService.getNotificas({})
             .then((response) => {
                 this.dataTable = response.data;
-                this.isLoading = false;
             })
             .catch((err) => {
                 console.log(err);
             })
-            .finally(() => (this.isLoading = false));
+            .finally(() => {});
 
         this.columns = [
             { title: "Código", field: "codigo", minWidth: 200, responsive:2, },

@@ -74,7 +74,7 @@
                                 <div class="column is-10 is-offset-1 has-text-centered cabeca">Parasitológico</div>
                             </div>
                             <div class="columns">
-                                <div class="field column is-4 is-offset-1">
+                                <div class="field column is-3 is-offset-1">
                                     <label class="label">Tipo Amostra</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="22" @selValue="setParasTipo($event)" :errclass="{
@@ -104,6 +104,17 @@
                                             {{ v$.foco_det.paras_result.$errors[0].$message }}
                                         </span>
                                         
+                                    </div>
+                                </div>
+                                <div class="field column is-2">
+                                    <label class="label">Responsável Exame</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="Nome "
+                                            v-model="parasito.paras_resp"
+                                            :class="{ 'is-danger': v$.foco_det.resp_parasito.$error }" />
+                                        <span class="is-error" v-if="v$.foco_det.resp_parasito.$error">
+                                            {{ v$.foco_det.resp_parasito.$errors[0].$message }}
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="field column is-2">
@@ -275,6 +286,7 @@ export default {
                 paras_dt_ex: "",
                 paras_result: 0,
                 paras_fant_result: '',
+                paraqs_resp: ''
             },  
             editing: -1,
             teste:[],
@@ -329,15 +341,19 @@ export default {
                 elisa_result: {  },
                 id_codend: { minValue: combo$(1) },
                 id_canino_det: { minValue: combo$(1) },
-                dt_desfecho: { required$ },
-                id_desfecho: { minValue: combo$(1) },
+                dt_desfecho: { requiredIf: requiredIf$(this.foco_det.id_desfecho > 0) },
+                id_desfecho: { },
                 id_situacao: { minValue: combo$(1) },
                 resp_exame: {
-                    requiredIf: requiredIf$(this.foco_det.id_situacao == 1142),
+                    requiredIf: requiredIf$((this.foco_det.dpp_result + this.foco_det.elisa_result) > 0),
                     maxLength: maxLength$(40)
                 },
                 resp_eutanasia: {
                     requiredIf: requiredIf$(this.foco_det.id_desfecho == 1129),
+                    maxLength: maxLength$(40)
+                },
+                resp_parasito: {
+                    requiredIf: requiredIf$(this.foco_det.paras_dt_ex != null),
                     maxLength: maxLength$(40)
                 },
             },
@@ -578,6 +594,7 @@ export default {
         { title: "Tipo Amostra", field: "paras_fant_tipo" },
             { title: "Data Exame", field: "paras_dt_ex" },
             { title: "Resultado", field: "paras_fant_result" },
+            { title: "Responsável", field: "paras_resp" },
             {
                 title: "Ações",
                 formatter: (cell, formatterParams) => {

@@ -92,6 +92,7 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
+      { title: "GVE", field: "gve", minWidth: 250, responsive:5, },
       { title: "Municipio", field: "municipio", minWidth: 250, responsive:1, },
       { title: "Código", field: "codigo", minWidth: 200, responsive:2, },
       { title: "Nome", field: "nome", minWidth: 200, responsive:1, },

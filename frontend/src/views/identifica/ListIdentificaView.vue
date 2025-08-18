@@ -14,7 +14,6 @@
             </button>
           </header>
           <div class="card-content">
-            <Loader v-if="isLoading" />
             <Message
               v-if="showMessage"
               @do-close="closeMessage"
@@ -42,7 +41,6 @@
 <script>
 import identificaService from "@/services/identifica.service";
 import MyTable from "@/components/forms/MyTable.vue";
-import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Message from "@/components/general/Message.vue";
 
@@ -51,7 +49,6 @@ export default {
   data() {
     return {
       dataTable: [],
-      isLoading: false,
       message: "",
       caption: "",
       type: "",
@@ -65,7 +62,6 @@ export default {
   },
   components: {
     MyTable,
-    Loader,
     Message,
     ConfirmDialog,
   },
@@ -92,16 +88,14 @@ export default {
 
     this.id_user = this.currentUser.id;
     
-    this.isLoading = true;
     identificaService.getidentificas({})
       .then((response) => {
         this.dataTable = response.data;
-        this.isLoading = false;
       })
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => (this.isLoading = false));
+      .finally(() => {});
 
     this.columns = [
       { title: "Município", field: "municipio", minWidth: 250, responsive:1, },

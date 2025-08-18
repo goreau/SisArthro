@@ -2,7 +2,6 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        <Loader v-if="isLoading" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">{{ title }}</p>
@@ -18,7 +17,6 @@
 </template>
 
 <script>
-import Loader from "@/components/general/Loader.vue";
 import MyTable from "@/components/forms/MyTable.vue";
 import reportService from "@/services/report.service";
 
@@ -29,7 +27,6 @@ export default {
       id: 0,
       filter: {},
       dataTable: [],
-      isLoading: false,
       columns: [],
       expColumns: [],
       title: 'Relatórios',
@@ -38,7 +35,6 @@ export default {
     };
   },
   components: {
-    Loader,
     MyTable,
   },
   methods: {
@@ -796,7 +792,6 @@ export default {
     }
   },
   mounted() {
-    this.isLoading = true;
   
     reportService.getRelat(this.id,this.filter)
       .then((response) => {
@@ -807,7 +802,7 @@ export default {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => (this.isLoading = false));
+      .finally(() => {});
     
     this.createColumns();
   },

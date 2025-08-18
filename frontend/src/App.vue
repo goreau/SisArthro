@@ -154,7 +154,7 @@ export default {
         },
         {
           href: "/codend",
-          title: "CodEnd",
+          title: "Cadastro de Endereços",
           icon: {
             element: "font-awesome-icon",
             attributes: {
@@ -167,6 +167,18 @@ export default {
             {
               href: "/codends",
               title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/duplicaCaracterizacao",
+              title: "Gerar Ciclo Caracterização",
               icon: {
                 element: "font-awesome-icon",
                 attributes: {
@@ -206,7 +218,7 @@ export default {
         },
         {
           href: "/inquerito",
-          title: "Inquerito",
+          title: "Inquerito Canino",
           icon: {
             element: "font-awesome-icon",
             attributes: {
@@ -232,7 +244,7 @@ export default {
         },
         {
           href: "/foco",
-          title: "Invest. Foco",
+          title: "Invest. Foco Canino",
           icon: {
             element: "font-awesome-icon",
             attributes: {

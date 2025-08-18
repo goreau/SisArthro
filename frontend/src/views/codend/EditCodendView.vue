@@ -87,7 +87,7 @@
                 </div>
               </div>
               <div class="columns">
-                <div class="field column is-4">
+                <div class="field column is-3">
                   <label class="label">Logradouro</label>
                   <div class="control">
                     <input
@@ -117,7 +117,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="field column is-4">
+                <div class="field column is-2">
                   <label class="label">Complemento</label>
                   <div class="control">
                     <input
@@ -129,6 +129,20 @@
                     />
                     <span class="is-error" v-if="v$.codend.complemento.$error">
                       {{ v$.codend.complemento.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
+                <div class="field column is-3">
+                  <label class="label">Localidade(ATL)</label>
+                  <div class="control">
+                  <CmbLocalidade
+                      :id_mun="codend.id_municipio"
+                      @selLoc="codend.id_localidade = $event"
+                      :sel="codend.id_localidade"
+                      :errclass="{ 'is-danger': v$.codend.id_localidade.$error }"
+                    />
+                    <span class="is-error" v-if="v$.codend.id_localidade.$error">
+                      {{ v$.codend.id_localidade.$errors[0].$message }}
                     </span>
                   </div>
                 </div>
@@ -157,7 +171,7 @@
           <div class="card-content">
             <div class="columns">
               <div class="column is-6 is-offset-3">
-                <MyTable :tableData="dataTable" :columns="columns" :filtered="false" :exports="false" :tableName="tableName"/>
+                <MySimpleTable :tableData="dataTable" :columns="columns"/>
               </div>
             </div>  
           </div>
@@ -173,15 +187,17 @@ import Loader from "@/components/general/Loader.vue";
 import footerCard from "@/components/forms/FooterCard.vue";
 import codendService from "@/services/codend.service";
 import territorioService from "@/services/territorio.service";
-import MyTable from "@/components/forms/MyTable.vue";
+import MySimpleTable from "@/components/forms/MySimpleTable.vue";
 import useValidate from "@vuelidate/core";
 import {
   required$,
   combo$,
   minLength$,
   maxLength$,
-  integer$
+  integer$,
+  numeric$
 } from "../../components/forms/validators.js";
+import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 
 
 export default {
@@ -204,6 +220,7 @@ export default {
         numero: '',
         complemento: '',
         id_usuario: 0,
+        id_localidade: 0,
         quadrante: 0
       },
       v$: useValidate(),
@@ -236,7 +253,8 @@ export default {
         },
         numero: {
           required$,
-          maxLength: maxLength$(10)
+          maxLength: maxLength$(10),
+          numeric$
         },
         complemento: {
           maxLength: maxLength$(20)
@@ -245,6 +263,9 @@ export default {
           minValue: combo$(1)
         },
         id_quarteirao: {
+          minValue: combo$(1)
+        },
+        id_localidade: {
           minValue: combo$(1)
         },
         quadrante: {
@@ -262,7 +283,8 @@ export default {
     Message,
     Loader,
     footerCard,
-    MyTable,
+    MySimpleTable,
+    CmbLocalidade,
   },
   methods: {
     lista(){
@@ -287,6 +309,7 @@ export default {
           this.codend.id_area = data.id_area;
           this.codend.fant_area = data.fant_area;
           this.codend.id_quarteirao = data.id_quarteirao;
+          this.codend.id_localidade = data.id_localidade;
           this.codend.fant_quart = data.fant_quart;
           this.codend.logradouro = data.logradouro;
           this.codend.numero = data.numero;

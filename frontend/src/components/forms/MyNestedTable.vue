@@ -30,6 +30,7 @@
       <font-awesome-icon icon="fa-solid fa-file-pdf" />
     </button>
   </div>
+  <Loader :active="isLoading" />
   <div ref="table" class="is-striped"></div>
   <div ref="tableExp" style="display: none;" ></div>
 </template>
@@ -37,8 +38,8 @@
 <script>
 import { TabulatorFull as Tabulator } from "tabulator-tables"; //import Tabulator library
 import lang from "./lang";
-import jsPDF from 'jspdf';
 import 'jspdf-autotable';
+import Loader from "@/components/general/Loader.vue";
 
 export default {
   data() {
@@ -46,6 +47,7 @@ export default {
       tabulator: null, //variable to hold your table
       tabulatorExp: null,
       xuxu: "coisas",
+      isLoading: false,
       form: {
         column: "0",
         operator: "0",
@@ -54,6 +56,9 @@ export default {
       },
       filter: false,
     };
+  },
+  components: {
+    Loader,
   },
   methods: {
     setFilter() {
@@ -65,11 +70,13 @@ export default {
       this.tabulator.setFilter(obj.column, obj.operator, obj.value);
     },
     clearFilter() {
+      this.isLoading = true;
       this.form.column = "0";
       this.form.operator = "0";
       this.form.value = "";
 
       this.tabulator.clearFilter();
+      this.isLoading = false;
     },
     download_csv() {
       this.tabulatorExp.download("csv", "data.csv");
@@ -96,6 +103,7 @@ export default {
   props: ["tableData", "columns", "expData", "expColumns"],
   watch: {
     tableData(value) {
+      this.isLoading = true;
       this.tabulator = new Tabulator(this.$refs.table, {
         langs: lang,
         locale: "pt-br",
@@ -184,6 +192,17 @@ export default {
             columns: _nt,
           });
         },
+      });
+
+      let me = this;
+      this.tabulator.on("tableBuilt", function () {
+        me.tabulator.on("pageLoaded", (function (pageno) {
+          me.initial = pageno;
+          let name = me.tableName + '_page';
+          localStorage.setItem(name, me.initial);
+        }).bind(this));
+        //  me.tabulator.setPageToRow(me.initial);
+        me.isLoading = false;
       });
     },
     expData(value) {

@@ -173,7 +173,7 @@ export default {
     // this.myspan.innerHTML='<p>teste</p>';;
 
     this.isLoading = true;
-    especieService.getEspecies({})
+    especieService.getEspecies()
       .then((response) => {
         this.dataTable = response.data;
         this.isLoading = false;
@@ -184,6 +184,7 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
+      { title: "Tipo", field: "tipo" },
       { title: "Genero", field: "genero" },
       { title: "Nome", field: "nome" },
       {

@@ -2,7 +2,6 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        <Loader v-if="isLoading" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">{{ title }}</p>
@@ -32,7 +31,6 @@
 </template>
 
 <script>
-import Loader from "@/components/general/Loader.vue";
 import MyNestedTable from "@/components/forms/MyNestedTable.vue";
 import reportService from "@/services/report.service";
 
@@ -44,7 +42,6 @@ export default {
       filter: {},
       dataTable: [],
       expTable: [],
-      isLoading: false,
       columns: [],
       nestedColumns: [],
       expColumns: [],
@@ -53,7 +50,6 @@ export default {
     };
   },
   components: {
-    Loader,
     MyNestedTable,
   },
   methods: {
@@ -297,7 +293,6 @@ export default {
     },
   },
   mounted() {
-    this.isLoading = true;
     this.myspan = document.getElementsByName("coisa")[0];
     this.myspan1 = document.getElementsByName("coisa1")[0];
 
@@ -312,7 +307,7 @@ export default {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => (this.isLoading = false));
+      .finally(() => {});
 
     reportService
       .getExport(this.id, this.filter)

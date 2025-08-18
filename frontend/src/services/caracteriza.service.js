@@ -91,6 +91,16 @@ class CaracterizaService {
         return error.response.data;
     })
   } 
+
+  duplicaCaracterizacao(loc){
+    return axios.post(`/duplicaCaracterizacao`,loc)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error.response.data;
+    })
+  }
 }
 
 export default new CaracterizaService();

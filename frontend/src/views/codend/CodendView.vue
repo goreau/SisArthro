@@ -83,7 +83,7 @@
                 </div>
               </div>
               <div class="columns">
-                <div class="field column is-4">
+                <div class="field column is-3">
                   <label class="label">Logradouro</label>
                   <div class="control has-icons">
                     <input
@@ -113,7 +113,7 @@
                     </span>
                   </div>
                 </div>
-                <div class="field column is-4">
+                <div class="field column is-2">
                   <label class="label">Complemento</label>
                   <div class="control">
                     <input
@@ -125,6 +125,19 @@
                     />
                     <span class="is-error" v-if="v$.codend.complemento.$error">
                       {{ v$.codend.complemento.$errors[0].$message }}
+                    </span>
+                  </div>
+                </div>
+                <div class="field column is-3">
+                  <label class="label">Localidade(ATL)</label>
+                  <div class="control">
+                  <CmbLocalidade
+                      :id_mun="codend.id_municipio"
+                      @selLoc="codend.id_localidade = $event"
+                      :errclass="{ 'is-danger': v$.codend.id_localidade.$error }"
+                    />
+                    <span class="is-error" v-if="v$.codend.id_localidade.$error">
+                      {{ v$.codend.id_localidade.$errors[0].$message }}
                     </span>
                   </div>
                 </div>
@@ -168,6 +181,7 @@ import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import footerCard from "@/components/forms/FooterCard.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
+import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 import codendService from "@/services/codend.service";
 import territorioService from "@/services/territorio.service";
 import MyTable from "@/components/forms/MyTable.vue";
@@ -177,7 +191,8 @@ import {
   combo$,
   minLength$,
   maxLength$,
-  integer$
+  integer$,
+  numeric$
 } from "../../components/forms/validators.js";
 
 export default {
@@ -193,6 +208,7 @@ export default {
       codend: {
         id_municipio: 0,
         id_area: 0,
+        id_localidade: 0,
         fant_area: '',
         id_quarteirao: 0,
         fant_quart: '',
@@ -227,7 +243,8 @@ export default {
         },
         numero: {
           required$,
-          maxLength: maxLength$(10)
+          maxLength: maxLength$(10),
+          numeric$
         },
         complemento: {
           maxLength: maxLength$(20)
@@ -239,6 +256,9 @@ export default {
           minValue: combo$(1)
         },
         id_quarteirao: {
+          minValue: combo$(1)
+        },
+        id_localidade: {
           minValue: combo$(1)
         },
         quadrante:{
@@ -258,6 +278,7 @@ export default {
     CmbMunicipio,
     footerCard,
     MyTable,
+    CmbLocalidade,
   },
   methods: {
     carac(){

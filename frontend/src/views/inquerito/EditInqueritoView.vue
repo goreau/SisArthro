@@ -74,20 +74,24 @@
                                         {{ v$.inquerito.id_tipo.$errors[0].$message }}
                                     </span>
                                 </div>
+                                <div class="field column is-2">
+                                    <label class="label">Ciclo</label>
+                                    <div class="control">
+                                        <input class="input" type="text" placeholder="" v-model="inquerito.ciclo"
+                                            :class="{ 'is-danger': v$.inquerito.ciclo.$error }" :disabled="inquerito.id_tipo == 1"/>
+                                        <span class="is-error" v-if="v$.inquerito.ciclo.$error">
+                                            {{ v$.inquerito.ciclo.$errors[0].$message }}
+                                        </span>
+                                    </div>
+                                </div>
                                 <div class="field column is-3">
                                     <label class="label">Atividade com encoleiramento</label>
                                     <div class="control has-icons-left has-icons-right">
                                         <label class="checkbox">
-                                            <input type="checkbox" name="encoleiramento" value="1"
+                                            <input type="checkbox" name="encoleiramento" value="1" :disabled="inquerito.id_tipo == 1"
                                                 v-model="inquerito.encoleiramento" />
                                             Sim
                                         </label>
-                                    </div>
-                                </div>
-                                <div class="field column is-3">
-                                    <label class="label">Nº de Cães</label>
-                                    <div class="control has-icons-left has-icons-right">
-                                        <input class="input" type="text" v-model="inquerito.num_caes"/>
                                     </div>
                                 </div>
                                 <div class="field column is-3">
@@ -171,8 +175,8 @@ export default {
                 fant_quart: '',
                 id_tipo: 0,
                 encoleiramento: 0,
+                ciclo: 0,
                 numero: '',
-                num_caes: 0,
                 dt_inquerito: '',
                 responsavel: '',
                 id_usuario: 0,
@@ -214,7 +218,7 @@ export default {
                     required$,
                     maxLength: maxLength$(40)
                 },
-                num_caes: {
+                ciclo: {
                     integer$
                 },
             },
@@ -232,7 +236,7 @@ export default {
             }
         },
         details(){
-            this.$router.push("/inquerito_dets/"+this.inquerito.id_inquerito);
+            this.$router.push(`/inquerito_dets/${this.inquerito.id_inquerito}/${this.inquerito.encoleiramento}`);
         },
         loadData() {
             this.isLoading = true;
@@ -246,7 +250,7 @@ export default {
                     this.inquerito.id_area = data.id_area;
                     this.inquerito.id_quarteirao = data.id_quarteirao;
 
-                    this.inquerito.num_caes = data.num_caes;
+                    this.inquerito.ciclo = data.ciclo;
                     this.inquerito.responsavel = data.responsavel;
                     this.edt_date = moment(String(data.dt_inquerito)).format('DD/MM/YYYY');
                     this.inquerito.dt_inquerito = data.dt_inquerito;

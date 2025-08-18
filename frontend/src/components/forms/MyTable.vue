@@ -72,7 +72,7 @@
       <font-awesome-icon icon="fa-solid fa-file-pdf" />
     </button>
   </div>
-  <Loader v-if="isLoading" />
+  <Loader :active="isLoading" />
   <div ref="table" class="is-striped"></div>
   <div ref="tableExp" style="display: none;"></div>
 </template>
@@ -213,11 +213,10 @@ export default {
           let name = me.tableName + '_page';
           localStorage.setItem(name, me.initial);
         }).bind(this));
-      //  me.tabulator.setPageToRow(me.initial);
+        //  me.tabulator.setPageToRow(me.initial);
+        me.isLoading = false;
       });
-
-
-      this.isLoading = false;
+      
     },
     expColumns(value) {
       if (this.tableData != undefined) {

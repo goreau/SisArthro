@@ -150,6 +150,17 @@ const routes = [
     }
   },
   {
+    path: '/duplicaCaracterizacao',
+    name: 'duplicaCaracterizacao',
+    component: () => import(/* webpackChunkName: "user" */ '../views/codend/DuplicaCaracterizacaoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Novo Ciclo de Caracterização',
+        root: false
+      }
+    }
+  },
+  {
     path: '/editCod/:id',
     name: 'editcod',
     component: () => import(/* webpackChunkName: "user" */ '../views/codend/EditCodendView.vue'),
@@ -337,7 +348,7 @@ const routes = [
     }
   },
   {
-    path: '/inquerito_det/:master/:quart',
+    path: '/inquerito_det/:master/:quart/:coleira',
     name: 'inquerito_det',
     component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/InqueritoDetView.vue'),
     meta: {
@@ -359,7 +370,7 @@ const routes = [
     }
   },
   {
-    path: '/inquerito_dets/:master',
+    path: '/inquerito_dets/:master/:tipo',
     name: 'inquerito_dets',
     component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoDetView.vue'),
     meta: {
@@ -386,7 +397,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoDetView.vue'),
     meta: {
       breadcrumb: {
-        name: 'Animal',
+        name: 'Inquérito',
         root: true,
       },
     }

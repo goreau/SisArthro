@@ -69,11 +69,11 @@
                                 </div>
                             </div>
                             <div class="columns">
-                                <div class="column is-5 has-text-centered cabeca">DPP</div>
-                                <div class="column is-5 has-text-centered cabeca">
+                                <div class="column is-4 has-text-centered cabeca">DPP</div>
+                                <div class="column is-4 is-offset-1 has-text-centered cabeca">
                                     Elisa
                                 </div>
-                                <div class="column is-2 has-text-centered cabeca">
+                                <div class="column is-2 is-offset-1 has-text-centered cabeca">
                                     Final
                                 </div>
                             </div>
@@ -87,7 +87,7 @@
                                         {{ v$.inquerito_det.dt_dpp.$errors[0].$message }}
                                     </span>
                                 </div>
-                                <div class="field column is-3">
+                                <div class="field column is-2">
                                     <label class="label">Resultado</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_dpp = $event" :errclass="{
@@ -100,7 +100,7 @@
                                         
                                     </div>
                                 </div>
-                                <div class="field column is-2">
+                                <div class="field column is-2 is-offset-1">
                                     <label class="label">Data Exame</label>
                                     <div class="control">
                                         <input type="text" id="dtElisa">
@@ -109,7 +109,7 @@
                                         {{ v$.inquerito_det.dt_elisa.$errors[0].$message }}
                                     </span>
                                 </div>
-                                <div class="field column is-3">
+                                <div class="field column is-2">
                                     <label class="label">Resultado</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="16" @selValue="inquerito_det.res_elisa = $event" :errclass="{
@@ -121,7 +121,7 @@
                                         </span>
                                     </div>
                                 </div>
-                                <div class="field column is-2">
+                                <div class="field column is-2 is-offset-1">
                                     <label class="label">Resultado Final</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="19" @selValue="inquerito_det.res_final = $event" :errclass="{
@@ -135,22 +135,12 @@
                             </div>
                             <!----->
                             <div class="columns">
-                                <div class="column is-7 has-text-centered cabeca">Coleira</div>
-                                <div class="column is-5 has-text-centered cabeca">
+                                <div class="column is-5 has-text-centered cabeca">Coleira</div>
+                                <div class="column is-6 is-offset-1 has-text-centered cabeca">
                                     Desfecho
                                 </div>
                             </div>
                             <div class="columns">
-                                <div class="field column is-3">
-                                    <label class="label">Ciclo</label>
-                                    <div class="control">
-                                        <input class="input" type="text" placeholder="" v-model="inquerito_det.coleira_ciclo"
-                                            :class="{ 'is-danger': v$.inquerito_det.coleira_ciclo.$error }" />
-                                        <span class="is-error" v-if="v$.inquerito_det.coleira_ciclo.$error">
-                                            {{ v$.inquerito_det.coleira_ciclo.$errors[0].$message }}
-                                        </span>
-                                    </div>
-                                </div>
                                 <div class="field column is-2">
                                     <label class="label">Data Troca</label>
                                     <div class="control">
@@ -160,22 +150,22 @@
                                         {{ v$.inquerito_det.dt_coleira.$errors[0].$message }}
                                     </span>
                                 </div>
-                                <div class="field column is-2">
+                                <div class="field column is-3">
                                     <label class="label">Situacao</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="17" @selValue="inquerito_det.res_coleira = $event" :errclass="{
                                             'is-danger': v$.inquerito_det.res_coleira.$error,
-                                        }" :sel="inquerito_det.res_coleira"/>
+                                        }" :sel="inquerito_det.res_coleira" :ativo="hasColeira"/>
                                         <span class="is-error" v-if="v$.inquerito_det.res_coleira.$error">
                                             {{ v$.inquerito_det.res_coleira.$errors[0].$message }}
                                         </span>
                                     </div>
                                 </div>    
-                                <div class="field column is-3">
+                                <div class="field column is-4 is-offset-1">
                                     <label class="label">Código</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="18" @selValue="inquerito_det.id_desfecho = $event" :errclass="{
-                                            'is-danger': v$.inquerito_det.id_desfecho.$error,
+                                            'is-danger': v$.inquerito_det.id_desfecho.$error, 
                                         }" :sel="inquerito_det.id_desfecho" />
                                         <span class="is-error" v-if="v$.inquerito_det.id_desfecho.$error">
                                             {{ v$.inquerito_det.id_desfecho.$errors[0].$message }}
@@ -193,6 +183,7 @@
                                 </div>                            
                             </div>                           
                         </div>
+                        {{ hasColeira }}
                         <footer class="card-footer">
                             <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
                         </footer>
@@ -214,7 +205,7 @@ import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
 import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
-import { required$, combo$, integer$, requiredIf$ } from "../../components/forms/validators.js";
+import { required$, combo$, requiredIf$ } from "../../components/forms/validators.js";
 
 
 export default {
@@ -229,6 +220,7 @@ export default {
             master: {},
             quart:{},
             codends: [],
+            caninos: [],
             inqueritos: [],
             inquerito_det: {
                 id_inquerito_det: 0,
@@ -242,7 +234,6 @@ export default {
                 dt_elisa: "",
                 res_elisa: 0,
                 res_final: 0,
-                coleira_ciclo: 0,
                 dt_coleira: '',
                 res_coleira: 0,
                 id_desfecho: 0, 
@@ -260,6 +251,7 @@ export default {
                 strAux: "Coletas",
                 aux: true,
             },
+            hasColeira: false,
         };
     },
     validations() {
@@ -272,25 +264,24 @@ export default {
         return {
             inquerito_det: {
                 dt_coleta: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115)},
-                dt_dpp: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_dpp != 1123) },
-                dt_elisa: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_elisa != 1123) },
+                dt_dpp: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_dpp > 0 && this.inquerito_det.res_dpp != 1123) },
+                dt_elisa: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_elisa > 0 && this.inquerito_det.res_elisa != 1123) },
                 dt_coleira: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_coleira == 1124) },
-                dt_desfecho: { required$ },
+                dt_desfecho: { requiredIf: requiredIf$(this.inquerito_det.id_desfecho > 0) },
                 id_codend: { minValue: combo$(1) },
                 id_situacao: { minValue: combo$(1) },
                 id_canino_det: { minValue: combo$(1) },
-                res_dpp: { minValueF },
-                res_elisa: { minValueF },
+                res_dpp: {  },
+                res_elisa: {  },
                 res_final: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115) },
-                res_coleira: { minValue: combo$(1) },
-                id_desfecho: { minValue: combo$(1) },
-                coleira_ciclo: { integer$ },
+                res_coleira: { requiredIf: requiredIf$(this.hasColeira) },
+                id_desfecho: { requiredIf: requiredIf$((this.inquerito_det.res_dpp + this.inquerito_det.res_elisa) > 0) },
             },
         };
     },
     methods: {
         details() {
-            this.$router.push("/inquerito_dets/" + this.inquerito_det.id_inquerito);
+            this.$router.push(`/inquerito_dets/${this.inquerito_det.id_inquerito}/${this.hasColeira}`);
         },
         loadData() {
             this.isLoading = true;
@@ -316,7 +307,9 @@ export default {
                     this.inquerito_det.dt_desfecho = data.dt_desfecho;
                     this.inquerito_det.dt_dpp = data.dt_dpp;
                     this.inquerito_det.dt_elisa = data.dt_elisa;
+                    this.hasColeira = data.encoleiramento;
                     this.startCalendar();
+                    
                 },
                 (error) => {
                     this.message =
@@ -519,6 +512,12 @@ export default {
                 element3.bulmaCalendar.on('select', datepicker => {
                     this.inquerito_det.dt_coleira = moment(datepicker.data.startDate).format('YYYY-MM-DD');
                 });
+
+                if (this.hasColeira == false) {
+                    element3.parentNode.parentNode.getElementsByTagName("button")[0].hidden = true;
+                    //Hide the button to clear the date
+                    element3.parentNode.parentNode.parentNode.style.cssText += 'pointer-events: none;';
+                }
             }
             if (element4) {
                 // bulmaCalendar instance is available as element.bulmaCalendar
@@ -538,7 +537,7 @@ export default {
         'inquerito_det.id_codend'(value) {
             this.getAnimais();
         },
-    }
+    },
 };
 </script>
 

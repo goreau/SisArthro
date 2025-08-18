@@ -153,6 +153,16 @@ class CaninoService {
     })
   } 
 
+  getCaninosByCodend(id) {
+    return axios.get(`/caninosbycodend/${id}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
   getCaninosDet(master) {
     return axios.get(`/caninos_det/${master}`)
     .then(response => {
