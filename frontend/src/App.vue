@@ -36,13 +36,16 @@ export default {
       }
     },
     updateMenuAccess() {
+      if (!this.currentUser) return;
       this.menu = this.menu.map((item) => {
         if (item.child) {
           // Percorre os subitens (child) e aplica a lógica
           item.child = item.child.map((subItem) => {
             if (subItem.href === '/refactor') {
               // Desabilita o subitem 'refactor' se o nível de acesso for maior que 1, ou seja, só habilita para administrador
-              //  subItem.disabled = this.currentUser.role > 1;
+              subItem.disabled = this.currentUser.role > 1;
+            } else if (subItem.href === '/estratos'){
+              subItem.hidden = this.currentUser.role > 1;
             }
             return subItem;
           });
@@ -296,7 +299,7 @@ export default {
         },
         {
           href: "/notifica",
-          title: "Notificação",
+          title: "Notificação de Cães",
           icon: {
             element: "font-awesome-icon",
             attributes: {
@@ -540,6 +543,18 @@ export default {
                 class: "small",
                 attributes: {
                   icon: "fa-solid fa-hand-point-up",
+                  transform: "shrink-10",
+                },
+              },
+            },
+            {
+              href: "/estratos",
+              title: "Estratos",
+              icon: {
+                element: "font-awesome-icon",
+                class: "small",
+                attributes: {
+                  icon: "fa-solid fa-file-lines",
                   transform: "shrink-10",
                 },
               },

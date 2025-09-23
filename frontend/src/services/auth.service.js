@@ -93,6 +93,9 @@ class AuthService {
       return axios.get(`/user/${id}` )
       .then(response => {
         return response;
+      },
+      (error) => {
+        return error.response.data;
       })
     }  
     

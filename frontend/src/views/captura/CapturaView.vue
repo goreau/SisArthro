@@ -106,7 +106,7 @@
                     {{ v$.captura.zona.$errors[0].$message }}
                   </span>
                 </div>
-                <div class="field column is-6">
+                <div class="field column is-4">
                   <label class="label">CodSis - Município</label>
                   <div class="control">
                     <CmbMunicipio
@@ -120,6 +120,15 @@
                   </div>
                 </div>
                 <div class="field column is-3">
+                  <label class="label">CodLoc - Localidade</label>
+                    <div class="control">
+                    <CmbLocalidade
+                      :id_mun="captura.id_municipio"
+                      @selLoc="captura.cod_loc = $event"
+                    />
+                  </div>
+                </div>
+                <div class="field column is-2">
                   <label class="label">Quadrante</label>
                   <div class="control">
                     <input
@@ -131,20 +140,12 @@
                 </div>
               </div>
               <!---->
-              <div class="columns">
-                <div class="field column is-6">
-                  <label class="label">CodLoc - Localidade</label>
-                    <div class="control">
-                    <CmbLocalidade
-                      :id_mun="captura.id_municipio"
-                      @selLoc="captura.cod_loc = $event"
-                    />
-                  </div>
-                </div>
-              </div>
+              
+                
+
               <!---->
               <div class="columns">
-                <div class="field column is-5">
+                <div class="field column is-4">
                   <label class="label">Agravo</label>
                   <div class="control">
                     <CmbAuxiliares
@@ -157,16 +158,29 @@
                   </span>
                   </div>
                 </div>
-                <div class="field column is-5">
+                <div class="field column is-3 is-offset-1">
                   <label class="label">Atividade</label>
                   <div class="control">
                     <CmbAuxiliares
                       :tipo="3"
                       @selValue="captura.atividade = $event"
-                      :errclass="{ 'is-danger': v$.captura.id_municipio.$error }"
+                      :errclass="{ 'is-danger': v$.captura.atividade.$error }"
                     />
                     <span class="is-error" v-if="v$.captura.atividade.$error">
                     {{ v$.captura.atividade.$errors[0].$message }}
+                  </span>
+                  </div>
+                </div>
+                <div class="field column is-3" v-show="captura.atividade == 32">
+                  <label class="label">Tipo</label>
+                  <div class="control">
+                    <CmbAuxiliares
+                      :tipo="28"
+                      @selValue="captura.tipo_ativ = $event"
+                      :errclass="{ 'is-danger': v$.captura.tipo_ativ.$error }"
+                    />
+                    <span class="is-error" v-if="v$.captura.tipo_ativ.$error">
+                    {{ v$.captura.tipo_ativ.$errors[0].$message }}
                   </span>
                   </div>
                 </div>
@@ -255,6 +269,7 @@ export default {
         quadrante: 0,
         agravo: 0,
         atividade: 0,
+        tipo_ativ: 0,
         equipe: '',
         obs: '',
         id_usuario: 0,
@@ -282,7 +297,8 @@ export default {
         zona: {minValue: combo$(1),},
         id_municipio: {minValue: combo$(1),},
         agravo: {minValue: combo$(1),},
-        atividade: {minValue: combo$(1),},
+        atividade: {minValue: combo$(1)},
+        tipo_ativ: {requiredIf: requiredIf$(this.captura.atividade == 32) },
         equipe: {required$, maxLength: maxLength$(50)},
       },
     };
@@ -311,7 +327,7 @@ export default {
             this.caption = "Captura";
             setTimeout(() => {
               this.showMessage = false; 
-              this.$router.push("/captura_det/"+response.data.master.id_captura)}, 5000);
+              this.$router.push("/captura_det/"+response.data.master.id_captura)}, 10000);
           },
           (error) => {
             this.message = error;

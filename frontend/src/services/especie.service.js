@@ -113,8 +113,8 @@ class EspecieService {
     })
   } 
 
-  comboGen() {
-    return axios.get(`/comboGen`)
+  comboGen(agravo) {
+    return axios.get(`/comboGen/${agravo}`)
     .then(response => {
         return {data: response.data};
     },

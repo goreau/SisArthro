@@ -189,7 +189,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{ hasColeira }}
                         <footer class="card-footer">
                             <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
                         </footer>

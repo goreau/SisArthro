@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <footer class="card-footer">
-                            <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                            <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
                         </footer>
                     </div>
                 </div>
@@ -241,9 +241,9 @@ export default {
                     .createDet(this.canino_det)
                     .then((response) => {
                         this.showMessage = true;
-                        this.message = "Captura inserida com sucesso!";
+                        this.message = "Animal alterado com sucesso!";
                         this.type = "success";
-                        this.caption = "Captura";
+                        this.caption = "Animal";
                         setTimeout(() => {
                             (this.showMessage = false);
                             location.reload();
@@ -252,7 +252,7 @@ export default {
                             this.message = error;
                             this.showMessage = true;
                             this.type = "alert";
-                            this.caption = "Captura";
+                            this.caption = "Animal";
                             setTimeout(() => (this.showMessage = false), 3000);
                         };
                     })
@@ -260,7 +260,7 @@ export default {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
                         this.showMessage = true;
                         this.type = "alert";
-                        this.caption = "Captura";
+                        this.caption = "Animal";
                         setTimeout(() => (this.showMessage = false), 3000);
                     })
                     .finally(() => {

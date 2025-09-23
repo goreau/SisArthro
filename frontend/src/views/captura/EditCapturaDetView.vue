@@ -351,7 +351,7 @@
               <!---->
               <div class="columns">
                 <div class="field column is-one-fifth">
-                  <label class="label">Situação</label>
+                  <label class="label">Situação da AIL</label>
                   <div class="control">
                     <CmbAuxiliares
                       :tipo="26"
@@ -432,6 +432,7 @@ import {
   maxValue$,
   maxLength$,
   integer$,
+  minValueIf$,
 } from "../../components/forms/validators.js";
  import CoordenadaMixin from "@/mixins/CoordenadaMixin.js";
 
@@ -512,11 +513,19 @@ export default {
         temp_final: { maxValue: maxValue$(50) },
         umidade_inicio: { maxValue: maxValue$(100) },
         umidade_final: { maxValue: maxValue$(100) },
-        situacao: { minValue: combo$(1) },
+        situacao: {
+          minValueIf: minValueIf$(1, () => this.isAil)
+        },
         amostra: { maxLength: maxLength$(10) },
         quant_potes: { integer$ },
       },
     };
+  },
+  computed: {
+    isAil() {
+      //console.log('metodo mudou:', this.captura_det.metodo, typeof this.captura_det.metodo)
+      return [42,43,44,45,46,47,49,52].includes(Number(this.captura_det.metodo))
+    },
   },
   methods: {
     setTpCodend(event){
@@ -576,12 +585,12 @@ export default {
         capturaService
           .editDet(this.captura_det)
           .then((response) => {
-            console.log(response);
 
             this.showMessage = true;
             this.message = "Captura alterada com sucesso!";
             this.type = "success";
             this.caption = "Captura";
+            this.v$.$reset() 
             setTimeout(() => (this.showMessage = false), 3000);
             (error) => {
               this.message = error;
@@ -662,11 +671,9 @@ export default {
       capturaService
         .getCaptura(this.captura_det.id_captura)
         .then((res) => {
-          console.log(res);
           territorioService
             .getAreas(res.data.id_municipio)
             .then((res) => {
-              console.log(res);
               this.area = res.data.area;
             })
             .catch((err) => {

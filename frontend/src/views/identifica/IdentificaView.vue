@@ -98,13 +98,22 @@
                         <div class="field column is-2">
                           <label class="label">Gênero</label>
                           <div class="control">
-                            <div class="select">
-                              <select class="input" @change="getEspeciesN($event)">
-                                <option value="0">-- Selecione --</option>
-                                <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
-                                  {{ reg.nome }}
-                                </option>
-                              </select>
+                            <div class="field has-addons">
+                              <div class="select">
+                                <select class="input" @change="getEspeciesN($event)">
+                                  <option value="0">-- Selecione --</option>
+                                  <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
+                                    {{ reg.nome }}
+                                  </option>
+                                </select>
+                              </div>
+                              <div class="control">
+                                <button class="button" @click="trocaListaGen()">
+                                  <span class="icon is-small has-text-success">
+                                    <font-awesome-icon icon="fa-solid fa-repeat" />
+                                  </span>
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -155,9 +164,10 @@
                         <div class="field column">
                           <label class="label">Fêmea Ing</label>
                           <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea_ing" :class="{
-                              'is-danger': v$.identifica_det.femea_ing.$error,
-                            }" />
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea_ing"
+                              :class="{
+                                'is-danger': v$.identifica_det.femea_ing.$error,
+                              }" />
                             <span class="is-error" v-if="v$.identifica_det.femea_ing.$error">
                               {{
                                 v$.identifica_det.femea_ing.$errors[0].$message
@@ -247,6 +257,8 @@ export default {
       amostras: [],
       generos: [],
       especies: [],
+      marcaGen: 99,
+      agravo: 0,
       identifica: {
         id_identificacao: 0,
         id_captura: 0,
@@ -325,11 +337,11 @@ export default {
             }
           )
           .catch((err) => {
-              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-              this.showMessage = true;
-              this.type = "alert";
-              this.caption = "Identificação";
-              setTimeout(() => (this.showMessage = false), 3000);
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Identificação";
+            setTimeout(() => (this.showMessage = false), 3000);
           })
           .finally(() => {
             document.getElementById("btAbreId").classList.remove("is-loading");
@@ -364,11 +376,11 @@ export default {
             };
           })
           .catch((err) => {
-              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-              this.showMessage = true;
-              this.type = "alert";
-              this.caption = "Identificação";
-              setTimeout(() => (this.showMessage = false), 3000);
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Identificação";
+            setTimeout(() => (this.showMessage = false), 3000);
           })
           .finally(() => {
             document.getElementById("login").classList.remove("is-loading");
@@ -396,14 +408,26 @@ export default {
         .getAmostras(this.identifica.id_captura)
         .then((res) => {
           this.amostras = res.data;
+          this.agravo = res.data[0].agravo;
+          this.getGeneros();
         })
         .catch((err) => {
           this.amostras = [];
         });
     },
+    trocaListaGen() {
+      if (this.marcaGen == 99) {
+        this.marcaGen = this.agravo
+        this.agravo = 99
+      } else {
+        this.agravo = this.marcaGen
+        this.marcaGen = 99
+      }
+      this.getGeneros()
+    },
     getGeneros() {
       especieService
-        .comboGen()
+        .comboGen(this.agravo)
         .then((res) => {
           this.generos = res.data;
         })
@@ -505,23 +529,22 @@ export default {
 
     const input = document.querySelector('.datetimepicker-dummy-input');
     input.removeAttribute('readonly');
-    input.setAttribute('value',"__/__/____");
-    input.setAttribute('data-mask',"__/__/____");
+    input.setAttribute('value', "__/__/____");
+    input.setAttribute('data-mask', "__/__/____");
     this.applyDataMask(input);
 
-      input.addEventListener('blur', ()=>{
-       this.identifica.dt_identificacao = moment(input.value).format('YYYY-MM-DD');
-      })
+    input.addEventListener('blur', () => {
+      this.identifica.dt_identificacao = moment(input.value).format('YYYY-MM-DD');
+    })
 
     const element = document.querySelector('#dtIdent');
-    
+
     if (element) {
       // bulmaCalendar instance is available as element.bulmaCalendar
       element.bulmaCalendar.on('select', datepicker => {
         this.identifica.dt_identificacao = moment(datepicker.data.startDate).format('YYYY-MM-DD');
       });
     }
-    this.getGeneros();
   },
 };
 </script>

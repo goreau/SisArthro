@@ -798,6 +798,17 @@ const routes = [
       }
     }
   },
+  {
+    path: '/estratos',
+    name: 'estratos',
+    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainEstratoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Estratos',
+        root: true
+      }
+    }
+  },
 ]
 
 const router = createRouter({

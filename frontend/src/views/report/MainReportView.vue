@@ -19,16 +19,12 @@
                         <label class="radio">
                           <input type="radio" name="execucao" value="1" v-model="tipo_relat" />
                           1 - Capturas </label>
-                        <label class="radio" v-if="currentUser.role == 1">
-                          <input type="radio" name="execucao" value="102" v-model="tipo_relat" />
-                          4 - Extrato de Identificações
-                        </label>
                         <label class="radio">
                           <input type="radio" name="execucao" value="105" v-model="tipo_relat" />
-                          7 - Inquérito Canino </label>
+                          4 - Inquérito Canino </label>
                         <label class="radio">
-                          <input type="radio" name="execucao" value="107" v-model="tipo_relat" />
-                          10 - Extrato de Notificação de Cães </label>
+                          <input type="radio" name="execucao" value="3" v-model="tipo_relat" />
+                          7 - Encoleiramento </label>
                       </div>
                       <div class="column is-4 linha">
                         <label class="radio">
@@ -37,22 +33,15 @@
                         <label class="radio">
                           <input type="radio" name="execucao" value="103" v-model="tipo_relat" />
                           5 - Caracterizações </label>
-                        <label class="radio">
-                          <input type="radio" name="execucao" value="3" v-model="tipo_relat" />
-                          8 - Encoleiramento </label>
                       </div>
                       <div class="column is-4 linha">
-                        <label class="radio" v-if="currentUser.role == 1">
-                          <input type="radio" name="execucao" value="101" v-model="tipo_relat" />
-                          3 - Extrato de Capturas
-                        </label>
                         <label class="radio">
                           <input type="radio" name="execucao" value="104" v-model="tipo_relat" />
-                          6 - Investigação de Foco 
+                          3 - Investigação de Foco
                         </label>
                         <label class="radio">
                           <input type="radio" name="execucao" value="106" v-model="tipo_relat" />
-                          9 - Notificação de Cães 
+                          6 - Notificação de Cães
                         </label>
                       </div>
 
@@ -96,12 +85,23 @@
                       </div>
                     </div>
                   </div>
+                  <div class="columns">
+                    <div class="column is-full">
+                      <div class="field">
+                        <label class="label">ATL/Localidade</label>
+                        <div class="control">
+                          <CmbLocalidade :id_mun="filter.id_municipio" :sel="filter.id_localidade"
+                            @selLoc="filter.id_localidade = $event" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                   <section class="section" v-show="noAgravo.indexOf(tipo_relat) != -1">
                     <div class="columns">
                       <div class="field column is-full">
                         <label class="label">Agravo</label>
                         <div class="control">
-                          <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event" :sel="filter.agravo"/>
+                          <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event" :sel="filter.agravo" />
                         </div>
                       </div>
                     </div>
@@ -111,33 +111,33 @@
                       <div class="field column is-full">
                         <fieldset class="fieldset">
                           <legend>Tipo de Amostra {{ filter.sexo }}</legend>
-                
-                        <div class="columns">
-                          <div class="column is-3">
-                            <label class="radio">
-                              <input type="radio" name="sexo" value="9" v-model="filter.sexo" />
+
+                          <div class="columns">
+                            <div class="column is-3">
+                              <label class="radio">
+                                <input type="radio" name="sexo" value="9" v-model="filter.sexo" />
                                 Todas
-                            </label>
-                          </div>
-                          <div class="column is-3">
-                            <label class="radio">
-                              <input type="radio" name="sexo" value="1" v-model="filter.sexo" />
+                              </label>
+                            </div>
+                            <div class="column is-3">
+                              <label class="radio">
+                                <input type="radio" name="sexo" value="1" v-model="filter.sexo" />
                                 Machos
-                            </label>
-                          </div>
-                          <div class="column is-3">
-                            <label class="radio">
-                              <input type="radio" name="sexo" value="2" v-model="filter.sexo" />
+                              </label>
+                            </div>
+                            <div class="column is-3">
+                              <label class="radio">
+                                <input type="radio" name="sexo" value="2" v-model="filter.sexo" />
                                 Fêmeas
-                            </label>
-                          </div>
-                          <div class="column is-3">
-                            <label class="radio">
-                              <input type="radio" name="sexo" value="3" v-model="filter.sexo" />
+                              </label>
+                            </div>
+                            <div class="column is-3">
+                              <label class="radio">
+                                <input type="radio" name="sexo" value="3" v-model="filter.sexo" />
                                 Fêmeas Ingurgitadas
-                            </label>
+                              </label>
+                            </div>
                           </div>
-                        </div>
                         </fieldset>
                       </div>
                     </div>
@@ -197,6 +197,7 @@ import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
 import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
+import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
 
 export default {
   data() {
@@ -206,6 +207,7 @@ export default {
         id_gve: 0,
         id_drs: 0,
         id_municipio: 0,
+        id_localidade: 0,
         dt_inicio: "",
         dt_final: "",
         agravo: "",
@@ -221,8 +223,8 @@ export default {
       type: "",
       showMessage: false,
       noDate: new Array('103'),
-      noAgravo: new Array('1','2','101','102'),
-      noSexo: new Array('1','2','101','102'),
+      noAgravo: new Array('1', '2', '101', '102'),
+      noSexo: new Array('1', '2', '101', '102'),
     };
   },
   computed: {
@@ -235,13 +237,14 @@ export default {
     Loader,
     CmbTerritorio,
     CmbMunicipio,
+    CmbLocalidade,
     CmbAuxiliares,
   },
   methods: {
     processar() {
       localStorage.setItem('filterRelArthro', JSON.stringify(this.filter));
 
-      
+
       if (this.tipo_relat > 100) {
         this.$router.push(`/report/${this.tipo_relat}`);
       } else {
@@ -309,7 +312,7 @@ export default {
       });
 
       element.bulmaCalendar.on('clear', datepicker => {
-          this.filter.dt_inicio = '';
+        this.filter.dt_inicio = '';
       });
     }
 
@@ -335,7 +338,7 @@ export default {
       });
 
       element2.bulmaCalendar.on('clear', datepicker => {
-          this.filter.dt_final = '';
+        this.filter.dt_final = '';
       });
     }
 

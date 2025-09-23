@@ -26,6 +26,27 @@ export const between$ = (min, max) => helpers.withMessage(({ $params}) => `O val
 
 export const requiredIf$ = (cond) => helpers.withMessage('Informe o valor desse campo.', requiredIf(cond))
 
-export const minValueIf = (value, vm) => helpers.withMessage('Informe o valor desse campo.', minValueF(value, vm))
+/*export const minValueIf$ = (min, active) =>
+  helpers.withParams(
+    { type: 'minValueIf', min, active },
+    (value, vm) => {
+      // se active for função, resolve com vm
+      const isActive = typeof active === 'function' ? active(vm) : active;
+
+      if (!isActive) return true; // condição inativa
+      if (value === null || value === undefined || value === '') return true; // vazio passa
+
+      // aplica minValue
+      return Number(value) >= min;
+    }
+  );*/
+
+export const minValueIf$ = (min, cond) =>
+  helpers.withMessage('Informe um valor para esse campo.', (value, vm) => {
+    const active = typeof cond === 'function' ? cond(vm) : cond;
+    if (!active) return true;                  // condição inativa
+    if (value === null || value === undefined || value === '') return true; // vazio passa
+    return Number(value) >= min;       // aplica minValue
+});
 
 export const integerOrNull$ =  helpers.withMessage('Informe um número inteiro para esse campo.', (value) => (value === null || integer(value)))

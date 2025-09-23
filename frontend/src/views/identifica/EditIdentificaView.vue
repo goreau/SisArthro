@@ -36,8 +36,8 @@
                                 'is-danger': v$.identifica.id_captura.$error,
                               }">
                                 <option value="0">-- Selecione --</option>
-                                <option v-for="reg in capturas" :key="reg.id_captura" 
-                                :value="reg.id_captura" :selected="reg.id_capturao == identifica.id_captura">
+                                <option v-for="reg in capturas" :key="reg.id_captura" :value="reg.id_captura"
+                                  :selected="reg.id_capturao == identifica.id_captura">
                                   {{ reg.codigo }}
                                 </option>
                               </select>
@@ -105,110 +105,120 @@
                         <div class="field column is-2">
                           <label class="label">Gênero</label>
                           <div class="control">
-                            <div class="select">
-                              <select class="input" @change="getEspeciesN($event)" v-model="genero">
-                                <option value="0">-- Selecione --</option>
-                                <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
-                                  {{ reg.nome }}
-                                </option>
-                              </select>
+                            <div class="field has-addons">
+                              <div class="select">
+                                <select class="input" @change="getEspeciesN($event)" v-model="genero">
+                                  <option value="0">-- Selecione --</option>
+                                  <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
+                                    {{ reg.nome }}
+                                  </option>
+                                </select>
+                              </div>
+                              <div class="control">
+                                <button class="button" @click="trocaListaGen()">
+                                  <span class="icon is-small has-text-success">
+                                    <font-awesome-icon icon="fa-solid fa-repeat" />
+                                  </span>
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div class="field column is-2">
-                          <label class="label">Espécie</label>
-                          <div class="control">
-                            <div class="select">
-                              <select v-model="identifica_det.id_especie" class="input" :class="{
-                                'is-danger':
-                                  v$.identifica_det.id_especie.$error,
-                              }">
-                                <option value="0">-- Selecione --</option>
-                                <option v-for="reg in especies" :value="reg.id_especie" :key="reg.id_especie">
-                                  {{ reg.especie }}
-                                </option>
-                              </select>
-                              <span class="is-error" v-if="v$.identifica_det.id_especie.$error">
+                          </div>
+                          <div class="field column is-2">
+                            <label class="label">Espécie</label>
+                            <div class="control">
+                              <div class="select">
+                                <select v-model="identifica_det.id_especie" class="input" :class="{
+                                  'is-danger':
+                                    v$.identifica_det.id_especie.$error,
+                                }">
+                                  <option value="0">-- Selecione --</option>
+                                  <option v-for="reg in especies" :value="reg.id_especie" :key="reg.id_especie">
+                                    {{ reg.especie }}
+                                  </option>
+                                </select>
+                                <span class="is-error" v-if="v$.identifica_det.id_especie.$error">
+                                  {{
+                                    v$.identifica_det.id_especie.$errors[0]
+                                      .$message
+                                  }}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="field column">
+                            <label class="label">Macho</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.macho" :class="{
+                                'is-danger': v$.identifica_det.macho.$error,
+                              }" />
+                              <span class="is-error" v-if="v$.identifica_det.macho.$error">
+                                {{ v$.identifica_det.macho.$errors[0].$message }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="field column">
+                            <label class="label">Fêmea</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea" :class="{
+                                'is-danger': v$.identifica_det.femea.$error,
+                              }" />
+                              <span class="is-error" v-if="v$.identifica_det.femea.$error">
+                                {{ v$.identifica_det.femea.$errors[0].$message }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="field column">
+                            <label class="label">Fêmea Ing</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea_ing"
+                                :class="{
+                                  'is-danger': v$.identifica_det.femea_ing.$error,
+                                }" />
+                              <span class="is-error" v-if="v$.identifica_det.femea_ing.$error">
                                 {{
-                                  v$.identifica_det.id_especie.$errors[0]
-                                    .$message
+                                  v$.identifica_det.femea_ing.$errors[0].$message
                                 }}
                               </span>
                             </div>
                           </div>
-                        </div>
-                        <div class="field column">
-                          <label class="label">Macho</label>
-                          <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.macho" :class="{
-                              'is-danger': v$.identifica_det.macho.$error,
-                            }" />
-                            <span class="is-error" v-if="v$.identifica_det.macho.$error">
-                              {{ v$.identifica_det.macho.$errors[0].$message }}
-                            </span>
+                          <div class="field column">
+                            <label class="label">Larva</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.larva" :class="{
+                                'is-danger': v$.identifica_det.larva.$error,
+                              }" />
+                              <span class="is-error" v-if="v$.identifica_det.larva.$error">
+                                {{ v$.identifica_det.larva.$errors[0].$message }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="field column">
+                            <label class="label">Ninfa</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.ninfa" :class="{
+                                'is-danger': v$.identifica_det.ninfa.$error,
+                              }" />
+                              <span class="is-error" v-if="v$.identifica_det.ninfa.$error">
+                                {{ v$.identifica_det.ninfa.$errors[0].$message }}
+                              </span>
+                            </div>
+                          </div>
+                          <div class="field column">
+                            <label class="label">Pool</label>
+                            <div class="control">
+                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.pool" :class="{
+                                'is-danger': v$.identifica_det.pool.$error,
+                              }" />
+                              <span class="is-error" v-if="v$.identifica_det.pool.$error">
+                                {{ v$.identifica_det.pool.$errors[0].$message }}
+                              </span>
+                            </div>
                           </div>
                         </div>
-                        <div class="field column">
-                          <label class="label">Fêmea</label>
-                          <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea" :class="{
-                              'is-danger': v$.identifica_det.femea.$error,
-                            }" />
-                            <span class="is-error" v-if="v$.identifica_det.femea.$error">
-                              {{ v$.identifica_det.femea.$errors[0].$message }}
-                            </span>
-                          </div>
+                        <div class="columns">
+                          <footerCard @submit="createDet" @cancel="null" @aux="details" :cFooter="cFooter" />
                         </div>
-                        <div class="field column">
-                          <label class="label">Fêmea Ing</label>
-                          <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea_ing" :class="{
-                              'is-danger': v$.identifica_det.femea_ing.$error,
-                            }" />
-                            <span class="is-error" v-if="v$.identifica_det.femea_ing.$error">
-                              {{
-                                v$.identifica_det.femea_ing.$errors[0].$message
-                              }}
-                            </span>
-                          </div>
-                        </div>
-                        <div class="field column">
-                          <label class="label">Larva</label>
-                          <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.larva" :class="{
-                              'is-danger': v$.identifica_det.larva.$error,
-                            }" />
-                            <span class="is-error" v-if="v$.identifica_det.larva.$error">
-                              {{ v$.identifica_det.larva.$errors[0].$message }}
-                            </span>
-                          </div>
-                        </div>
-                        <div class="field column">
-                          <label class="label">Ninfa</label>
-                          <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.ninfa" :class="{
-                              'is-danger': v$.identifica_det.ninfa.$error,
-                            }" />
-                            <span class="is-error" v-if="v$.identifica_det.ninfa.$error">
-                              {{ v$.identifica_det.ninfa.$errors[0].$message }}
-                            </span>
-                          </div>
-                        </div>
-                        <div class="field column">
-                          <label class="label">Pool</label>
-                          <div class="control">
-                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.pool" :class="{
-                              'is-danger': v$.identifica_det.pool.$error,
-                            }" />
-                            <span class="is-error" v-if="v$.identifica_det.pool.$error">
-                              {{ v$.identifica_det.pool.$errors[0].$message }}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="columns">
-                        <footerCard @submit="createDet" @cancel="null" @aux="details" :cFooter="cFooter" />
-                      </div>
                     </article>
                   </div>
                 </div>
@@ -256,6 +266,8 @@ export default {
       generos: [],
       especies: [],
       genero: 0,
+      marcaGen: 99,
+      agravo: 0,
       identifica: {
         id_identificacao: 0,
         id_captura: 0,
@@ -324,7 +336,7 @@ export default {
       var calini = bulmaCalendar.attach('#dtIdent', options);
 
       const input = document.querySelector('.datetimepicker-dummy-input');
-      if(input){
+      if (input) {
         input.removeAttribute('readonly');
         input.setAttribute('value', "__/__/____");
         input.setAttribute('data-mask', "__/__/____");
@@ -368,11 +380,11 @@ export default {
             }
           )
           .catch((err) => {
-              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-              this.showMessage = true;
-              this.type = "alert";
-              this.caption = "Identificação";
-              setTimeout(() => (this.showMessage = false), 3000);
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Identificação";
+            setTimeout(() => (this.showMessage = false), 3000);
           })
           .finally(() => {
             document.getElementById("btAbreId").classList.remove("is-loading");
@@ -413,54 +425,54 @@ export default {
               document.getElementById("login").classList.remove("is-loading");
             });
         } else {
-          if (this.identifica_det.amostra>0){
+          if (this.identifica_det.amostra > 0) {
             identificaService
-            .createDet(this.identifica_det)
-            .then(
-              (response) => {
-                this.showMessage = true;
-                this.message = "Identificação inserida!";
-                this.type = "success";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
-              },
-              (error) => {
-                this.message = error;
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
-              }
-            )
-            .finally(() => {
-              document.getElementById("login").classList.remove("is-loading");
-            });
+              .createDet(this.identifica_det)
+              .then(
+                (response) => {
+                  this.showMessage = true;
+                  this.message = "Identificação inserida!";
+                  this.type = "success";
+                  this.caption = "Identificação";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                },
+                (error) => {
+                  this.message = error;
+                  this.showMessage = true;
+                  this.type = "alert";
+                  this.caption = "Identificação";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                }
+              )
+              .finally(() => {
+                document.getElementById("login").classList.remove("is-loading");
+              });
 
           } else {
             identificaService
-            .update(this.identifica)
-            .then(
-              (response) => {
-                this.showMessage = true;
-                this.message = "Identificação alterada!";
-                this.type = "success";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
-              },
-              (error) => {
-                this.message = error;
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
-              }
-            )
-            .finally(() => {
-              document.getElementById("login").classList.remove("is-loading");
-            });
-          
+              .update(this.identifica)
+              .then(
+                (response) => {
+                  this.showMessage = true;
+                  this.message = "Identificação alterada!";
+                  this.type = "success";
+                  this.caption = "Identificação";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                },
+                (error) => {
+                  this.message = error;
+                  this.showMessage = true;
+                  this.type = "alert";
+                  this.caption = "Identificação";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                }
+              )
+              .finally(() => {
+                document.getElementById("login").classList.remove("is-loading");
+              });
+
           }
-          
+
 
         }
       } else {
@@ -548,10 +560,22 @@ export default {
         .getAmostras(this.identifica.id_captura)
         .then((res) => {
           this.amostras = res.data;
+          this.agravo = res.data[0].agravo;
+          this.getGeneros();
         })
         .catch((err) => {
           this.amostras = [];
         });
+    },
+    trocaListaGen() {
+      if (this.marcaGen == 99) {
+        this.marcaGen = this.agravo
+        this.agravo = 99
+      } else {
+        this.agravo = this.marcaGen
+        this.marcaGen = 99
+      }
+      this.getGeneros()
     },
     getCapturas() {
       capturaService
@@ -565,7 +589,7 @@ export default {
     },
     getGeneros() {
       especieService
-        .comboGen()
+        .comboGen(this.agravo)
         .then((res) => {
           this.generos = res.data;
         })
@@ -641,7 +665,7 @@ export default {
     this.identifica.id_identificacao = this.$route.params.id;
     this.identifica_det.id_identificacao = this.$route.params.id;
     this.loadData();
-    this.getGeneros();
+
     if (this.$route.params.det) {
       this.identifica_det.id_identificacao_det = this.$route.params.det;
       this.loadDet();
