@@ -347,12 +347,12 @@
                 </div>
             </div>
             <div style="display: none">
-                    <span class="icon is-small is-left" name="coisa">
-                        <font-awesome-icon icon="fa-solid fa-edit" />
-                    </span>
-                    <span class="icon is-small is-left" name="coisa2">
-                        <font-awesome-icon icon="fa-solid fa-trash" />
-                    </span>
+                <span class="icon is-small is-left" name="coisa">
+                    <font-awesome-icon icon="fa-solid fa-edit" />
+                </span>
+                <span class="icon is-small is-left" name="coisa2">
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                </span>
             </div>
         </div>
     </div>
@@ -481,7 +481,7 @@ export default {
                 },
                 endereco: {
                     required$,
-                    maxLength: maxLength$(40)
+                    maxLength: maxLength$(50)
                 },
                 telefone: {
                     maxLength: maxLength$(16)
@@ -530,11 +530,11 @@ export default {
                     this.sinais = [];
                 })
         },
-        selectSinal(id){
-            if(this.notifica.sinais.includes(id)){
+        selectSinal(id) {
+            if (this.notifica.sinais.includes(id)) {
                 const idx = this.notifica.sinais.indexOf(id);
                 this.notifica.sinais.splice(idx, 1);
-            }else{
+            } else {
                 this.notifica.sinais.push(id)
             }
         },

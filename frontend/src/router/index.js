@@ -259,6 +259,39 @@ const routes = [
       }
     }
   },
+    {
+    path: '/suspeito',
+    name: 'suspeito',
+    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito/SuspeitoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Notificação de Artrópodes',
+        root: true,
+      },
+    }
+  },
+  {
+    path: '/suspeitos',
+    name: 'suspeitos',
+    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito/ListSuspeitoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Notificação de Artrópodes',
+        root: false,
+      },
+    }
+  },
+  {
+    path: '/editSuspeito/:id',
+    name: 'editsuspeito',
+    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito/EditSuspeitoView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Editar Notiificação',
+        root: false,
+      },
+    }
+  },
   {
     path: '/canino',
     name: 'canino',
@@ -519,6 +552,39 @@ const routes = [
     meta: {
       breadcrumb: {
         name: 'Lista Amostras Identificação',
+        root: true
+      }
+    }
+  },
+  {
+    path: '/editSuspeitoIdent/:id',
+    name: 'editsuspeitoident',
+    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito_identifica/EditSuspeitoIdentificaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Editar Identificação Artrópode',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/editSuspeitoIdent/:id/:det',
+    name: 'editsuspeitoident2',
+    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito_identifica/EditSuspeitoIdentificaView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Editar Amostra Artrópodes',
+        root: false
+      }
+    }
+  },
+  {
+    path: '/suspeito_identifica_dets/:master',
+    name: 'suspeito_identifica_dets',
+    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito_identifica/ListSuspeitoIdentificaDetView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Amostras Artrópodes',
         root: true
       }
     }

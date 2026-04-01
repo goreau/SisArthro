@@ -84,7 +84,8 @@
                                     <label class="label">Raça</label>
                                     <div class="control">
                                         <div class="select">
-                                            <select v-model="canino_det.id_raca" class="input" :class="{'is-danger':v$.canino_det.id_raca.$error}">
+                                            <select v-model="canino_det.id_raca" class="input"
+                                                :class="{ 'is-danger': v$.canino_det.id_raca.$error }">
                                                 <option value="0">-- Selecione --</option>
                                                 <option v-for="reg in raca" :key="reg.id_raca" :value="reg.id_raca">
                                                     {{ reg.codigo }}
@@ -196,7 +197,7 @@ export default {
         prepare() {
             this.canino_det.peso = this.canino_det.peso == "" ? '0' : this.canino_det.peso;
 
-            this.canino_det.peso.replace(',','.');
+            this.canino_det.peso.replace(',', '.');
         },
         create() {
             this.v$.$validate(); // checks all inputs
@@ -209,9 +210,9 @@ export default {
                     .createDet(this.canino_det)
                     .then((response) => {
                         this.showMessage = true;
-                        this.message = "Captura inserida com sucesso!";
+                        this.message = "Animal inserido com sucesso!";
                         this.type = "success";
-                        this.caption = "Captura";
+                        this.caption = "Animal";
                         setTimeout(() => {
                             (this.showMessage = false);
                             location.reload();
@@ -228,7 +229,7 @@ export default {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
                         this.showMessage = true;
                         this.type = "alert";
-                        this.caption = "Captura";
+                        this.caption = "Animal";
                         setTimeout(() => (this.showMessage = false), 3000);
                     })
                     .finally(() => {
@@ -238,7 +239,7 @@ export default {
                 this.message = "Corrija os erros para enviar as informações";
                 this.showMessage = true;
                 this.type = "alert";
-                this.caption = "Captura";
+                this.caption = "Animal";
                 setTimeout(() => (this.showMessage = false), 3000);
             }
         },

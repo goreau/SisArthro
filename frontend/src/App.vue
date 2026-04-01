@@ -44,7 +44,7 @@ export default {
             if (subItem.href === '/refactor') {
               // Desabilita o subitem 'refactor' se o nível de acesso for maior que 1, ou seja, só habilita para administrador
               subItem.disabled = this.currentUser.role > 1;
-            } else if (subItem.href === '/estratos'){
+            } else if (subItem.href === '/estratos') {
               subItem.hidden = this.currentUser.role > 1;
             }
             return subItem;
@@ -311,6 +311,32 @@ export default {
           child: [
             {
               href: "/notificas",
+              title: "Consultar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ],
+        },
+        {
+          href: "/suspeito",
+          title: "Notificação de Artrópodes",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-bugs",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/suspeitos",
               title: "Consultar",
               icon: {
                 element: "font-awesome-icon",
@@ -593,7 +619,7 @@ export default {
 }
 
 .main-container {
-  margin: 5rem;
+  margin: 2rem;
   min-height: 40rem;
 }
 

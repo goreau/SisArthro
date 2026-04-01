@@ -31,7 +31,7 @@
                           <input type="radio" name="execucao" value="2" v-model="tipo_relat" />
                           2 - Identificações </label>
                         <label class="radio">
-                          <input type="radio" name="execucao" value="103" v-model="tipo_relat" />
+                          <input type="radio" name="execucao" value="109" v-model="tipo_relat" />
                           5 - Caracterizações </label>
                       </div>
                       <div class="column is-4 linha">
@@ -92,6 +92,16 @@
                         <div class="control">
                           <CmbLocalidade :id_mun="filter.id_municipio" :sel="filter.id_localidade"
                             @selLoc="filter.id_localidade = $event" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="columns" v-show="tipo_relat == 103">
+                    <div class="column is-full">
+                      <div class="field">
+                        <label class="label">Ciclo</label>
+                        <div class="control">
+                          <input type="number" class="input" name="ciclo" v-model="filter.ciclo">
                         </div>
                       </div>
                     </div>
@@ -198,6 +208,7 @@ import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
+import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   data() {
@@ -212,6 +223,7 @@ export default {
         dt_final: "",
         agravo: "",
         sexo: '9',
+        ciclo: ''
       },
       ini_date: '',
       fim_date: '',
@@ -222,7 +234,7 @@ export default {
       caption: "",
       type: "",
       showMessage: false,
-      noDate: new Array('103'),
+      noDate: new Array(),//'103'
       noAgravo: new Array('1', '2', '101', '102'),
       noSexo: new Array('1', '2', '101', '102'),
     };

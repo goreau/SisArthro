@@ -82,8 +82,9 @@
                 <div class="field column is-2">
                   <label class="label">Longitude</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude" name="longitude"
-                      :class="{ 'is-danger': v$.canino.longitude.$error }" @blur="changeComma($event)" />
+                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude"
+                      name="longitude" :class="{ 'is-danger': v$.canino.longitude.$error }"
+                      @blur="changeComma($event)" />
                     <span class="is-error" v-if="v$.canino.longitude.$error">
                       {{ v$.canino.longitude.$errors[0].$message }}
                     </span>
@@ -275,10 +276,10 @@ export default {
     changeComma(e) {
       //this.latitude = this.formatarCoordenada(this.latitude);
       let str = this.formatarCoordenada(e.target.value);
-      
-      if (e.target.name == 'latitude'){
+
+      if (e.target.name == 'latitude') {
         this.canino.latitude = str;
-      } else if (e.target.name == 'longitude'){
+      } else if (e.target.name == 'longitude') {
         this.canino.longitude = str;
       }
     },
@@ -287,11 +288,11 @@ export default {
       this.canino.longitude.replace(',', '.');
     },
     create() {
-     // this.prepare();
+      // this.prepare();
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById('login').classList.add('is-loading');
-        
+
 
         caninoService.create(this.canino).then(
           (response) => {
@@ -301,7 +302,11 @@ export default {
             this.caption = "Animais";
             setTimeout(() => {
               this.showMessage = false;
-              this.$router.push("/canino_det/" + response.data.master.id_canino)
+              if (this.canino.id_situacao == 700) {
+                this.$router.push("/canino_det/" + response.data.master.id_canino);
+              } else {
+                this.$router.push(`/codends/${this.canino.id_codend}`);
+              }
             }, 5000);
           },
           (error) => {

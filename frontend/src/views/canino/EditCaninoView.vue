@@ -146,8 +146,8 @@
                 </div>
               </div>
               <hr>
-              <div class="columns is-centered">             
-                    <h5>Animais Cadastrados</h5>
+              <div class="columns is-centered">
+                <h5>Animais Cadastrados</h5>
               </div>
               <div class="columns">
                 <div class="column is-10 is-offset-1">
@@ -306,11 +306,16 @@ export default {
         caninoService.edit(this.canino).then(
           (response) => {
             this.showMessage = true;
-            this.message = "Endereço alterado";
+            this.message = "Cadastro alterado";
             this.type = "success";
             this.caption = "Animais";
             setTimeout(() => {
               this.showMessage = false;
+              if (this.canino.id_situacao == 700) {
+                this.$router.push("/canino_det/" + response.data.master.id_canino);
+              } else {
+                this.$router.go(-1);
+              }
               // this.$router.push("/canino_det/"+response.data.master.id_canino)
             }, 5000);
           },
@@ -380,7 +385,7 @@ export default {
         }
       );
 
-      
+
 
       this.isLoading = false;
     },

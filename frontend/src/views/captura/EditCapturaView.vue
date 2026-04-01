@@ -117,7 +117,7 @@
                 <div class="field column is-3" v-show="captura.atividade == 32">
                   <label class="label">Tipo</label>
                   <div class="control">
-                    <CmbAuxiliares :tipo="28" @selValue="captura.tipo_ativ = $event"
+                    <CmbAuxiliares :tipo="28" @selValue="captura.tipo_ativ = $event" :sel="captura.tipo_ativ"
                       :errclass="{ 'is-danger': v$.captura.tipo_ativ.$error }" />
                     <span class="is-error" v-if="v$.captura.tipo_ativ.$error">
                       {{ v$.captura.tipo_ativ.$errors[0].$message }}

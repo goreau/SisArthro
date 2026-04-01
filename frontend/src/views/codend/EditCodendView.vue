@@ -3,13 +3,7 @@
     <div class="columns is-centered">
       <div class="column is-four-fifths">
         <Loader v-if="isLoading" />
-        <Message
-          v-if="showMessage"
-          @do-close="closeMessage"
-          :msg="message"
-          :type="type"
-          :caption="caption"
-        />
+        <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Cadastro de Endereços - CodEnd</p>
@@ -20,13 +14,8 @@
                 <div class="column field is-4 is-offset-4">
                   <label class="label">CodEnd</label>
                   <div class="control">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Código"
-                      v-model="codend.codigo"
-                      :class="{ 'is-danger': v$.codend.codigo.$error }"
-                    />
+                    <input class="input" type="text" placeholder="Código" v-model="codend.codigo"
+                      :class="{ 'is-danger': v$.codend.codigo.$error }" />
                     <span class="is-error" v-if="v$.codend.codigo.$error">
                       {{ v$.codend.codigo.$errors[0].$message }}
                     </span>
@@ -35,35 +24,25 @@
               </div>
               <div class="columns">
                 <div class="field column is-4">
-                <label class="label">Município</label>
-                <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Nome"
-                    v-model="municipio"
-                    readonly
-                  />
+                  <label class="label">Município</label>
+                  <div class="control">
+                    <input class="input" type="text" placeholder="Nome" v-model="municipio" readonly />
+                  </div>
                 </div>
-              </div>
                 <div class="field column is-4">
                   <label class="label">Área</label>
                   <div class="control">
                     <div class="select">
                       <select v-model="codend.id_area" class="input" :class="{ 'is-danger': v$.codend.id_area.$error }">
                         <option value="0">-- Selecione --</option>
-                        <option
-                          v-for="reg in area"
-                          :key="reg.id_area"
-                          :value="reg.id_area"
-                          :selected="reg.id_area === codend.id_area"
-                        >
+                        <option v-for="reg in area" :key="reg.id_area" :value="reg.id_area"
+                          :selected="reg.id_area === codend.id_area">
                           {{ reg.codigo }}
                         </option>
                       </select>
                       <span class="is-error" v-if="v$.codend.id_area.$error">
-                      {{ v$.codend.id_area.$errors[0].$message }}
-                    </span>
+                        {{ v$.codend.id_area.$errors[0].$message }}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -71,14 +50,11 @@
                   <label class="label">Quadra</label>
                   <div class="control">
                     <div class="select">
-                      <select v-model="codend.id_quarteirao" class="input" :class="{ 'is-danger': v$.codend.id_quarteirao.$error }">
+                      <select v-model="codend.id_quarteirao" class="input"
+                        :class="{ 'is-danger': v$.codend.id_quarteirao.$error }">
                         <option value="0">-- Selecione --</option>
-                        <option
-                          v-for="reg in quarteirao"
-                          :key="reg.id_quarteirao"
-                          :value="reg.id_quarteirao"
-                          :selected="reg.id_quarteirao === codend.id_quarteirao"
-                        >
+                        <option v-for="reg in quarteirao" :key="reg.id_quarteirao" :value="reg.id_quarteirao"
+                          :selected="reg.id_quarteirao === codend.id_quarteirao">
                           {{ reg.numero }}
                         </option>
                       </select>
@@ -90,13 +66,8 @@
                 <div class="field column is-3">
                   <label class="label">Logradouro</label>
                   <div class="control">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Nome"
-                      v-model="codend.logradouro"
-                      :class="{ 'is-danger': v$.codend.logradouro.$error }"
-                    />
+                    <input class="input" type="text" placeholder="Nome" v-model="codend.logradouro"
+                      :class="{ 'is-danger': v$.codend.logradouro.$error }" />
                     <span class="is-error" v-if="v$.codend.logradouro.$error">
                       {{ v$.codend.logradouro.$errors[0].$message }}
                     </span>
@@ -105,13 +76,8 @@
                 <div class="field column is-2">
                   <label class="label">Número</label>
                   <div class="control">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Nome"
-                      v-model="codend.numero"
-                      :class="{ 'is-danger': v$.codend.numero.$error }"
-                    />
+                    <input class="input" type="text" placeholder="Nome" v-model="codend.numero"
+                      :class="{ 'is-danger': v$.codend.numero.$error }" />
                     <span class="is-error" v-if="v$.codend.numero.$error">
                       {{ v$.codend.numero.$errors[0].$message }}
                     </span>
@@ -120,13 +86,8 @@
                 <div class="field column is-2">
                   <label class="label">Complemento</label>
                   <div class="control">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Nome"
-                      v-model="codend.complemento"
-                      :class="{ 'is-danger': v$.codend.complemento.$error }"
-                    />
+                    <input class="input" type="text" placeholder="Nome" v-model="codend.complemento"
+                      :class="{ 'is-danger': v$.codend.complemento.$error }" />
                     <span class="is-error" v-if="v$.codend.complemento.$error">
                       {{ v$.codend.complemento.$errors[0].$message }}
                     </span>
@@ -135,12 +96,8 @@
                 <div class="field column is-3">
                   <label class="label">Localidade(ATL)</label>
                   <div class="control">
-                  <CmbLocalidade
-                      :id_mun="codend.id_municipio"
-                      @selLoc="codend.id_localidade = $event"
-                      :sel="codend.id_localidade"
-                      :errclass="{ 'is-danger': v$.codend.id_localidade.$error }"
-                    />
+                    <CmbLocalidade :id_mun="codend.id_municipio" @selLoc="codend.id_localidade = $event"
+                      :sel="codend.id_localidade" :errclass="{ 'is-danger': v$.codend.id_localidade.$error }" />
                     <span class="is-error" v-if="v$.codend.id_localidade.$error">
                       {{ v$.codend.id_localidade.$errors[0].$message }}
                     </span>
@@ -149,13 +106,8 @@
                 <div class="field column is-2">
                   <label class="label">Quadrante</label>
                   <div class="control">
-                    <input
-                      class="input"
-                      type="text"
-                      placeholder="Quadrante"
-                      v-model="codend.quadrante"
-                      :class="{ 'is-danger': v$.codend.quadrante.$error }"
-                    />
+                    <input class="input" type="text" placeholder="Quadrante" v-model="codend.quadrante"
+                      :class="{ 'is-danger': v$.codend.quadrante.$error }" />
                     <span class="is-error" v-if="v$.codend.quadrante.$error">
                       {{ v$.codend.quadrante.$errors[0].$message }}
                     </span>
@@ -171,9 +123,9 @@
           <div class="card-content">
             <div class="columns">
               <div class="column is-6 is-offset-3">
-                <MySimpleTable :tableData="dataTable" :columns="columns"/>
+                <MySimpleTable :tableData="dataTable" :columns="columns" />
               </div>
-            </div>  
+            </div>
           </div>
         </div>
       </div>
@@ -210,7 +162,7 @@ export default {
       tableName: 'codendLst',
       codend: {
         id_codend: 0,
-        codigo:'',
+        codigo: '',
         id_municipio: 0,
         id_area: 0,
         fant_area: '',
@@ -224,18 +176,18 @@ export default {
         quadrante: 0
       },
       v$: useValidate(),
-      municipio:'',
+      municipio: '',
       isLoading: false,
       message: "",
       caption: "",
       type: "",
       showMessage: false,
-      cFooter:{
-          strSubmit:'Salvar',
-          strCancel: 'Cancelar',
-          strAux:'',
-          aux: false
-        }
+      cFooter: {
+        strSubmit: 'Salvar',
+        strCancel: 'Cancelar',
+        strAux: '',
+        aux: false
+      }
     };
   },
   validations() {
@@ -287,14 +239,14 @@ export default {
     CmbLocalidade,
   },
   methods: {
-    lista(){
+    lista() {
       codendService.getListCodendsByQuadra(this.codend.id_quarteirao)
-            .then((response) => {
-                this.dataTable = response.data;
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+        .then((response) => {
+          this.dataTable = response.data;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     },
     loadData() {
       this.isLoading = true;
@@ -306,6 +258,7 @@ export default {
           this.codend.id_municipio = data.id_municipio;
           await this.getAreas();
           await this.getQuarteirao(data.id_area);
+
           this.codend.id_area = data.id_area;
           this.codend.fant_area = data.fant_area;
           this.codend.id_quarteirao = data.id_quarteirao;
@@ -339,7 +292,7 @@ export default {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById('login').classList.add('is-loading');
-      
+
         codendService.update(this.codend).then(
           (response) => {
             this.showMessage = true;
@@ -357,16 +310,16 @@ export default {
             setTimeout(() => (this.showMessage = false), 3000);
           }
         )
-        .catch((err) => {
-                        this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                        this.showMessage = true;
-                        this.type = "alert";
-                        this.caption = "Caracterização";
-                        setTimeout(() => (this.showMessage = false), 3000);
-                    })
-        .finally(() => {
-          document.getElementById('login').classList.remove('is-loading');
-        });
+          .catch((err) => {
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Caracterização";
+            setTimeout(() => (this.showMessage = false), 3000);
+          })
+          .finally(() => {
+            document.getElementById('login').classList.remove('is-loading');
+          });
       } else {
         this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
@@ -375,7 +328,7 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
-    getAreas(){
+    async getAreas() {
       territorioService.getAreas(this.codend.id_municipio)
         .then((res) => {
           console.log(res);
@@ -385,19 +338,19 @@ export default {
           this.area = [];
         })
     },
-    getQuarteirao(area){
+    async getQuarteirao(area) {
       territorioService.getQuarteiroes(area)
-      .then((res) => {
-        this.quarteirao = res.data.quarteirao;
-      })
-      .catch((err) => {
-        this.quarteirao = [];
-      })
+        .then((res) => {
+          this.quarteirao = res.data.quarteirao;
+        })
+        .catch((err) => {
+          this.quarteirao = [];
+        })
     },
   },
   mounted() {
     let cUser = this.currentUser;
-    if (cUser){
+    if (cUser) {
       this.codend.id_usuario = cUser.id;
     }
     this.loadData();
@@ -416,7 +369,7 @@ export default {
         let fant_a = this.area.filter(item => item.id_area === value);
         this.codend.fant_area = fant_a[0].codigo;
         this.getQuarteirao(value);
-      } 
+      }
     },
     'codend.id_quarteirao'(value) {
       if (this.quarteirao.length > 0) {

@@ -30,8 +30,8 @@
                                 <div class="field column is-3">
                                     <label class="label">Laboratorio</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="24" @selValue="notifica_exame.id_laboratorio = $event" :sel="notifica_exame.id_laboratorio"
-                                            :errclass="{
+                                        <CmbAuxiliares :tipo="24" @selValue="notifica_exame.id_laboratorio = $event"
+                                            :sel="notifica_exame.id_laboratorio" :errclass="{
                                                 'is-danger': v$.notifica_exame.id_laboratorio.$error,
                                             }" />
                                         <span class="is-error" v-if="v$.notifica_exame.id_laboratorio.$error">
@@ -43,7 +43,8 @@
                                 <div class="field column is-3">
                                     <label class="label">Especificar</label>
                                     <div class="control">
-                                        <input class="input" :disabled="notifica_exame.id_laboratorio != 1330" type="text" v-model="notifica_exame.lab_especifica"
+                                        <input class="input" :disabled="notifica_exame.id_laboratorio != 1330"
+                                            type="text" v-model="notifica_exame.lab_especifica"
                                             :class="{ 'is-danger': v$.notifica_exame.lab_especifica.$error }" />
                                         <span class="is-error" v-if="v$.notifica_exame.lab_especifica.$error">
                                             {{ v$.notifica_exame.lab_especifica.$errors[0].$message }}
@@ -66,7 +67,7 @@
                                     <label class="label">Tipo</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="22" @selValue="setAmTipo($event)" :sel="amostra.tipo"
-                                        :errclass="{'is-danger': v$.amostra.tipo.$error,}" />
+                                            :errclass="{ 'is-danger': v$.amostra.tipo.$error, }" />
                                         <span class="is-error" v-if="v$.amostra.tipo.$error">
                                             {{ v$.amostra.tipo.$errors[0].$message }}
                                         </span>
@@ -75,8 +76,9 @@
                                 <div class="field column is-2">
                                     <label class="label">Resultado</label>
                                     <div class="control">
-                                        <CmbAuxiliares :tipo="16" @selValue="setAmResult($event)" :sel="amostra.resultado"
-                                        :errclass="{'is-danger': v$.amostra.resultado.$error,}" />
+                                        <CmbAuxiliares :tipo="16" @selValue="setAmResult($event)"
+                                            :sel="amostra.resultado"
+                                            :errclass="{ 'is-danger': v$.amostra.resultado.$error, }" />
                                         <span class="is-error" v-if="v$.amostra.resultado.$error">
                                             {{ v$.amostra.resultado.$errors[0].$message }}
                                         </span>
@@ -86,7 +88,7 @@
                                     <label class="label">Exame</label>
                                     <div class="control">
                                         <CmbAuxiliares :tipo="25" @selValue="setAmExame($event)" :sel="amostra.exame"
-                                        :errclass="{'is-danger': v$.amostra.exame.$error,}" />
+                                            :errclass="{ 'is-danger': v$.amostra.exame.$error, }" />
                                         <span class="is-error" v-if="v$.amostra.exame.$error">
                                             {{ v$.amostra.exame.$errors[0].$message }}
                                         </span>
@@ -159,17 +161,20 @@
                                     <label class="label">Causa Óbito</label>
                                     <div class="control has-icons-left has-icons-right">
                                         <label class="radio">
-                                            <input type="radio" name="causaobito" value="1" :disabled="notifica_exame.obito != 2"
+                                            <input type="radio" name="causaobito" value="1"
+                                                :disabled="notifica_exame.obito != 2"
                                                 v-model="notifica_exame.id_causa_obito" />
                                             1 - Natural
                                         </label>
                                         <label class="radio">
-                                            <input type="radio" name="causaobito" value="2" :disabled="notifica_exame.obito != 2"
+                                            <input type="radio" name="causaobito" value="2"
+                                                :disabled="notifica_exame.obito != 2"
                                                 v-model="notifica_exame.id_causa_obito" />
                                             2 - Eutanásia
                                         </label>
                                         <label class="radio">
-                                            <input type="radio" name="causaobito" value="3" :disabled="notifica_exame.obito != 2"
+                                            <input type="radio" name="causaobito" value="3"
+                                                :disabled="notifica_exame.obito != 2"
                                                 v-model="notifica_exame.id_causa_obito" />
                                             3 - Outro
                                         </label>
@@ -181,7 +186,8 @@
                                 <div class="field column is-3">
                                     <label class="label">Especificar</label>
                                     <div class="control">
-                                        <input class="input" type="text" v-model="notifica_exame.ob_especifica" :disabled="notifica_exame.id_causa_obito != 3"
+                                        <input class="input" type="text" v-model="notifica_exame.ob_especifica"
+                                            :disabled="notifica_exame.id_causa_obito != 3"
                                             :class="{ 'is-danger': v$.notifica_exame.ob_especifica.$error }" />
                                         <span class="is-error" v-if="v$.notifica_exame.ob_especifica.$error">
                                             {{ v$.notifica_exame.ob_especifica.$errors[0].$message }}
@@ -426,7 +432,9 @@ export default {
                             this.notifica_exame.dt_entrada = moment(e.value).format('YYYY-MM-DD');
                             break;
                         case 1:
-                            this.notifica_exame.dt_obito = moment(e.value).format('YYYY-MM-DD');
+                            if (this.notifica_exame.obito > 0) {
+                                this.notifica_exame.dt_obito = moment(e.value).format('YYYY-MM-DD');
+                            }
                             break;
                     }
 
@@ -454,7 +462,7 @@ export default {
             notificaService.getNotificaDet(this.notifica_exame.id_notificacao).then(
                 async (response) => {
                     let data = response.data;
-                    if (data != ''){
+                    if (data != '') {
                         this.id_notificacao_exame = data.id_notificacao_exame;
                         this.notifica_exame.id_laboratorio = data.id_laboratorio;
                         this.notifica_exame.lab_especifica = data.lab_especifica;
@@ -466,7 +474,7 @@ export default {
                         this.notifica_exame.ob_especifica = data.ob_especifica;
                         this.teste = data.amostras;
                         this.dataTable = [...this.teste];
-                        this.notifica_exame.responsavel = data.responsavel;                  
+                        this.notifica_exame.responsavel = data.responsavel;
                     }
                     this.startCalendar();
                 },
@@ -496,7 +504,7 @@ export default {
 
                 this.notifica_exame.amostras = this.teste;
 
-                if (this.id_notificacao_exame > 0){
+                if (this.id_notificacao_exame > 0) {
                     this.update();
                 } else {
                     this.insert();
@@ -508,78 +516,78 @@ export default {
                 this.type = "alert";
                 this.caption = "Exames";
                 setTimeout(() => (this.showMessage = false), 3000);
-            }   
+            }
         },
-        insert(){
+        insert() {
             notificaService
-                    .createDet(this.notifica_exame)
-                    .then((response) => {
-                        this.showMessage = true;
-                        this.message = "Exames registrados com sucesso!";
-                        this.type = "success";
-                        this.caption = "Exames";
-                        setTimeout(() => {
-                            (this.showMessage = false);
-                            location.reload();
-                        }, 2000);
-                        (error) => {
-                            this.message = error;
-                            this.showMessage = true;
-                            this.type = "alert";
-                            this.caption = "Exames";
-                            setTimeout(() => (this.showMessage = false), 3000);
-                        };
-                    })
-                    .catch((err) => {
-                        this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                .createDet(this.notifica_exame)
+                .then((response) => {
+                    this.showMessage = true;
+                    this.message = "Exames registrados com sucesso!";
+                    this.type = "success";
+                    this.caption = "Exames";
+                    setTimeout(() => {
+                        (this.showMessage = false);
+                        location.reload();
+                    }, 2000);
+                    (error) => {
+                        this.message = error;
                         this.showMessage = true;
                         this.type = "alert";
                         this.caption = "Exames";
                         setTimeout(() => (this.showMessage = false), 3000);
-                    })
-                    .finally(() => {
-                        document.getElementById("login").classList.remove("is-loading");
-                    });
-            
+                    };
+                })
+                .catch((err) => {
+                    this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                    this.showMessage = true;
+                    this.type = "alert";
+                    this.caption = "Exames";
+                    setTimeout(() => (this.showMessage = false), 3000);
+                })
+                .finally(() => {
+                    document.getElementById("login").classList.remove("is-loading");
+                });
+
         },
-        update(){
+        update() {
             this.notifica_exame.id_notificacao_exame = this.id_notificacao_exame;
             notificaService
-                    .editDet(this.notifica_exame)
-                    .then((response) => {
-                        this.showMessage = true;
-                        this.message = "Exames alterados com sucesso!";
-                        this.type = "success";
-                        this.caption = "Exames";
-                        setTimeout(() => {
-                            (this.showMessage = false);
-                            location.reload();
-                        }, 2000);
-                        (error) => {
-                            this.message = error;
-                            this.showMessage = true;
-                            this.type = "alert";
-                            this.caption = "Exames";
-                            setTimeout(() => (this.showMessage = false), 3000);
-                        };
-                    })
-                    .catch((err) => {
-                        this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                .editDet(this.notifica_exame)
+                .then((response) => {
+                    this.showMessage = true;
+                    this.message = "Exames alterados com sucesso!";
+                    this.type = "success";
+                    this.caption = "Exames";
+                    setTimeout(() => {
+                        (this.showMessage = false);
+                        location.reload();
+                    }, 2000);
+                    (error) => {
+                        this.message = error;
                         this.showMessage = true;
                         this.type = "alert";
                         this.caption = "Exames";
                         setTimeout(() => (this.showMessage = false), 3000);
-                    })
-                    .finally(() => {
-                        document.getElementById("login").classList.remove("is-loading");
-                    });
+                    };
+                })
+                .catch((err) => {
+                    this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                    this.showMessage = true;
+                    this.type = "alert";
+                    this.caption = "Exames";
+                    setTimeout(() => (this.showMessage = false), 3000);
+                })
+                .finally(() => {
+                    document.getElementById("login").classList.remove("is-loading");
+                });
         },
     },
     mounted() {
         this.myspan = document.getElementsByName("coisa")[0];
         this.myspan2 = document.getElementsByName("coisa2")[0];
         this.loadData();
-        
+
 
         this.columns = [
             { title: "Número", field: "numero", widthGrow: 1 },
@@ -588,7 +596,8 @@ export default {
             { title: "Resultado", field: "fant_result", widthGrow: 2 },
             { title: "Espécie", field: "especie", widthGrow: 2 },
             { title: "Repetir", field: "repetir", formatter: "tickCross", hozAlign: "center", widthGrow: 1 },
-            { title: "Ações", widthGrow: 2,
+            {
+                title: "Ações", widthGrow: 2,
                 formatter: (cell, formatterParams) => {
                     const row = cell.getRow().getData();
                     const idx = cell.getRow().getPosition();

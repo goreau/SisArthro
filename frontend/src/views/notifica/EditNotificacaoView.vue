@@ -37,7 +37,8 @@
                                     <label class="label">CodSis - Município</label>
                                     <div class="control">
                                         <CmbMunicipio :id_prop="currentUser.id" @selMun="notifica.id_municipio = $event"
-                                            :errclass="{ 'is-danger': v$.notifica.id_municipio.$error }" :sel="notifica.id_municipio" />
+                                            :errclass="{ 'is-danger': v$.notifica.id_municipio.$error }"
+                                            :sel="notifica.id_municipio" />
                                         <span class="is-error" v-if="v$.notifica.id_municipio.$error">
                                             {{ v$.notifica.id_municipio.$errors[0].$message }}
                                         </span>
@@ -73,7 +74,8 @@
                                     <label class="label">Município</label>
                                     <div class="control">
                                         <CmbMunicipio :id_prop="currentUser.id" @selMun="notifica.id_mun_cao = $event"
-                                            :errclass="{ 'is-danger': v$.notifica.id_mun_cao.$error }" :sel="notifica.id_mun_cao" />
+                                            :errclass="{ 'is-danger': v$.notifica.id_mun_cao.$error }"
+                                            :sel="notifica.id_mun_cao" />
                                         <span class="is-error" v-if="v$.notifica.id_mun_cao.$error">
                                             {{ v$.notifica.id_mun_cao.$errors[0].$message }}
                                         </span>
@@ -83,11 +85,13 @@
                                     <label class="label">Registro</label>
                                     <div class="control has-icons-left has-icons-right">
                                         <label class="radio">
-                                            <input type="radio" name="registro" value="false" v-model="notifica.registro" />
+                                            <input type="radio" name="registro" value="false"
+                                                v-model="notifica.registro" />
                                             1 - Não
                                         </label>
                                         <label class="radio">
-                                            <input type="radio" name="registro" value="true" v-model="notifica.registro" />
+                                            <input type="radio" name="registro" value="true"
+                                                v-model="notifica.registro" />
                                             2 - Sim
                                         </label>
                                     </div>
@@ -346,12 +350,12 @@
                 </div>
             </div>
             <div style="display: none">
-                    <span class="icon is-small is-left" name="coisa">
-                        <font-awesome-icon icon="fa-solid fa-edit" />
-                    </span>
-                    <span class="icon is-small is-left" name="coisa2">
-                        <font-awesome-icon icon="fa-solid fa-trash" />
-                    </span>
+                <span class="icon is-small is-left" name="coisa">
+                    <font-awesome-icon icon="fa-solid fa-edit" />
+                </span>
+                <span class="icon is-small is-left" name="coisa2">
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                </span>
             </div>
         </div>
     </div>
@@ -480,7 +484,7 @@ export default {
                 },
                 endereco: {
                     required$,
-                    maxLength: maxLength$(40)
+                    maxLength: maxLength$(50)
                 },
                 telefone: {
                     maxLength: maxLength$(16)
@@ -523,30 +527,30 @@ export default {
 
             this.dataTable = JSON.parse(JSON.stringify(this.teste));
         },
-        startSinais(){
+        startSinais() {
             const chks = document.querySelectorAll('input[type="checkbox"]');
             for (let i = 0; i < chks.length; i++) {
-                if (this.notifica.sinais.includes(parseInt(chks[i].value))){
-                    chks[i].setAttribute('checked','checked');
+                if (this.notifica.sinais.includes(parseInt(chks[i].value))) {
+                    chks[i].setAttribute('checked', 'checked');
                 }
             }
         },
-        selectSinal(id){
-            if(this.notifica.sinais.includes(id)){
+        selectSinal(id) {
+            if (this.notifica.sinais.includes(id)) {
                 const idx = this.notifica.sinais.indexOf(id);
                 this.notifica.sinais.splice(idx, 1);
-            }else{
+            } else {
                 this.notifica.sinais.push(id)
             }
         },
         getSinais() {
             notificaService.getComboSinais()
-            .then((res) => {
-                this.sinais = res.data;
-            })
-            .catch((err) => {
-                this.sinais = [];
-            })
+                .then((res) => {
+                    this.sinais = res.data;
+                })
+                .catch((err) => {
+                    this.sinais = [];
+                })
         },
         getRaca() {
             caninoService
@@ -577,8 +581,8 @@ export default {
                     this.notifica.dt_notifica = data.dt_notifica;
                     this.notifica.id_mun_cao = data.id_mun_cao;
                     this.notifica.cpf = data.cpf;
-                    if (data.deslocamentos != null){
-                        this.teste = data.deslocamentos;                 
+                    if (data.deslocamentos != null) {
+                        this.teste = data.deslocamentos;
                         this.dataTable = [...this.teste];
                     }
                     this.notifica.endereco = data.endereco;
@@ -591,14 +595,14 @@ export default {
                     this.notifica.proprietario = data.proprietario;
                     this.notifica.registro = data.registro;
                     this.notifica.sexo = data.sexo;
-                    if (data.sinais != null){
+                    if (data.sinais != null) {
                         this.notifica.sinais = data.sinais;
                     }
                     this.notifica.telefone = data.telefone;
                     this.notifica.tempo_moradia = data.tempo_moradia;
                     this.notifica.tipo_idade = data.tipo_idade;
                     this.notifica.tipo_tempo = data.tipo_tempo;
-                    
+
                     this.startCalendar();
                     this.startSinais();
                 },
@@ -788,8 +792,8 @@ export default {
     },
     created() {
         this.notifica.id_notificacao = this.$route.params.id;
-        this.getSinais(); 
-        this.loadData(); 
+        this.getSinais();
+        this.loadData();
     },
 }
 </script>

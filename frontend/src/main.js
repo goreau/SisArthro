@@ -15,13 +15,13 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
 import { faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash, faCity,
   faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose, faDog, 
-  faImage, faFileText, faSearchLocation, faRepeat, faMapMarker, faMapLocationDot, faHandPointUp} from '@fortawesome/free-solid-svg-icons'
+  faImage, faFileText, faSearchLocation, faRepeat, faMapMarker, faMapLocationDot, faHandPointUp, faMicroscope} from '@fortawesome/free-solid-svg-icons'
 
 
 /* add icons to the library */
 library.add(faUserSecret, faUser, faUsers, faHouse, faFileLines, faEnvelope, faExclamationTriangle, faTrash, faEdit, faSearch, faCaretDown, faCaretUp, faEye, faEyeSlash, faCity, 
   faFilePdf, faFileExcel, faFileCsv, faLocationPin, faTreeCity, faBugs, faPlusCircle, faCheck, faBan, faList, faBroom, faVialVirus, faScrewdriverWrench, faInfo, faClose, faDog, 
-  faImage, faFileText, faSearchLocation, faRepeat, faMapMarker, faMapLocationDot, faHandPointUp)
+  faImage, faFileText, faSearchLocation, faRepeat, faMapMarker, faMapLocationDot, faHandPointUp, faMicroscope)
 
 createApp(App)
 .use(router)

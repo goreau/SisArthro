@@ -36,151 +36,169 @@
                                                 </label>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                        </section>
-                        <section class="section" v-show="tipo_relat > 0">
-                            <div class="dvTipo">
-                                <label class="label">Filtros:</label>
-                                <div class="columns">
-                                    <div class="column is-full">
-                                        <div class="field">
-                                            <label class="label">DRS</label>
-                                            <div class="control">
-                                                <CmbTerritorio :id_prop="currentUser.id" :tipo="2" :sel="filter.id_drs"
-                                                    @selLoc="filter.id_drs = $event" />
+                                        <div class="columns">
+                                            <div class="column is-4 linha">
+                                                <label class="radio">
+                                                    <input type="radio" name="execucao" value="108"
+                                                        v-model="tipo_relat" />
+                                                    4 - Cadastro de Animais
+                                                </label>
+                                            </div>
+                                            <div class="column is-4 linha">
+                                                <label class="radio">
+                                                    <input type="radio" name="execucao" value="103"
+                                                        v-model="tipo_relat" />
+                                                    5 - Caracterizações
+                                                </label>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="columns">
-                                    <div class="column is-full">
-                                        <div class="field">
-                                            <label class="label">GVE</label>
-                                            <div class="control">
-                                                <CmbTerritorio :id_prop="currentUser.id" :tipo="4" :sel="filter.id_gve"
-                                                    @selLoc="filter.id_gve = $event" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns">
-                                    <div class="column is-full">
-                                        <div class="field">
-                                            <label class="label">Município</label>
-                                            <div class="control">
-                                                <CmbMunicipio :id_prop="currentUser.id" :sel="filter.id_municipio"
-                                                    @selMun="filter.id_municipio = $event" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="columns">
-                                    <div class="column is-full">
-                                        <div class="field">
-                                            <label class="label">ATL/Localidade</label>
-                                            <div class="control">
-                                                <CmbLocalidade :id_mun="filter.id_municipio" :sel="filter.id_localidade"
-                                                    @selLoc="filter.id_localidade = $event" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <section class="section" v-show="noAgravo.indexOf(tipo_relat) != -1">
+                            </section>
+                            <section class="section" v-show="tipo_relat > 0">
+                                <div class="dvTipo">
+                                    <label class="label">Filtros:</label>
                                     <div class="columns">
-                                        <div class="field column is-full">
-                                            <label class="label">Agravo</label>
-                                            <div class="control">
-                                                <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event"
-                                                    :sel="filter.agravo" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </section>
-                                <section class="section" v-show="noSexo.indexOf(tipo_relat) != -1">
-                                    <div class="columns">
-                                        <div class="field column is-full">
-                                            <fieldset class="fieldset">
-                                                <legend>Tipo de Amostra {{ filter.sexo }}</legend>
-
-                                                <div class="columns">
-                                                    <div class="column is-3">
-                                                        <label class="radio">
-                                                            <input type="radio" name="sexo" value="9"
-                                                                v-model="filter.sexo" />
-                                                            Todas
-                                                        </label>
-                                                    </div>
-                                                    <div class="column is-3">
-                                                        <label class="radio">
-                                                            <input type="radio" name="sexo" value="1"
-                                                                v-model="filter.sexo" />
-                                                            Machos
-                                                        </label>
-                                                    </div>
-                                                    <div class="column is-3">
-                                                        <label class="radio">
-                                                            <input type="radio" name="sexo" value="2"
-                                                                v-model="filter.sexo" />
-                                                            Fêmeas
-                                                        </label>
-                                                    </div>
-                                                    <div class="column is-3">
-                                                        <label class="radio">
-                                                            <input type="radio" name="sexo" value="3"
-                                                                v-model="filter.sexo" />
-                                                            Fêmeas Ingurgitadas
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
-                                        </div>
-                                    </div>
-                                </section>
-                                <section class="section" v-show="noDate.indexOf(tipo_relat) == -1">
-                                    <div class="columns">
-                                        <div class="column is-half">
-                                            <label class="label">Início</label>
+                                        <div class="column is-full">
                                             <div class="field">
-                                                <div class="control" id="contIni">
-                                                    <input type="date" id="dtIni">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="column is-half">
-                                            <label class="label">Final</label>
-                                            <div class="field">
-                                                <div class="control" id="contFim">
-                                                    <input type="date" id="dtFim">
+                                                <label class="label">DRS</label>
+                                                <div class="control">
+                                                    <CmbTerritorio :id_prop="currentUser.id" :tipo="2"
+                                                        :sel="filter.id_drs" @selLoc="filter.id_drs = $event" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </section>
-                            </div>
-                        </section>
-                        <section class="section" v-if="tipo_relat > 0">
-                            <div class="columns is-centered">
-                                <div class="column is-4">
-                                    <div class="control">
-                                        <button class="button is-link submit-btn is-fullwidth" id="login"
-                                            @click="processar">
-                                            <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
-                                            Processar
-                                        </button>
+                                    <div class="columns">
+                                        <div class="column is-full">
+                                            <div class="field">
+                                                <label class="label">GVE</label>
+                                                <div class="control">
+                                                    <CmbTerritorio :id_prop="currentUser.id" :tipo="4"
+                                                        :sel="filter.id_gve" @selLoc="filter.id_gve = $event" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column is-full">
+                                            <div class="field">
+                                                <label class="label">Município</label>
+                                                <div class="control">
+                                                    <CmbMunicipio :id_prop="currentUser.id" :sel="filter.id_municipio"
+                                                        @selMun="filter.id_municipio = $event" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="columns">
+                                        <div class="column is-full">
+                                            <div class="field">
+                                                <label class="label">ATL/Localidade</label>
+                                                <div class="control">
+                                                    <CmbLocalidade :id_mun="filter.id_municipio"
+                                                        :sel="filter.id_localidade"
+                                                        @selLoc="filter.id_localidade = $event" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <section class="section" v-show="noAgravo.indexOf(tipo_relat) != -1">
+                                        <div class="columns">
+                                            <div class="field column is-full">
+                                                <label class="label">Agravo</label>
+                                                <div class="control">
+                                                    <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event"
+                                                        :sel="filter.agravo" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="section" v-show="noSexo.indexOf(tipo_relat) != -1">
+                                        <div class="columns">
+                                            <div class="field column is-full">
+                                                <fieldset class="fieldset">
+                                                    <legend>Tipo de Amostra {{ filter.sexo }}</legend>
+
+                                                    <div class="columns">
+                                                        <div class="column is-3">
+                                                            <label class="radio">
+                                                                <input type="radio" name="sexo" value="9"
+                                                                    v-model="filter.sexo" />
+                                                                Todas
+                                                            </label>
+                                                        </div>
+                                                        <div class="column is-3">
+                                                            <label class="radio">
+                                                                <input type="radio" name="sexo" value="1"
+                                                                    v-model="filter.sexo" />
+                                                                Machos
+                                                            </label>
+                                                        </div>
+                                                        <div class="column is-3">
+                                                            <label class="radio">
+                                                                <input type="radio" name="sexo" value="2"
+                                                                    v-model="filter.sexo" />
+                                                                Fêmeas
+                                                            </label>
+                                                        </div>
+                                                        <div class="column is-3">
+                                                            <label class="radio">
+                                                                <input type="radio" name="sexo" value="3"
+                                                                    v-model="filter.sexo" />
+                                                                Fêmeas Ingurgitadas
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="section" v-show="noDate.indexOf(tipo_relat) == -1">
+                                        <div class="columns">
+                                            <div class="column is-half">
+                                                <label class="label">Início</label>
+                                                <div class="field">
+                                                    <div class="control" id="contIni">
+                                                        <input type="date" id="dtIni">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="column is-half">
+                                                <label class="label">Final</label>
+                                                <div class="field">
+                                                    <div class="control" id="contFim">
+                                                        <input type="date" id="dtFim">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </section>
+                            <section class="section" v-if="tipo_relat > 0">
+                                <div class="columns is-centered">
+                                    <div class="column is-4">
+                                        <div class="control">
+                                            <button class="button is-link submit-btn is-fullwidth" id="login"
+                                                @click="processar">
+                                                <span class="btico"><font-awesome-icon
+                                                        icon="fa-solid fa-check" /></span>
+                                                Processar
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </section>
+                            </section>
+                        </div>
                     </div>
+                    <footer class="card-footer">
+                        <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                    </footer>
                 </div>
-                <footer class="card-footer">
-                    <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
-                </footer>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -243,7 +261,7 @@ export default {
 
             if (this.tipo_relat > 100) {
                 this.$router.push(`/report/${this.tipo_relat}`);
-            } 
+            }
         },
         setDateIni($event) {
             if ($event && $event.length > 0) {

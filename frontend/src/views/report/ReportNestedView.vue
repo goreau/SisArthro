@@ -8,13 +8,8 @@
           </header>
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
-            <MyNestedTable
-              :tableData="dataTable"
-              :columns="columns"
-              :expData="expTable"
-              :expColumns="expColumns"
-              v-if="id > 0"
-            />
+            <MyNestedTable :tableData="dataTable" :columns="columns" :expData="expTable" :expColumns="expColumns"
+              v-if="id > 0" />
           </div>
         </div>
       </div>
@@ -97,6 +92,7 @@ export default {
               },
             },
             { title: "Município", field: "municipio" },
+            { title: "Captura", field: "codigo" },
             { title: "Localidade", field: "localidade" },
             { title: "Data", field: "dt_captura" },
             { title: "Execução", field: "execucao" },
@@ -192,32 +188,40 @@ export default {
                 return buttonHolder;
               },
             },
-            { title: "Identificação", headerHozAlign:"center", columns:[
-              { title: "Município", field: "municipio" },
-              { title: "Área", field: "area" },
-              { title: "Quarteirão", field: "quadra", formatter: function(cell, formatterParams, onRendered){
+            {
+              title: "Identificação", headerHozAlign: "center", columns: [
+                { title: "Município", field: "municipio" },
+                { title: "Área", field: "area" },
+                {
+                  title: "Quarteirão", field: "quadra", formatter: function (cell, formatterParams, onRendered) {
                     // Adiciona uma classe CSS para a borda direita
                     cell.getElement().classList.add("right-border");
                     return cell.getValue();
-                } 
-              },
-            ]},
-            { title: "Total", headerHozAlign:"center", columns:[
-              { title: "Imóveis", field: "imoveis" },
-              { title: "Cães", field: "caes", formatter: function(cell, formatterParams, onRendered){
+                  }
+                },
+              ]
+            },
+            {
+              title: "Total", headerHozAlign: "center", columns: [
+                { title: "Imóveis", field: "imoveis" },
+                {
+                  title: "Cães", field: "caes", formatter: function (cell, formatterParams, onRendered) {
                     // Adiciona uma classe CSS para a borda direita
                     cell.getElement().classList.add("right-border");
                     return cell.getValue();
-                } 
-              },
-            ]},
-            { title: "Encoleiramento", headerHozAlign:"center", columns:[
-              { title: "Encoleirados", field: "encoleirado" },
-              { title: "Falta Coleira", field: "falta" },
-              { title: "Recusa Alergia", field: "alergia" },
-              { title: "Recusa Outros", field: "recusa" },
-              { title: "Fechado", field: "fechado" },
-            ]},
+                  }
+                },
+              ]
+            },
+            {
+              title: "Encoleiramento", headerHozAlign: "center", columns: [
+                { title: "Encoleirados", field: "encoleirado" },
+                { title: "Falta Coleira", field: "falta" },
+                { title: "Recusa Alergia", field: "alergia" },
+                { title: "Recusa Outros", field: "recusa" },
+                { title: "Fechado", field: "fechado" },
+              ]
+            },
           ];
           break;
         default:
@@ -307,7 +311,7 @@ export default {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {});
+      .finally(() => { });
 
     reportService
       .getExport(this.id, this.filter)
@@ -331,7 +335,8 @@ export default {
 .visible {
   display: none !important;
 }
-.filter{
+
+.filter {
   font-size: small;
   font-weight: 600;
 }
