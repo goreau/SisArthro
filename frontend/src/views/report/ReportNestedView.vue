@@ -8,8 +8,7 @@
           </header>
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
-            <MyNestedTable :tableData="dataTable" :columns="columns" :expData="expTable" :expColumns="expColumns"
-              v-if="id > 0" />
+            <MyTable :data="dataTable" :columns="columns" :pagination="true" :calcHeight="false" />
           </div>
         </div>
       </div>
@@ -26,7 +25,7 @@
 </template>
 
 <script>
-import MyNestedTable from "@/components/forms/MyNestedTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 import reportService from "@/services/report.service";
 
 export default {
@@ -45,184 +44,121 @@ export default {
     };
   },
   components: {
-    MyNestedTable,
+    MyTable,
   },
   methods: {
+    getGroupFields(columns) {
+      return columns
+        .filter(c => c.group === true || c.group === 'true')
+        .map(c => c.field);
+    },
+    buildGroupedData(data, columns) {
+      const groupFields = this.getGroupFields(columns);
+
+      const result = [];
+      let lastKey = null;
+
+      data.forEach(row => {
+        const key = groupFields.map(f => row[f]).join('|');
+
+        if (key !== lastKey) {
+          result.push({
+            __type: 'group',
+            ...groupFields.reduce((acc, f) => {
+              acc[f] = row[f];
+              return acc;
+            }, {})
+          });
+
+          lastKey = key;
+        }
+
+        result.push({
+          __type: 'detail',
+          ...row
+        });
+      });
+
+      return result;
+    },
+    repeatCleaner(field, groupFields) {
+      return (params) => {
+        if (this.isNewGroup(params, groupFields)) return params.value;
+
+        const prev = params.api.getDisplayedRowAtIndex(params.rowIndex - 1)?.data;
+
+        return prev && prev[field] === params.value ? "" : params.value;
+      };
+    },
+    isNewGroup(params, groupFields) {
+      const prev = params.api.getDisplayedRowAtIndex(params.rowIndex - 1)?.data;
+      const curr = params.data;
+
+      if (!prev) return true;
+
+      return groupFields.some(f => prev[f] !== curr[f]);
+    },
+    createGroupRenderer(groupFields) {
+      return (params) => {
+        if (!this.isNewGroup(params, groupFields)) return "";
+
+        const data = params.data;
+
+        return `
+      <div style="
+        font-weight: bold;
+        padding: 6px 0;
+        border-top: 1px solid #ccc;
+      ">
+        ${groupFields.map(f => data[f]).join(" | ")}
+      </div>
+    `;
+      };
+    },
+    buildColumns(columns) {
+      const groupFields = columns
+        .filter(c => c.group)
+        .map(c => c.field);
+
+      const cols = columns.map(col => {
+        const base = {
+          ...col,
+          sortable: true,
+          filter: true,
+          resizable: true,
+        };
+
+        // 👉 coluna principal do grupo (primeira)
+        if (col.group && col.field === groupFields[0]) {
+          return {
+            ...base,
+            cellRenderer: this.createGroupRenderer(groupFields)
+          };
+        }
+
+        // 👉 outras colunas de grupo
+        if (col.group) {
+          return {
+            ...base,
+            valueFormatter: this.repeatCleaner(col.field, groupFields)
+          };
+        }
+
+        return base;
+      });
+
+      return cols;
+    },
     crateColumns() {
       switch (this.id) {
         case "1":
           this.title = 'Capturas';
-          this.columns = [
-            {
-              title: "Capturas",
-              formatter: (cell, formatterParams) => {
-                const row = cell.getRow().getData();
-
-                const btEdit = document.createElement("button");
-                btEdit.type = "button";
-                btEdit.title = "Ver Detalhes";
-                btEdit.disabled = this.id_user != row.id_usuario;
-                btEdit.style.cssText =
-                  "height: fit-content; margin-left: 1rem;";
-                btEdit.classList.add(
-                  "button",
-                  "is-info",
-                  "is-light",
-                  "is-outlined"
-                );
-                btEdit.innerHTML = this.myspan.innerHTML;
-                btEdit.addEventListener("click", () => {
-                  const id = row.id;
-                  const el = document.getElementsByClassName(
-                    "subTable" + id + ""
-                  );
-                  if (el[0].style["display"] == "none") {
-                    el[0].style["display"] = "block";
-                    btEdit.innerHTML = this.myspan1.innerHTML;
-                  } else {
-                    el[0].style["display"] = "none";
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                  }
-                });
-
-                const buttonHolder = document.createElement("span");
-                buttonHolder.appendChild(btEdit);
-
-                return buttonHolder;
-              },
-            },
-            { title: "Município", field: "municipio" },
-            { title: "Captura", field: "codigo" },
-            { title: "Localidade", field: "localidade" },
-            { title: "Data", field: "dt_captura" },
-            { title: "Execução", field: "execucao" },
-            { title: "Agravo", field: "agravo" },
-            { title: "Atividade", field: "atividade" },
-          ];
           break;
         case "2":
           this.title = 'Identificações';
-          this.columns = [
-            {
-              title: "Identificações",
-              formatter: (cell, formatterParams) => {
-                const row = cell.getRow().getData();
-
-                const btEdit = document.createElement("button");
-                btEdit.type = "button";
-                btEdit.title = "Editar";
-                btEdit.disabled = this.id_user != row.id_usuario;
-                btEdit.style.cssText =
-                  "height: fit-content; margin-left: 1rem;";
-                btEdit.classList.add(
-                  "button",
-                  "is-info",
-                  "is-light",
-                  "is-outlined"
-                );
-                btEdit.innerHTML = this.myspan.innerHTML;
-                btEdit.addEventListener("click", () => {
-                  const id = row.id;
-                  const el = document.getElementsByClassName(
-                    "subTable" + id + ""
-                  );
-                  if (el[0].style["display"] == "none") {
-                    el[0].style["display"] = "block";
-                    btEdit.innerHTML = this.myspan1.innerHTML;
-                  } else {
-                    el[0].style["display"] = "none";
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                  }
-                });
-
-                const buttonHolder = document.createElement("span");
-                buttonHolder.appendChild(btEdit);
-
-                return buttonHolder;
-              },
-            },
-            { title: "Município", field: "municipio" },
-            { title: "Data Captura", field: "dt_captura" },
-            { title: "Data Identificação", field: "dt_identificacao" },
-            { title: "Responsável", field: "responsavel" },
-          ];
           break;
         case "3":
           this.title = 'Encoleiramento';
-          this.columns = [
-            {
-              title: "Encoleiramento",
-              formatter: (cell, formatterParams) => {
-                const row = cell.getRow().getData();
-
-                const btEdit = document.createElement("button");
-                btEdit.type = "button";
-                btEdit.title = "Ver Detalhes";
-                btEdit.disabled = this.id_user != row.id_usuario;
-                btEdit.style.cssText =
-                  "height: fit-content; margin-left: 1rem;";
-                btEdit.classList.add(
-                  "button",
-                  "is-info",
-                  "is-light",
-                  "is-outlined"
-                );
-                btEdit.innerHTML = this.myspan.innerHTML;
-                btEdit.addEventListener("click", () => {
-                  const id = row.id;
-                  const el = document.getElementsByClassName(
-                    "subTable" + id + ""
-                  );
-                  if (el[0].style["display"] == "none") {
-                    el[0].style["display"] = "block";
-                    btEdit.innerHTML = this.myspan1.innerHTML;
-                  } else {
-                    el[0].style["display"] = "none";
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                  }
-                });
-
-                const buttonHolder = document.createElement("span");
-                buttonHolder.appendChild(btEdit);
-
-                return buttonHolder;
-              },
-            },
-            {
-              title: "Identificação", headerHozAlign: "center", columns: [
-                { title: "Município", field: "municipio" },
-                { title: "Área", field: "area" },
-                {
-                  title: "Quarteirão", field: "quadra", formatter: function (cell, formatterParams, onRendered) {
-                    // Adiciona uma classe CSS para a borda direita
-                    cell.getElement().classList.add("right-border");
-                    return cell.getValue();
-                  }
-                },
-              ]
-            },
-            {
-              title: "Total", headerHozAlign: "center", columns: [
-                { title: "Imóveis", field: "imoveis" },
-                {
-                  title: "Cães", field: "caes", formatter: function (cell, formatterParams, onRendered) {
-                    // Adiciona uma classe CSS para a borda direita
-                    cell.getElement().classList.add("right-border");
-                    return cell.getValue();
-                  }
-                },
-              ]
-            },
-            {
-              title: "Encoleiramento", headerHozAlign: "center", columns: [
-                { title: "Encoleirados", field: "encoleirado" },
-                { title: "Falta Coleira", field: "falta" },
-                { title: "Recusa Alergia", field: "alergia" },
-                { title: "Recusa Outros", field: "recusa" },
-                { title: "Fechado", field: "fechado" },
-              ]
-            },
-          ];
           break;
         default:
           break;
@@ -297,14 +233,12 @@ export default {
     },
   },
   mounted() {
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan1 = document.getElementsByName("coisa1")[0];
-
     reportService
       .getRelat(this.id, this.filter)
       .then((response) => {
         var data = response.data;
-        this.dataTable = data.data;
+        this.columns = this.buildColumns(data.cols)
+        this.dataTable = this.buildGroupedData(data.data, this.columns);
         this.strFiltro = data.filter;
         this.crateColumns();
       })

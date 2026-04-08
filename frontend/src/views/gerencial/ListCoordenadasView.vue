@@ -17,8 +17,9 @@
                             </div>
                         </section>
                         <section v-show="hasData">
-                            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"
-                                :tableName="tableName" />
+                            <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
+                                :pagination="true" :buttons="['edit']" :has-exports="true" @edit="onEditRow"
+                                :calcHeight="false" />
                         </section>
                         <!-- Modal (Bulma) -->
                         <div class="modal" :class="{ 'is-active': modalAberto }">
@@ -29,18 +30,20 @@
                                     <button class="delete" aria-label="close" @click="fecharModal"></button>
                                 </header>
                                 <section class="modal-card-body">
-                                    <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
+                                    <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
+                                        :caption="caption" />
                                     <div class="columns">
                                         <div class="column">
                                             <label class="label">ID</label>
                                             <div class="control">
-                                                <input class="input" type="text" :value="registroEditando.id" readonly disabled />
+                                                <input class="input" type="text" :value="registroEditando.id" readonly
+                                                    disabled />
                                             </div>
                                         </div>
                                         <div class="column">
                                             <label class="label">ID</label>
                                             <div class="control">
-                                                <input class="input" type="text" v-model="registroEditando.latitude"/>
+                                                <input class="input" type="text" v-model="registroEditando.latitude" />
                                             </div>
                                         </div>
                                         <div class="column">
@@ -50,7 +53,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                                                        
+
                                 </section>
                                 <footer class="modal-card-foot">
                                     <button class="button is-success" id="login" @click="salvarEdicao">Salvar</button>
@@ -88,6 +91,7 @@ export default {
             myspan: null,
             myspan2: null,
             id_user: 0,
+            tpUser: 0,
             tabela: 0,
             message: "",
             caption: "",
@@ -109,6 +113,13 @@ export default {
         Message,
     },
     methods: {
+        onEditRow(id) {
+            const row = this.dataTable.find(item => item.id === id);
+
+            if (row) {
+                this.abrirModal(row);
+            }
+        },
         abrirModal(registro) {
             // Cópia para edição (evita alterar diretamente antes de salvar)
             this.registroEditando = { ...registro };
@@ -125,7 +136,7 @@ export default {
                 this.dataTable[index] = { ...this.registroEditando };
                 document.getElementById('login').classList.add('is-loading');
                 gerencialService.putCoordenadas({ ...this.registroEditando })
-                .then(
+                    .then(
                         (response) => {
                             this.callData(this.tabela);
                             this.fecharModal();
@@ -150,12 +161,12 @@ export default {
                     });
                 // Aqui você pode fazer um POST/PUT na API também se quiser salvar no backend
             }
-            
+
         },
         callData(tab) {
             this.tabela = tab;
             gerencialService.getCoordenadas(tab)
-                .then((response) => { 
+                .then((response) => {
                     this.dataTable = [...response.data];//response.data;
                     this.isLoading = false;
                     this.hasData = true;
@@ -167,34 +178,11 @@ export default {
         },
         createColumns() {
             this.columns = [
-                { title: "ID", field: "id", minWidth: 100, responsive: 1, },
-                { title: "Municipio", field: "municipio", minWidth: 200, responsive: 1, },
-                { title: "Latitude", field: "latitude", minWidth: 200, responsive: 3, },
-                { title: "Longitude", field: "longitude", minWidth: 200, responsive: 3, },
-                {
-                    title: "Ações", minWidth: 200, responsive: 0,
-                    formatter: (cell, formatterParams) => {
-                        const row = cell.getRow().getData();
-
-                        const btEdit = document.createElement("button");
-                        btEdit.type = "button";
-                        btEdit.title = "Alterar";
-                        btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-                        btEdit.classList.add("button", "is-success", "is-outlined");
-                        btEdit.innerHTML = this.myspan.innerHTML;
-                        btEdit.disabled = this.id_user != row.owner && this.currentUser.nivel > 1;
-                        btEdit.addEventListener("click", () => {
-                            this.abrirModal(row);
-                        });
-
-                        const buttonHolder = document.createElement("span");
-                        buttonHolder.appendChild(btEdit);
-
-
-
-                        return buttonHolder;
-                    },
-                },
+                { headerName: "ID", field: "id" },
+                { headerName: "Municipio", field: "municipio" },
+                { headerName: "Latitude", field: "latitude" },
+                { headerName: "Longitude", field: "longitude" },
+                { headerName: 'Prop', field: 'owner_id', hide: true },
             ];
         },
         getFormat(row) {
@@ -209,8 +197,6 @@ export default {
     },
     mounted() {
         this.id_user = this.currentUser.id;
-
-        this.myspan = document.getElementsByName("coisa")[0];
 
         this.tipo = this.$route.params.id;
 

@@ -123,102 +123,102 @@
                               </div>
                             </div>
                           </div>
-                          </div>
-                          <div class="field column is-2">
-                            <label class="label">Espécie</label>
-                            <div class="control">
-                              <div class="select">
-                                <select v-model="identifica_det.id_especie" class="input" :class="{
-                                  'is-danger':
-                                    v$.identifica_det.id_especie.$error,
-                                }">
-                                  <option value="0">-- Selecione --</option>
-                                  <option v-for="reg in especies" :value="reg.id_especie" :key="reg.id_especie">
-                                    {{ reg.especie }}
-                                  </option>
-                                </select>
-                                <span class="is-error" v-if="v$.identifica_det.id_especie.$error">
-                                  {{
-                                    v$.identifica_det.id_especie.$errors[0]
-                                      .$message
-                                  }}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="field column">
-                            <label class="label">Macho</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.macho" :class="{
-                                'is-danger': v$.identifica_det.macho.$error,
-                              }" />
-                              <span class="is-error" v-if="v$.identifica_det.macho.$error">
-                                {{ v$.identifica_det.macho.$errors[0].$message }}
-                              </span>
-                            </div>
-                          </div>
-                          <div class="field column">
-                            <label class="label">Fêmea</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea" :class="{
-                                'is-danger': v$.identifica_det.femea.$error,
-                              }" />
-                              <span class="is-error" v-if="v$.identifica_det.femea.$error">
-                                {{ v$.identifica_det.femea.$errors[0].$message }}
-                              </span>
-                            </div>
-                          </div>
-                          <div class="field column">
-                            <label class="label">Fêmea Ing</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea_ing"
-                                :class="{
-                                  'is-danger': v$.identifica_det.femea_ing.$error,
-                                }" />
-                              <span class="is-error" v-if="v$.identifica_det.femea_ing.$error">
+                        </div>
+                        <div class="field column is-2">
+                          <label class="label">Espécie</label>
+                          <div class="control">
+                            <div class="select">
+                              <select v-model="identifica_det.id_especie" class="input" :class="{
+                                'is-danger':
+                                  v$.identifica_det.id_especie.$error,
+                              }">
+                                <option value="0">-- Selecione --</option>
+                                <option v-for="reg in especies" :value="reg.id_especie" :key="reg.id_especie">
+                                  {{ reg.especie }}
+                                </option>
+                              </select>
+                              <span class="is-error" v-if="v$.identifica_det.id_especie.$error">
                                 {{
-                                  v$.identifica_det.femea_ing.$errors[0].$message
+                                  v$.identifica_det.id_especie.$errors[0]
+                                    .$message
                                 }}
                               </span>
                             </div>
                           </div>
-                          <div class="field column">
-                            <label class="label">Larva</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.larva" :class="{
-                                'is-danger': v$.identifica_det.larva.$error,
-                              }" />
-                              <span class="is-error" v-if="v$.identifica_det.larva.$error">
-                                {{ v$.identifica_det.larva.$errors[0].$message }}
-                              </span>
-                            </div>
-                          </div>
-                          <div class="field column">
-                            <label class="label">Ninfa</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.ninfa" :class="{
-                                'is-danger': v$.identifica_det.ninfa.$error,
-                              }" />
-                              <span class="is-error" v-if="v$.identifica_det.ninfa.$error">
-                                {{ v$.identifica_det.ninfa.$errors[0].$message }}
-                              </span>
-                            </div>
-                          </div>
-                          <div class="field column">
-                            <label class="label">Pool</label>
-                            <div class="control">
-                              <input class="input" type="text" placeholder="Nome" v-model="identifica_det.pool" :class="{
-                                'is-danger': v$.identifica_det.pool.$error,
-                              }" />
-                              <span class="is-error" v-if="v$.identifica_det.pool.$error">
-                                {{ v$.identifica_det.pool.$errors[0].$message }}
-                              </span>
-                            </div>
+                        </div>
+                        <div class="field column">
+                          <label class="label">Macho</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.macho" :class="{
+                              'is-danger': v$.identifica_det.macho.$error,
+                            }" />
+                            <span class="is-error" v-if="v$.identifica_det.macho.$error">
+                              {{ v$.identifica_det.macho.$errors[0].$message }}
+                            </span>
                           </div>
                         </div>
-                        <div class="columns">
-                          <footerCard @submit="createDet" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <div class="field column">
+                          <label class="label">Fêmea</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea" :class="{
+                              'is-danger': v$.identifica_det.femea.$error,
+                            }" />
+                            <span class="is-error" v-if="v$.identifica_det.femea.$error">
+                              {{ v$.identifica_det.femea.$errors[0].$message }}
+                            </span>
+                          </div>
                         </div>
+                        <div class="field column">
+                          <label class="label">Fêmea Ing</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.femea_ing"
+                              :class="{
+                                'is-danger': v$.identifica_det.femea_ing.$error,
+                              }" />
+                            <span class="is-error" v-if="v$.identifica_det.femea_ing.$error">
+                              {{
+                                v$.identifica_det.femea_ing.$errors[0].$message
+                              }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="field column">
+                          <label class="label">Larva</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.larva" :class="{
+                              'is-danger': v$.identifica_det.larva.$error,
+                            }" />
+                            <span class="is-error" v-if="v$.identifica_det.larva.$error">
+                              {{ v$.identifica_det.larva.$errors[0].$message }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="field column">
+                          <label class="label">Ninfa</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.ninfa" :class="{
+                              'is-danger': v$.identifica_det.ninfa.$error,
+                            }" />
+                            <span class="is-error" v-if="v$.identifica_det.ninfa.$error">
+                              {{ v$.identifica_det.ninfa.$errors[0].$message }}
+                            </span>
+                          </div>
+                        </div>
+                        <div class="field column">
+                          <label class="label">Pool</label>
+                          <div class="control">
+                            <input class="input" type="text" placeholder="Nome" v-model="identifica_det.pool" :class="{
+                              'is-danger': v$.identifica_det.pool.$error,
+                            }" />
+                            <span class="is-error" v-if="v$.identifica_det.pool.$error">
+                              {{ v$.identifica_det.pool.$errors[0].$message }}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="columns">
+                        <footerCard @submit="createDet" @cancel="null" @aux="details" :cFooter="cFooter" />
+                      </div>
                     </article>
                   </div>
                 </div>
@@ -528,6 +528,7 @@ export default {
           async (response) => {
             let data = response.data;
             this.identifica_det.amostra = data.amostra;
+
             this.genero = data.id_genero;
             await this.getEspecies(this.genero);
             this.identifica_det.id_especie = data.id_especie;
@@ -592,6 +593,10 @@ export default {
         .comboGen(this.agravo)
         .then((res) => {
           this.generos = res.data;
+          let idx = this.generos.find(item => item.id_genero === this.genero);
+          if (!idx && this.marcaGen == 99) {
+            this.trocaListaGen()
+          }
         })
         .catch((err) => {
           this.generos = [];

@@ -114,6 +114,19 @@
                                             </div>
                                         </div>
                                     </section>
+                                    <section class="section" v-show="tipo_relat == 103">
+                                        <div class="columns">
+                                            <div class="column is-full">
+                                                <div class="field">
+                                                    <label class="label">Ciclo</label>
+                                                    <div class="control">
+                                                        <input type="number" class="input" name="ciclo"
+                                                            v-model="filter.ciclo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
                                     <section class="section" v-show="noSexo.indexOf(tipo_relat) != -1">
                                         <div class="columns">
                                             <div class="field column is-full">
@@ -226,6 +239,7 @@ export default {
                 dt_final: "",
                 agravo: "",
                 sexo: '9',
+                ciclo: ''
             },
             ini_date: '',
             fim_date: '',

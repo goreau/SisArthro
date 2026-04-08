@@ -3,13 +3,7 @@
     <div class="columns is-centered">
       <div class="column is-two-fifths">
         <Loader v-if="isLoading" />
-        <Message
-          v-if="showMessage"
-          @do-close="closeMessage"
-          :msg="message"
-          :type="type"
-          :caption="caption"
-        />
+        <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Meu Cadastro</p>
@@ -19,13 +13,8 @@
               <div class="field">
                 <label class="label">Nome</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Nome"
-                    v-model="user.name"
-                    :class="{ 'is-danger': v$.user.name.$error }"
-                  />
+                  <input class="input" type="text" placeholder="Nome" v-model="user.name"
+                    :class="{ 'is-danger': v$.user.name.$error }" />
                   <span class="is-error" v-if="v$.user.name.$error">
                     {{ v$.user.name.$errors[0].$message }}
                   </span>
@@ -34,43 +23,22 @@
               <div class="field">
                 <label class="label">Município</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Nome"
-                    v-model="municipio"
-                    readonly
-                  />
+                  <input class="input" type="text" placeholder="Nome" v-model="municipio" readonly />
                 </div>
               </div>
               <div class="field">
                 <label class="label">Nível</label>
                 <div class="control has-icons-left has-icons-right">
-                  <label class="radio" v-if="user.role==1">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="1"
-                      checked="checked"
-                    />
+                  <label class="radio" v-if="user.role == 1">
+                    <input type="radio" name="role" value="1" checked="checked" />
                     Administrador
                   </label>
-                  <label class="radio" v-if="user.role==2">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="2"
-                      checked="checked"
-                    />
+                  <label class="radio" v-if="user.role == 2">
+                    <input type="radio" name="role" value="2" checked="checked" />
                     Regional
                   </label>
-                  <label class="radio"  v-if="user.role==3">
-                    <input
-                      type="radio"
-                      name="role"
-                      value="3"
-                      checked="checked"
-                    />
+                  <label class="radio" v-if="user.role == 3">
+                    <input type="radio" name="role" value="3" checked="checked" />
                     Município
                   </label>
                 </div>
@@ -78,13 +46,8 @@
               <div class="field">
                 <label class="label">Email</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="E-mail"
-                    v-model="user.email"
-                    :class="{ 'is-danger': v$.user.email.$error }"
-                  />
+                  <input class="input" type="text" placeholder="E-mail" v-model="user.email"
+                    :class="{ 'is-danger': v$.user.email.$error }" />
                   <span class="is-error" v-if="v$.user.email.$error">
                     {{ v$.user.email.$errors[0].$message }}
                   </span>
@@ -93,36 +56,20 @@
               <div class="field">
                 <label class="label">Login</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="text"
-                    placeholder="Nome de usuário"
-                    v-model="user.username"
-                    readonly
-                  />
+                  <input class="input" type="text" placeholder="Nome de usuário" v-model="user.username" readonly />
                 </div>
               </div>
               <div class="field">
                 <label class="label">Senha Atual</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="password"
-                    v-model="user.old_password"
-                    placeholder="Informe a senha"
-                  />
+                  <input class="input" type="password" v-model="user.old_password" placeholder="Informe a senha" />
                 </div>
               </div>
               <div class="field">
                 <label class="label">Nova Senha</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="password"
-                    v-model="user.new_password"
-                    placeholder="Confirme a senha"
-                    :class="{ 'is-danger': v$.user.new_password.$error }"
-                  />
+                  <input class="input" type="password" v-model="user.new_password" placeholder="Confirme a senha"
+                    :class="{ 'is-danger': v$.user.new_password.$error }" />
                   <span class="is-error" v-if="v$.user.new_password.$error">
                     {{ v$.user.new_password.$errors[0].$message }}
                   </span>
@@ -131,13 +78,8 @@
               <div class="field">
                 <label class="label">Confirme a Senha</label>
                 <div class="control">
-                  <input
-                    class="input"
-                    type="password"
-                    v-model="senha"
-                    placeholder="Confirme a senha"
-                    :class="{ 'is-danger': v$.senha.$error }"
-                  />
+                  <input class="input" type="password" v-model="senha" placeholder="Confirme a senha"
+                    :class="{ 'is-danger': v$.senha.$error }" />
                   <span class="is-error" v-if="v$.senha.$error">
                     {{ v$.senha.$errors[0].$message }}
                   </span>
@@ -187,28 +129,28 @@ export default {
       senha: '',
       version: '15.08',
       v$: useValidate(),
-      municipio:'',
+      municipio: '',
       isLoading: false,
       message: "",
       caption: "",
       type: "",
       showMessage: false,
-      cFooter:{
-          strSubmit:'Salvar',
-          strCancel: 'Cancelar',
-          strAux:'',
-          aux: false
-        }
+      cFooter: {
+        strSubmit: 'Salvar',
+        strCancel: 'Cancelar',
+        strAux: '',
+        aux: false
+      }
     };
   },
-  validations(){
+  validations() {
     return {
       user: {
-        name: {required$, minLength: minLength$(10)},
-        new_password: {required$, minLength: minLength$(4)},
-        email: {required$, email$},
+        name: { required$, minLength: minLength$(10) },
+        new_password: { required$, minLength: minLength$(4) },
+        email: { required$, email$ },
       },
-      senha: {sameAs: sameAs$(this.user.new_password)}
+      senha: { sameAs: sameAs$(this.user.new_password) }
     }
   },
   computed: {
@@ -225,9 +167,13 @@ export default {
     CmbMunicipio,
     footerCard
   },
-  methods: {  
+  methods: {
+    closeMessage() {
+      alert('funfa')
+      this.showMessage = false;
+    },
     update() {
-      this.v$.$validate(); 
+      this.v$.$validate();
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
@@ -247,7 +193,7 @@ export default {
             setTimeout(() => (this.showMessage = false), 3000);
           }
         )
-        .finally(() => {
+          .finally(() => {
             document.getElementById("login").classList.remove("is-loading");
           });
       } else {
@@ -286,10 +232,10 @@ export default {
   },
   mounted() {
     let cUser = this.currentUser;
-    if (cUser){
+    if (cUser) {
       this.user.id_usuario = cUser.id;
     }
-    
+
     this.loadData();
   },
 };

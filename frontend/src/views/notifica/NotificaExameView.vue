@@ -124,7 +124,9 @@
                             </div>
                             <div class="columns">
                                 <div class="column is-10 is-offset-1">
-                                    <MySimpleTable :tableData="dataTable" :columns="columns" />
+                                    <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
+                                        :pagination="false" :buttons="['edit', 'delete']" :has-exports="false"
+                                        :calcHeight="true" @edit="editAmostra" @delete="delAmostra" />
                                 </div>
                             </div>
                             <div class="columns">
@@ -237,7 +239,7 @@ import moment from 'moment';
 import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
 import { required$, combo$, requiredIf$, maxLength$, integer$, } from "../../components/forms/validators.js";
-import MySimpleTable from "@/components/forms/MySimpleTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 
 export default {
     components: {
@@ -245,7 +247,7 @@ export default {
         Message,
         CmbAuxiliares,
         footerCard,
-        MySimpleTable,
+        MyTable,
     },
     data() {
         return {
@@ -473,7 +475,10 @@ export default {
                         this.notifica_exame.id_causa_obito = data.id_causa_obito;
                         this.notifica_exame.ob_especifica = data.ob_especifica;
                         this.teste = data.amostras;
-                        this.dataTable = [...this.teste];
+                        this.dataTable = this.teste.map((item, index) => ({
+                            ...item,
+                            id: index
+                        }));
                         this.notifica_exame.responsavel = data.responsavel;
                     }
                     this.startCalendar();
@@ -590,45 +595,12 @@ export default {
 
 
         this.columns = [
-            { title: "Número", field: "numero", widthGrow: 1 },
-            { title: "Tipo", field: "fant_tipo", widthGrow: 3 },
-            { title: "Exame", field: "fant_exame", widthGrow: 2 },
-            { title: "Resultado", field: "fant_result", widthGrow: 2 },
-            { title: "Espécie", field: "especie", widthGrow: 2 },
-            { title: "Repetir", field: "repetir", formatter: "tickCross", hozAlign: "center", widthGrow: 1 },
-            {
-                title: "Ações", widthGrow: 2,
-                formatter: (cell, formatterParams) => {
-                    const row = cell.getRow().getData();
-                    const idx = cell.getRow().getPosition();
-
-                    const btEdit = document.createElement("button");
-                    btEdit.type = "button";
-                    btEdit.title = "Editar";
-                    btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btEdit.classList.add("button", "is-primary", "is-outlined");
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                    btEdit.addEventListener("click", () => {
-                        this.editAmostra(idx - 1);
-                    });
-
-                    const btDel = document.createElement("button");
-                    btDel.type = "button";
-                    btDel.title = "Excluir";
-                    btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btDel.classList.add("button", "is-danger", "is-outlined");
-                    btDel.innerHTML = this.myspan2.innerHTML;
-                    btDel.addEventListener("click", async () => {
-                        this.delAmostra(idx - 1);
-                    });
-
-                    const buttonHolder = document.createElement("span");
-                    buttonHolder.appendChild(btEdit);
-                    buttonHolder.appendChild(btDel);
-
-                    return buttonHolder;
-                },
-            }
+            { headerName: "Número", field: "numero", },
+            { headerName: "Tipo", field: "fant_tipo", },
+            { headerName: "Exame", field: "fant_exame", },
+            { headerName: "Resultado", field: "fant_result", },
+            { headerName: "Espécie", field: "especie", },
+            { headerName: "Repetir", field: "repetir", formatter: "tickCross", hozAlign: "center", widthGrow: 1 },
         ]
     },
     created() {

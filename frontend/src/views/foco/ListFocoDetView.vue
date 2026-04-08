@@ -16,16 +16,10 @@
                         <Loader v-if="isLoading" />
                         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
                             :caption="caption" />
-                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :table-name="tableName" />
+                        <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
+                            :pagination="true" :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow"
+                            :calcHeight="false" @delete="onDeleteRow" />
                     </div>
-                </div>
-                <div style="display: none">
-                    <span class="icon is-small is-left" name="coisa">
-                        <font-awesome-icon icon="fa-solid fa-edit" />
-                    </span>
-                    <span class="icon is-small is-left" name="coisa2">
-                        <font-awesome-icon icon="fa-solid fa-trash" />
-                    </span>
                 </div>
             </div>
         </div>
@@ -69,8 +63,28 @@ export default {
         newCapt() {
             this.$router.push(`/foco_det/${this.master}/${this.quart}`);
         },
-        editCapt(id) {
+        onEditRow(id) {
             this.$router.push(`/editFocoDet/${id}`);
+        },
+        async onDeleteRow(id) {
+            const ok = await this.$refs.confirmDialog.show({
+                title: 'Excluir',
+                message: 'Deseja mesmo excluir essa foco e todas as informações associada a ela?',
+                okButton: 'Confirmar',
+            })
+            if (ok) {
+                focoService.deleteDet(row.id_foco_det)
+                    .then(() => {
+                        location.reload();
+                    })
+                    .catch((err) => {
+                        this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                        this.showMessage = true;
+                        this.type = "alert";
+                        this.caption = "Foco";
+                        setTimeout(() => (this.showMessage = false), 3000);
+                    })
+            }
         },
         getFormat(row) {
             return {
@@ -85,19 +99,16 @@ export default {
     mounted() {
         this.id_user = this.currentUser.id;
 
-        this.myspan = document.getElementsByName("coisa")[0];
-        this.myspan2 = document.getElementsByName("coisa2")[0];
-
         this.isLoading = true;
         focoService.getFocosDet(this.master)
             .then((response) => {
                 this.dataTable = response.data;
-                if (response.data.length > 0){
+                if (response.data.length > 0) {
                     this.quart = response.data[0].id_quarteirao;
                 } else {
                     this.quart = this.$route.params.quart;
                 }
-                
+
                 this.isLoading = false;
             })
             .catch((err) => {
@@ -106,72 +117,11 @@ export default {
             .finally(() => (this.isLoading = false));
 
         this.columns = [
-            { title: "Codend", field: "codend", minWidth: 200, responsive:1, },
-            { title: "Animal", field: "nome", minWidth: 200, responsive:1, },
-            { title: "Situação", field: "situacao", minWidth: 200, responsive:1, },
-            { title: "Desfecho", field: "desfecho", minWidth: 200, responsive:2, },
-            {
-                title: "Data", field: "dt_desfecho", sorter: "date", sorterParams: {
-                    format: "dd/MM/yyyy",
-                    alignEmptyValues: "top",
-                }, minWidth: 200, responsive:3,
-                formatter:function(cell, formatterParams, onRendered){
-                        var value = cell.getValue();
-                        value = moment(value).format("DD/MM/YYYY");
-                        return value;
-                    }
-            },
-            {
-                title: "Ações", minWidth: 200, responsive:0,
-                formatter: (cell, formatterParams) => {
-                    const row = cell.getRow().getData();
-
-                    const btEdit = document.createElement("button");
-                    btEdit.type = "button";
-                    btEdit.title = "Editar";
-                    //btEdit.disabled = this.id_user != row.id_usuario;
-                    btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btEdit.classList.add("button", "is-primary", "is-outlined");
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                    btEdit.addEventListener("click", () => {
-                        this.$router.push(`/editFocoDet/${row.id_foco_det}`);
-                    });
-
-                    const btDel = document.createElement("button");
-                    btDel.type = "button";
-                    btDel.title = "Excluir";
-                    //btDel.disabled = this.id_user != row.id_usuario;
-                    btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btDel.classList.add("button", "is-danger", "is-outlined");
-                    btDel.innerHTML = this.myspan2.innerHTML;
-                    btDel.addEventListener("click", async () => {
-                        const ok = await this.$refs.confirmDialog.show({
-                            title: 'Excluir',
-                            message: 'Deseja mesmo excluir essa foco e todas as informações associada a ela?',
-                            okButton: 'Confirmar',
-                        })
-                        if (ok) {
-                            focoService.deleteDet(row.id_foco_det)
-                                .then(() => {
-                                    location.reload();
-                                })
-                                .catch((err) => {
-                                    this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                                    this.showMessage = true;
-                                    this.type = "alert";
-                                    this.caption = "Animais";
-                                    setTimeout(() => (this.showMessage = false), 3000);
-                                })
-                        }
-                    });
-
-                    const buttonHolder = document.createElement("span");
-                    buttonHolder.appendChild(btEdit);
-                    buttonHolder.appendChild(btDel);
-
-                    return buttonHolder;
-                },
-            },
+            { headerName: "Codend", field: "codend" },
+            { headerName: "Animal", field: "nome" },
+            { headerName: "Situação", field: "situacao" },
+            { headerName: "Desfecho", field: "desfecho" },
+            { headerName: "Data", field: "data" },
         ];
     },
     computed: {

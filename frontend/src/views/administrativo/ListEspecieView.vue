@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <div class="columns is-centered">
-      <div class="column is-11">
+      <div class="column is-7">
         <Loader v-if="isLoading" />
         <div class="card">
           <header class="card-header">
@@ -14,27 +14,16 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
+            <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
+              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
+              @delete="onDeleteRow" />
           </div>
-        </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
         </div>
       </div>
     </div>
   </div>
   <confirm-dialog ref="confirmDialog"></confirm-dialog>
-  <Modal
-    v-show="isModalVisible"
-    @close="closeModal"
-    @post="postContent"
-    :msg="message"
-  >
+  <Modal v-show="isModalVisible" @close="closeModal" @post="postContent" :msg="message">
     <template v-slot:header>
       Espécie
     </template>
@@ -43,34 +32,24 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-                <label class="label">Gênero</label>
-                <div class="control">
-                  <select v-model="especie.id_genero" class="input">
-                    <option value="0">-- Selecione --</option>
-                        <option
-                          v-for="reg in generos"
-                          :key="reg.id_genero"
-                          :value="reg.id_genero"
-                        >
-                          {{ reg.nome }}
-                        </option> 
-                  </select>
-                </div>
-              </div>
+            <label class="label">Gênero</label>
+            <div class="control">
+              <select v-model="especie.id_genero" class="input">
+                <option value="0">-- Selecione --</option>
+                <option v-for="reg in generos" :key="reg.id_genero" :value="reg.id_genero">
+                  {{ reg.nome }}
+                </option>
+              </select>
+            </div>
+          </div>
         </div>
         <div class="column">
           <div class="field">
-                <label class="label">Nome</label>
-                <div class="control">
-                  <input
-                    id="valor"
-                    class="input"
-                    type="text"
-                    placeholder="Nome"
-                    v-model="especie.nome"
-                  />
-                </div>
-              </div>
+            <label class="label">Nome</label>
+            <div class="control">
+              <input id="valor" class="input" type="text" placeholder="Nome" v-model="especie.nome" />
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -78,7 +57,7 @@
     <template v-slot:footer>
       {{ message }}
     </template>
-</Modal>
+  </Modal>
 </template>
 
 <script>
@@ -127,7 +106,7 @@ export default {
     },
     postContent() {
       document.getElementById("postVal").classList.add("is-loading");
-      if (this.especie.id_especie > 0){
+      if (this.especie.id_especie > 0) {
         especieService.updateSpp(this.especie)
           .then(
             (response) => {
@@ -159,18 +138,25 @@ export default {
           });
       }
     },
-    editSpp(row) {
+    async onEditRow(id) {
       this.isModalVisible = true;
-      this.especie = row;
+      this.especie = this.dataTable.find(item => item.id === id);
     },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa espécie?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        especieService.deleteSpp(id);
+        location.reload();
+      }
+    }
   },
   mounted() {
     this.id_user = this.currentUser.id;
-
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan2 = document.getElementsByName("coisa2")[0];
-    //document.createElement('span');
-    // this.myspan.innerHTML='<p>teste</p>';;
+    this.tpUser = this.currentUser.role;
 
     this.isLoading = true;
     especieService.getEspecies()
@@ -187,53 +173,6 @@ export default {
       { title: "Tipo", field: "tipo" },
       { title: "Genero", field: "genero" },
       { title: "Nome", field: "nome" },
-      {
-        title: "Ações",
-        formatter: (cell, formatterParams) => {
-          const row = cell.getRow().getData();
-
-          const btEdit = document.createElement("button");
-          btEdit.type = "button";
-          btEdit.title = "Editar";
-          btEdit.disabled = this.currentUser.role > 1;
-          btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btEdit.classList.add("button", "is-primary", "is-outlined");
-          btEdit.innerHTML = this.myspan.innerHTML;
-          btEdit.addEventListener("click", () => {
-            this.editSpp(row);
-          });
-
-          /* const teste = document.createElement('div'); 
-              teste.classList.add('icon', 'is-small');
-              teste.innerHTML='<span><font-awesome-icon icon=\"fa-solid fa-envelope\" /></span>';*/
-
-          const btDel = document.createElement("button");
-          btDel.type = "button";
-          btDel.title = "Excluir";
-          btDel.disabled = this.currentUser.role > 1;
-          btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btDel.classList.add("button", "is-danger", "is-outlined");
-          btDel.innerHTML = this.myspan2.innerHTML;
-          btDel.addEventListener("click", async () => {
-            const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir essa espécie?',
-                okButton: 'Confirmar',
-            })
-            if (ok) {
-              especieService.deleteSpp(row.id_especie);
-              location.reload();
-            }
-           
-          });
-
-          const buttonHolder = document.createElement("span");
-          buttonHolder.appendChild(btEdit);
-          buttonHolder.appendChild(btDel);
-
-          return buttonHolder;
-        },
-      },
     ];
   },
   created() {

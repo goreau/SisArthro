@@ -7,9 +7,11 @@
     <div class="main" id="main">
 
       <router-view />
+      <br>
     </div>
   </div>
   <Footer />
+
 </template>
 
 <script>
@@ -40,11 +42,13 @@ export default {
       this.menu = this.menu.map((item) => {
         if (item.child) {
           // Percorre os subitens (child) e aplica a lógica
+          // Desabilita os subitens  se o nível de acesso for maior que 1, ou seja, só habilita para administrador
           item.child = item.child.map((subItem) => {
             if (subItem.href === '/refactor') {
-              // Desabilita o subitem 'refactor' se o nível de acesso for maior que 1, ou seja, só habilita para administrador
               subItem.disabled = this.currentUser.role > 1;
             } else if (subItem.href === '/estratos') {
+              subItem.hidden = this.currentUser.role > 1;
+            } else if (subItem.href === '/deluser') {
               subItem.hidden = this.currentUser.role > 1;
             }
             return subItem;
@@ -424,6 +428,18 @@ export default {
               },
             },
             {
+              href: "/deluser",
+              title: "Remover Usuário",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-city",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
               href: "/propmun",
               title: "Usuário/Município",
               icon: {
@@ -621,6 +637,7 @@ export default {
 .main-container {
   margin: 2rem;
   min-height: 40rem;
+  margin-top: 4rem;
 }
 
 iframe#webpack-dev-server-client-overlay {
@@ -642,7 +659,7 @@ body {
   margin-left: 290px;
   width: calc(100% - 290px);
   height: calc(100% - 7rem);
-  margin-top: 4rem;
+  margin-top: 6rem;
 }
 
 .main_colapsed {

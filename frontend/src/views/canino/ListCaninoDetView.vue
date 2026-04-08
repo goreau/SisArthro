@@ -14,23 +14,11 @@
           </header>
           <div class="card-content">
             <Loader v-if="isLoading" />
-            <Message
-              v-if="showMessage"
-              @do-close="closeMessage"
-              :msg="message"
-              :type="type"
-              :caption="caption"
-            />
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"  :table-name="tableName"/>
+            <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
+            <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
+              :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow" :calcHeight="true"
+              @delete="onDeleteRow" />
           </div>
-        </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
         </div>
       </div>
     </div>
@@ -71,8 +59,28 @@ export default {
     newCaptDet() {
       this.$router.push(`/canino_det/${this.master}`);
     },
-    editCapt(id) {
-      this.$router.push(`/editCapt/${id}`);
+    onEditRow(id) {
+      this.$router.push(`/editCaninoDet/${id}`);
+    },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa animal?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        caninoService.deleteDet(id)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Animais";
+            setTimeout(() => (this.showMessage = false), 3000);
+          })
+      }
     },
     getFormat(row) {
       return {
@@ -85,11 +93,6 @@ export default {
     },
   },
   mounted() {
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan2 = document.getElementsByName("coisa2")[0];
-    //document.createElement('span');
-    // this.myspan.innerHTML='<p>teste</p>';;
-
     this.isLoading = true;
     caninoService.getCaninosDet(this.master)
       .then((response) => {
@@ -102,64 +105,11 @@ export default {
       .finally(() => (this.isLoading = false));
 
     this.columns = [
-      { title: "Tipo", field: "tipo", minWidth: 200 },
-      { title: "Nome", field: "nome", minWidth: 200 },
-      { title: "Ano Nasc", field: "nascimento", minWidth: 200, responsive: 2, },
-      { title: "Raça", field: "raca", minWidth: 200 },
-      { title: "Sexo", field: "sexo", minWidth: 200, responsive: 3 },
-      {
-        title: "Ações", responsive: 0, minWidth: 200,
-        formatter: (cell, formatterParams) => {
-          const row = cell.getRow().getData();
-
-          const btEdit = document.createElement("button");
-          btEdit.type = "button";
-          btEdit.title = "Editar";
-          btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btEdit.classList.add("button", "is-primary", "is-outlined");
-          btEdit.innerHTML = this.myspan.innerHTML;
-          btEdit.addEventListener("click", () => {
-            this.$router.push(`/editCaninoDet/${row.id_canino_det}`);
-          });
-
-          /* const teste = document.createElement('div'); 
-              teste.classList.add('icon', 'is-small');
-              teste.innerHTML='<span><font-awesome-icon icon=\"fa-solid fa-envelope\" /></span>';*/
-
-          const btDel = document.createElement("button");
-          btDel.type = "button";
-          btDel.title = "Excluir";
-          btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btDel.classList.add("button", "is-danger", "is-outlined");
-          btDel.innerHTML = this.myspan2.innerHTML;
-          btDel.addEventListener("click", async () => {
-            const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir essa canino?',
-                okButton: 'Confirmar',
-            })
-            if (ok) {
-              caninoService.deleteDet(row.id_canino_det)
-              .then(()=>{
-                location.reload();
-              })
-              .catch((err)=>{
-                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Animais";
-                setTimeout(() => (this.showMessage = false), 3000);
-              })
-            }
-          });
-
-          const buttonHolder = document.createElement("span");
-          buttonHolder.appendChild(btEdit);
-          buttonHolder.appendChild(btDel);
-
-          return buttonHolder;
-        },
-      },
+      { headerName: "Tipo", field: "tipo" },
+      { headerName: "Nome", field: "nome" },
+      { headerName: "Ano Nasc", field: "nascimento" },
+      { headerName: "Raça", field: "raca" },
+      { headerName: "Sexo", field: "sexo" },
     ];
   },
   created() {

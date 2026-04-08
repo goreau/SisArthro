@@ -123,7 +123,8 @@
           <div class="card-content">
             <div class="columns">
               <div class="column is-6 is-offset-3">
-                <MySimpleTable :tableData="dataTable" :columns="columns" />
+                <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
+                  :buttons="[]" :has-exports="false" :calcHeight="true" />
               </div>
             </div>
           </div>
@@ -139,7 +140,7 @@ import Loader from "@/components/general/Loader.vue";
 import footerCard from "@/components/forms/FooterCard.vue";
 import codendService from "@/services/codend.service";
 import territorioService from "@/services/territorio.service";
-import MySimpleTable from "@/components/forms/MySimpleTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 import useValidate from "@vuelidate/core";
 import {
   required$,
@@ -235,7 +236,7 @@ export default {
     Message,
     Loader,
     footerCard,
-    MySimpleTable,
+    MyTable,
     CmbLocalidade,
   },
   methods: {

@@ -1,57 +1,42 @@
 <template>
   <div class="main-container">
     <div class="columns is-centered">
-      <div class="column is-11">
+      <div class="column is-5">
         <Loader v-if="isLoading" />
         <div class="card">
           <header class="card-header">
-              <div class="card-header-title">
-                <label style="padding-right: 2rem;">Escolha a informação:</label>
-                <div class="control">
-                  <select v-model="tpAux" class="input" @change="selTipo">
-                    <option value="0">-- Selecione --</option>
-                    <option
-                      v-for="tp in tipos"
-                      :key=tp.id
-                      :value=tp.id
-                    >
-                      {{ tp.tipo }}
-                    </option>
-                  </select>
-                </div>
-        
+            <div class="card-header-title">
+              <label style="padding-right: 2rem;">Escolha a informação:</label>
+              <div class="control">
+                <select v-model="tpAux" class="input" @change="selTipo">
+                  <option value="0">-- Selecione --</option>
+                  <option v-for="tp in tipos" :key=tp.id :value=tp.id>
+                    {{ tp.tipo }}
+                  </option>
+                </select>
               </div>
-              <div class="column" v-if="tpAux > 0">
-                <button class="button is-primary is-outlined" :disabled="currentUser.role > 1" @click="newAux">
-                  <span class="icon">
-                    <font-awesome-icon icon="fa-solid fa-plus-circle" />
-                  </span>
-                  <span>Novo</span>
-                </button>
-              </div>
+
+            </div>
+            <div class="column" v-if="tpAux > 0">
+              <button class="button is-primary is-outlined" :disabled="currentUser.role > 1" @click="newAux">
+                <span class="icon">
+                  <font-awesome-icon icon="fa-solid fa-plus-circle" />
+                </span>
+                <span>Novo</span>
+              </button>
+            </div>
           </header>
-          <div class="card-content" >
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
+          <div class="card-content">
+            <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
+              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
+              @delete="onDeleteRow" />
           </div>
-        </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
         </div>
       </div>
     </div>
   </div>
   <confirm-dialog ref="confirmDialog"></confirm-dialog>
-  <Modal
-    v-show="isModalVisible"
-    @close="closeModal"
-    @post="postContent"
-    :msg="message"
-  >
+  <Modal v-show="isModalVisible" @close="closeModal" @post="postContent" :msg="message">
     <template v-slot:header>
       {{ title }}
     </template>
@@ -60,31 +45,19 @@
       <div class="columns">
         <div class="column">
           <div class="field">
-                <label class="label">Codigo</label>
-                <div class="control">
-                  <input
-                    id="valor"
-                    class="input"
-                    type="text"
-                    placeholder="Codigo"
-                    v-model="aux.codigo"
-                  />
-                </div>
-              </div>
+            <label class="label">Codigo</label>
+            <div class="control">
+              <input id="valor" class="input" type="text" placeholder="Codigo" v-model="aux.codigo" />
+            </div>
+          </div>
         </div>
         <div class="column">
           <div class="field">
-                <label class="label">Nome</label>
-                <div class="control">
-                  <input
-                    id="valor"
-                    class="input"
-                    type="text"
-                    placeholder="Nome"
-                    v-model="aux.descricao"
-                  />
-                </div>
-              </div>
+            <label class="label">Nome</label>
+            <div class="control">
+              <input id="valor" class="input" type="text" placeholder="Nome" v-model="aux.descricao" />
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -92,7 +65,7 @@
     <template v-slot:footer>
       {{ message }}
     </template>
-</Modal>
+  </Modal>
 </template>
 
 <script>
@@ -112,7 +85,7 @@ export default {
       myspan: null,
       myspan2: null,
       isModalVisible: false,
-      tipos:[],
+      tipos: [],
       tableName: 'auxiliares',
       aux: {
         id_auxiliares: 0,
@@ -124,6 +97,7 @@ export default {
       tpAux: 0,
       title: '',
       id_user: 0,
+      tpUser: 0
     };
   },
   components: {
@@ -133,7 +107,7 @@ export default {
     Modal,
   },
   methods: {
-    selTipo(e){
+    selTipo(e) {
       this.title = e.target.options[e.target.selectedIndex].text;
     },
     newAux() {
@@ -148,7 +122,7 @@ export default {
     },
     postContent() {
       document.getElementById("postVal").classList.add("is-loading");
-      if (this.aux.id_auxiliares > 0){
+      if (this.aux.id_auxiliares > 0) {
         capturaService.updateAux(this.aux)
           .then(
             (response) => {
@@ -180,91 +154,51 @@ export default {
           });
       }
     },
-    editAux(row) {
+    async onEditRow(id) {
       this.isModalVisible = true;
-      this.aux = row;
+      this.aux = this.dataTable.find(item => item.id === id);
     },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa informação?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        capturaService.deleteAux(id);
+        location.reload();
+      }
+    }
   },
   mounted() {
     this.tipos = [
-      {id: 1, tipo: 'Zona (Captura)'},
-      {id: 2, tipo: 'Agravo (Captura)'},
-      {id: 3, tipo: 'Atividade (Captura)'},
-      {id: 4, tipo: 'Método (Captura)'},
-      {id: 5, tipo: 'Ambiente (Captura)'},
-      {id: 6, tipo: 'Local de Captura (Captura)'},
-      {id: 7, tipo: 'Situação do Imóvel (Caracterização)'},
-      {id: 8, tipo: 'Tipo de imóvel (Caracterização)'},
-      {id: 10, tipo: 'Cor (Animais)'},
-      {id: 11, tipo: 'Situação do Imóvel (Animal)'},
-      {id: 15, tipo: 'Situação do Imóvel (Inquérito)'},
-      {id: 16, tipo: 'Resultado (DPP e Elisa)'},
-      {id: 17, tipo: 'Situação Encoleiramento (Inquérito)'},
-      {id: 18, tipo: 'Desfecho (Inquérito/Invest. Foco)'},
-      {id: 19, tipo: 'Resultado Final (Inquérito)'},
-      {id: 20, tipo: 'Situação do Imóvel (Invest. Foco)'},
-      {id: 21, tipo: 'Sinais e Sintomas (Invest. Foco)'},
-      {id: 22, tipo: 'Tipo Amostra (Invest. Foco)'},
-      {id: 23, tipo: 'Resultado Parasitológico (Invest. Foco)'},
+      { id: 1, tipo: 'Zona (Captura)' },
+      { id: 2, tipo: 'Agravo (Captura)' },
+      { id: 3, tipo: 'Atividade (Captura)' },
+      { id: 4, tipo: 'Método (Captura)' },
+      { id: 5, tipo: 'Ambiente (Captura)' },
+      { id: 6, tipo: 'Local de Captura (Captura)' },
+      { id: 7, tipo: 'Situação do Imóvel (Caracterização)' },
+      { id: 8, tipo: 'Tipo de imóvel (Caracterização)' },
+      { id: 10, tipo: 'Cor (Animais)' },
+      { id: 11, tipo: 'Situação do Imóvel (Animal)' },
+      { id: 15, tipo: 'Situação do Imóvel (Inquérito)' },
+      { id: 16, tipo: 'Resultado (DPP e Elisa)' },
+      { id: 17, tipo: 'Situação Encoleiramento (Inquérito)' },
+      { id: 18, tipo: 'Desfecho (Inquérito/Invest. Foco)' },
+      { id: 19, tipo: 'Resultado Final (Inquérito)' },
+      { id: 20, tipo: 'Situação do Imóvel (Invest. Foco)' },
+      { id: 21, tipo: 'Sinais e Sintomas (Invest. Foco)' },
+      { id: 22, tipo: 'Tipo Amostra (Invest. Foco)' },
+      { id: 23, tipo: 'Resultado Parasitológico (Invest. Foco)' },
     ];
 
     this.id_user = this.currentUser.id;
-
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan2 = document.getElementsByName("coisa2")[0];
-    //document.createElement('span');
-    // this.myspan.innerHTML='<p>teste</p>';;
+    this.tpUser = this.currentUser.role;
 
     this.columns = [
-      { title: "Código", field: "codigo" },
-      { title: "Nome", field: "descricao" },
-      {
-        title: "Ações",
-        formatter: (cell, formatterParams) => {
-          const row = cell.getRow().getData();
-
-          const btEdit = document.createElement("button");
-          btEdit.type = "button";
-          btEdit.title = "Editar";
-          btEdit.disabled = this.currentUser.role > 1;
-          btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btEdit.classList.add("button", "is-primary", "is-outlined");
-          btEdit.innerHTML = this.myspan.innerHTML;
-          btEdit.addEventListener("click", () => {
-            this.editAux(row);
-          });
-
-          /* const teste = document.createElement('div'); 
-              teste.classList.add('icon', 'is-small');
-              teste.innerHTML='<span><font-awesome-icon icon=\"fa-solid fa-envelope\" /></span>';*/
-
-          const btDel = document.createElement("button");
-          btDel.type = "button";
-          btDel.title = "Excluir";
-          btDel.disabled = this.currentUser.role > 1;
-          btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btDel.classList.add("button", "is-danger", "is-outlined");
-          btDel.innerHTML = this.myspan2.innerHTML;
-          btDel.addEventListener("click", async () => {
-            const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir esse gênero?',
-                okButton: 'Confirmar',
-            })
-            if (ok) {
-              capturaService.deleteAux(row.id_auxiliares);
-              location.reload();
-            }
-           
-          });
-
-          const buttonHolder = document.createElement("span");
-          buttonHolder.appendChild(btEdit);
-          buttonHolder.appendChild(btDel);
-
-          return buttonHolder;
-        },
-      },
+      { headername: "Código", field: "codigo" },
+      { headername: "Nome", field: "descricao" },
     ];
   },
   computed: {
@@ -273,9 +207,9 @@ export default {
     },
   },
   watch: {
-    tpAux(value){
+    tpAux(value) {
       this.isLoading = true;
-      
+
       capturaService.getAuxiliaresEd(value)
         .then((response) => {
           this.dataTable = response.data;
@@ -284,7 +218,7 @@ export default {
           console.log(err);
         })
         .finally(() => (this.isLoading = false));
-      }
+    }
   }
 };
 </script>

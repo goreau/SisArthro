@@ -9,6 +9,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import '../node_modules/tabulator-tables/dist/css/tabulator_bulma.min.css'
 
 
+
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 

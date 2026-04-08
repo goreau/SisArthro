@@ -96,7 +96,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="columns" v-show="tipo_relat == 103">
+                  <div class="columns" v-show="tipo_relat == 109">
                     <div class="column is-full">
                       <div class="field">
                         <label class="label">Ciclo</label>
@@ -257,11 +257,11 @@ export default {
       localStorage.setItem('filterRelArthro', JSON.stringify(this.filter));
 
 
-      if (this.tipo_relat > 100) {
-        this.$router.push(`/report/${this.tipo_relat}`);
-      } else {
-        this.$router.push(`/reportN/${this.tipo_relat}`);
-      }
+      //    if (this.tipo_relat > 100) {
+      this.$router.push(`/report/${this.tipo_relat}`);
+      //    } else {
+      //       this.$router.push(`/reportN/${this.tipo_relat}`);
+      //     }
     },
     setDateIni($event) {
       if ($event && $event.length > 0) {

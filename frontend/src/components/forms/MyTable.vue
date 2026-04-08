@@ -1,353 +1,409 @@
-<template>
-  <div class="columns is-centered" v-if="filtered">
-    <div class="column is-2">
-      <div class="field is-horizontal">
-        <label class="label" style="padding-right: 2rem">Filtrar: </label>
-        <label class="switch">
-          <input type="checkbox" v-model="filter" @change="toggleFilter($event)" />
-          <span class="slider round"></span>
-        </label>
-      </div>
-    </div>
-    <div class="column is-10" :style="{ visibility: filter ? 'visible' : 'hidden' }">
-      <div class="columns">
-        <div class="column is-3">
-          <div class="select">
-            <select v-model="form.field" class="input">
-              <option value="0">-- Coluna --</option>
-              <option v-for="(item, index) in columns" :key="index" :value="item.field">
-                {{ item.title }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="field">
-            <div class="select">
-              <select v-model="form.type" class="input">
-                <option value="0">-- Comparador --</option>
-                <option value="=">igual a</option>
-                <option value=">">maior que</option>
-                <option value="<">menor que</option>
-                <option value="!=">diferente de</option>
-                <option value="like">contendo</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="column is-3">
-          <div class="field has-addons">
-            <input type="text" class="input" v-model="form.value" placeholder="Valor a filtrar" />
-            <div class="control">
-              <a class="button is-info" @click="setFilter">
-                <span class="icon is-small">
-                  <font-awesome-icon icon="fa-solid fa-search" />
-                </span>
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="column is-1">
-          <button class="button is-success is-outlined" title="Limpar" @click="clearFilter">
-            <span class="icon is-small">
-              <font-awesome-icon icon="fa-solid fa-broom" />
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- src/components/MyDataTable.vue -->
+<script setup>
+import { ref, watch, onMounted, nextTick, computed } from 'vue'
+import { AgGridVue } from 'ag-grid-vue3'
+import {
+    ColumnAutoSizeModule,
+    CustomFilterModule,
+    DateFilterModule,
+    LocaleModule,
+    ModuleRegistry,
+    NumberFilterModule,
+    PaginationModule,
+    TextFilterModule,
+    themeAlpine,
+    ValidationModule,
+} from 'ag-grid-community'
 
-  <div class="has-text-right" v-if="exports">
-    <button id="download-csv" class="button is-link is-outlined is-small" @click="download_csv">
-      <font-awesome-icon icon="fa-solid fa-file-csv" />
-    </button>
-    <button id="download-json" class="button is-info is-outlined is-small" @click="download_json">
-      <font-awesome-icon icon="fa-solid fa-file-lines" />
-    </button>
-    <button id="download-xlsx" class="button is-success is-outlined is-small" @click="download_xlsx">
-      <font-awesome-icon icon="fa-solid fa-file-excel" />
-    </button>
-    <button id="download-pdf" class="button is-danger is-outlined is-small" @click="download_pdf">
-      <font-awesome-icon icon="fa-solid fa-file-pdf" />
-    </button>
-  </div>
-  <Loader :active="isLoading" />
-  <div ref="table" class="is-striped"></div>
-  <div ref="tableExp" style="display: none;"></div>
+import localeText from '@/utils/agGridLocale'
+import { ClientSideRowModelModule } from 'ag-grid-community'
+import { CsvExportModule } from 'ag-grid-community'
+import tickCrossRenderer from '@/components/general/tickCrossRender.vue'
+
+ModuleRegistry.registerModules([
+    ClientSideRowModelModule,
+    CsvExportModule,
+    ValidationModule,
+    ColumnAutoSizeModule,
+    TextFilterModule,
+    NumberFilterModule,
+    DateFilterModule,
+    CustomFilterModule,
+    PaginationModule,
+    LocaleModule,
+])
+
+const paginationPageSizeSelector = [12, 20, 50, 100]
+
+const props = defineProps({
+    data: Array,
+    columns: {
+        type: Array,
+        default: () => [],
+    },
+    pagination: Boolean,
+    buttons: {
+        type: Array,
+        default: () => [],
+    },
+    loggedUser: {
+        type: Object,
+        default: () => { },
+    },
+    hasExports: {
+        type: Boolean,
+        default: false
+    },
+    hasGraf: {
+        type: Boolean,
+        default: false,
+    },
+    calcHeight: {
+        type: Boolean,
+        default: false,
+    },
+    treeData: {
+        type: Boolean,
+        default: false
+    },
+    useDetail: {
+        type: Boolean,
+        default: false
+    },
+    detailColumns: {
+        type: Array,
+        default: () => [],
+    },
+})
+const emit = defineEmits([
+    'edit',
+    'delete',
+    'caracteriza',
+    'reset',
+    'impersonate',
+    'animais',
+    'boletim',
+    'identifica',
+])
+
+const gridApi = ref(null)
+const columnApi = ref(null)
+const gridWrapper = ref(null)
+
+const agGridColumns = ref([])
+
+const alturasFixas = ref(0)
+const rowHeight = 50 // altura média de cada linha, ajuste conforme seu grid
+const baseHeight = 60 // altura base (header + margens), ajuste se necessário
+
+const rows = ref([...props.data])
+
+const onFirstDataRendered = (params) => {
+    setTimeout(() => {
+
+        autoSizeAll()
+    }, 0)
+}
+
+/*const onFirstDataRendered = () => {
+  setTimeout(() => {
+    autoSizeAll()
+  }, 0)
+}*/
+
+function onGridReady(params) {
+    gridApi.value = params.api
+    columnApi.value = params.columnApi
+    //  console.log('SET columnApi', params.columnApi)
+    //autoSizeColumns()
+}
+
+function autoSizeAll() {
+    if (!columnApi.value) return
+
+    const allColumnIds = columnApi.value.getAllColumns().map((col) => col.getColId())
+    columnApi.value.autoSizeColumns(allColumnIds, false)
+}
+
+function shouldDisableButton(row, name) {
+    if (!props.loggedUser) return
+    if (name == 'reset' || name == 'impersonate' || row.owner_id < 0) {
+        return props.loggedUser.tipo > 1
+    } else if (name == 'boletim') {
+        return false
+    } else {
+        return props.loggedUser.id !== 0 && row.owner_id != props.loggedUser.id
+    }
+}
+
+const myAutoGroupColumnDef = {
+    headerName: "Captura",
+    minWidth: 300,
+    cellRendererParams: {
+        suppressCount: true
+    },
+    valueGetter: (params) => {
+        const d = params.data;
+
+        if (!d) return params.value; // grupo
+
+        return `${d.municipio} | ${d.codigo} | ${d.dt_captura}`;
+    }
+};
+
+
+const getFilteredRows = () => {
+    const rows = []
+    const count = gridApi.value.getDisplayedRowCount()
+
+    for (let i = 0; i < count; i++) {
+        const rowNode = gridApi.value.getDisplayedRowAtIndex(i)
+        rows.push(rowNode.data)
+    }
+
+    return rows
+}
+
+async function download_xlsx() {
+    const XLSX = await import('xlsx')
+    const { saveAs } = await import('file-saver')
+
+    const data = getFilteredRows()
+
+    // achata as colunas (com suporte a children)
+    const exportCols = flattenColumns(props.columns).filter(
+        (col) => col.field && col.field !== 'acoes',
+    )
+
+    const exportData = data.map((row) =>
+        Object.fromEntries(
+            exportCols.map((col) => {
+                let value = row[col.field]
+
+                // Se o valor for uma string que contém apenas números (ou decimal), converte
+                // Verifica se não é nulo/vazio e se é um número válido
+                if (typeof value === 'string' && value.trim() !== '' && !isNaN(value)) {
+                    value = Number(value)
+                }
+
+                return [col.exportHeader, value]
+            }),
+        ),
+    )
+
+    // monta os dados já com headers "pai - filho"
+    /* const exportData = data.map((row) =>
+      Object.fromEntries(exportCols.map((col) => [col.exportHeader, row[col.field]])),
+    )*/
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData)
+    const workbook = XLSX.utils.book_new()
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados')
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
+    saveAs(new Blob([excelBuffer]), 'Sisaweb3.xlsx')
+}
+
+function flattenColumns(columns, parentHeader = '') {
+    const result = []
+    columns.forEach((col) => {
+        if (col.children) {
+            // recursivo
+            result.push(...flattenColumns(col.children, col.headerName))
+        } else {
+            // monta o header concatenando pai + filho
+            const header = parentHeader ? `${parentHeader} - ${col.headerName}` : col.headerName
+            result.push({ ...col, exportHeader: header })
+        }
+    })
+    return result
+}
+
+async function download_pdf() {
+    const jsPDF = (await import('jspdf')).default
+    const autoTable = (await import('jspdf-autotable')).default
+
+    const doc = new jsPDF({ orientation: 'landscape' })
+
+    // achata colunas igual ao Excel
+    const exportCols = flattenColumns(props.columns).filter(
+        (col) => col.field && col.field !== 'acoes',
+    )
+
+    const headers = exportCols.map((col) => col.exportHeader)
+
+    const rows = getFilteredRows().map((row) => exportCols.map((col) => row[col.field]))
+
+    autoTable(doc, {
+        head: [headers],
+        body: rows,
+    })
+
+    doc.save('Sisaweb3.pdf')
+}
+
+function toGrafico() {
+    emit('chart')
+}
+
+watch(
+    () => props.data,
+    (val) => {
+        rows.value = [...val]
+        if (columnApi.value) {
+            nextTick(() => autoSizeAll())
+        }
+    },
+    { deep: true },
+)
+
+watch(
+    () => props.columns,
+    () => {
+        agGridColumns.value = [
+            ...props.columns.map((col) => ({
+                ...col,
+                sortable: true,
+                filter: true,
+                resizable: true,
+                valueFormatter: col.repeat ? repeatFormatter(col.field) : undefined,
+            })),
+            props.buttons?.length ? createActionsColumn() : null,
+        ].filter(Boolean)
+    },
+    { immediate: true },
+)
+
+onMounted(() => {
+    let footer = document.querySelector('#footer')?.offsetHeight || 0
+    let header = document.querySelector('.conteudo')?.offsetHeight || 0
+    alturasFixas.value = footer + header * 4 + 100
+    /**nextTick(() => {
+        if (gridApi.value && props.pagination) {
+            //gridApi.value.setPaginationSetPageSize(20)
+        }
+    })*/
+    setTimeout(() => {
+        gridApi.value?.sizeColumnsToFit()
+    }, 150)
+})
+
+const repeatFormatter = (field) => (params) => {
+    const rowIndex = params.node.rowIndex;
+
+    if (rowIndex > 0) {
+        const prevNode = params.api.getDisplayedRowAtIndex(rowIndex - 1);
+
+        if (prevNode && prevNode.data[field] === params.value && params.value) {
+            return '...';
+        }
+    }
+
+    return params.value;
+};
+
+// Coluna de ações customizada
+function createActionsColumn() {
+    var definedWidth = 0
+    if (props.buttons.length == 0) {
+        return {}
+    } else {
+        definedWidth = props.buttons.length * 80
+    }
+    return {
+        headerName: 'Ações',
+        field: 'acoes',
+        cellRenderer: ({ data }) => {
+            const container = document.createElement('div')
+            const addButton = (icon, title, emitName, className = 'is-success') => {
+                if (!props.buttons.includes(emitName)) return
+                const btn = document.createElement('button')
+                btn.innerHTML = `<i class="${icon}"></i>`
+                btn.title = title
+                btn.className = `button is-small is-outlined ${className}`
+                btn.disabled = shouldDisableButton(data, emitName)
+                btn.onclick = () => emit(emitName, data.id)
+                container.appendChild(btn)
+            }
+
+            addButton('fas fa-edit', 'Editar', 'edit')
+            addButton('fas fa-trash', 'Excluir', 'delete', 'is-danger')
+            addButton('fas fa-microscope', 'Identificação', 'identifica', 'is-primary')
+            addButton('fas fa-image', 'Caracterização', 'caracteriza', 'is-info')
+            if (props.loggedUser.tipo == 1) {
+                addButton('fas fa-power-off', 'Reset', 'reset', 'is-warning')
+                addButton('fas fa-user-secret', 'Logar como', 'impersonate', 'is-info')
+            }
+            addButton('fas fa-dog', 'Animais', 'animais', 'is-info')
+            addButton('fas fa-file-pdf', 'Boletim', 'boletim', 'is-info')
+
+            return container
+        },
+        minWidth: definedWidth,
+        suppressSizeToFit: true,
+        pinned: 'right',
+    }
+}
+
+
+
+const gridHeight = computed(() => {
+    if (!props.calcHeight) return `calc(100vh - ${alturasFixas.value}px)`
+    let qt = rows.value.length == 0 ? 1 : rows.value.length
+    let alt = Math.min(qt * rowHeight + baseHeight, 500)
+    return alt + 'px'
+})
+
+defineExpose({
+    getFilteredRows,
+    tickCrossRenderer,
+    clearFilters() {
+        gridApi.value?.setFilterModel(null)
+    },
+})
+
+
+/**
+ *  //height: 40rem"
+    :style="{ height: gridHeight + 'px' }"
+ */
+</script>
+
+<template>
+    <div class="columns">
+        <div class="column has-text-right">
+            <span class="has-text-right export" v-if="hasGraf">
+                <button class="button is-info is-outlined is-small" title="Gráfico" @click="toGrafico">
+                    <font-awesome-icon icon="fa-solid fa-chart-column" />
+                </button>
+            </span>
+            <span class="has-text-right export" v-if="hasExports">
+                <button class="button is-success is-outlined is-small" title="Excel" @click="download_xlsx">
+                    <font-awesome-icon icon="fa-solid fa-file-excel" />
+                </button>
+                <button class="button is-danger is-outlined is-small" title="Pdf" @click="download_pdf">
+                    <font-awesome-icon icon="fa-solid fa-file-pdf" />
+                </button>
+            </span>
+        </div>
+    </div>
+    <div ref="gridWrapper">
+        <AgGridVue :theme="themeAlpine" :style="{ width: '100%', height: gridHeight }" :rowData="rows"
+            :treeData="treeData" :columnDefs="agGridColumns" :pagination="pagination" :paginationPageSize="12"
+            :pagination-auto-page-size="false" :localeText="localeText"
+            :paginationPageSizeSelector="paginationPageSizeSelector" @grid-ready="onGridReady"
+            :autoGroupColumnDef="myAutoGroupColumnDef" :groupDefaultExpanded="1" :groupDisplayType="'singleColumn'"
+            @first-data-rendered="onFirstDataRendered" />
+    </div>
 </template>
 
-<script>
-import { TabulatorFull as Tabulator } from "tabulator-tables"; //import Tabulator library
-import { ResponsiveLayoutModule } from 'tabulator-tables';
-import lang from "./lang";
-import Loader from "@/components/general/Loader.vue";
-
-
-export default {
-  data() {
-    return {
-      tabulator: null, //variable to hold your table
-      form: {
-        field: "0",
-        type: "0",
-        value: "",
-        typed: "string",
-      },
-      initial: 1,
-      isLoading: false,
-      filter: false,
-      arrFilter: [],
-      cbColumns: []
-    };
-  },
-  components: {
-    Loader,
-  },
-  methods: {
-    setFilter() {
-      let obj = this.form;
-
-      const col = this.columns.filter((v) => v.field === obj.field, obj);
-      obj.typed = col[0].type;
-
-      this.arrFilter.push({ field: obj.field, type: obj.type, value: obj.value });
-
-      this.tabulator.setFilter(this.arrFilter);//obj.column, obj.operator, obj.value);
-
-      localStorage.setItem(this.tableName, JSON.stringify(this.arrFilter));//obj));
-    },
-    clearFilter() {
-      this.isLoading = true;
-      this.form.field = "0";
-      this.form.type = "0";
-      this.form.value = "";
-
-      this.arrFilter = [];
-
-      this.tabulator.clearFilter();
-      localStorage.removeItem(this.tableName);
-
-      let name = this.tableName + '_page';
-      localStorage.removeItem(name);
-
-      this.isLoading = false;
-    },
-    download_csv() {
-      if (this.expColumns == undefined) {
-        this.tabulator.download("csv", "data.csv");
-      } else {
-        this.tabulatorExp.download("csv", "data.csv");
-      }
-
-    },
-    download_xlsx() {
-      if (this.expColumns == undefined) {
-        this.tabulator.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
-      } else {
-        this.tabulatorExp.download("xlsx", "data.xlsx", { sheetName: "SisArthro" });
-      }
-    },
-    download_pdf() {
-      this.tabulator.download("pdf", "data.pdf", {
-        orientation: "landscape", //set page orientation to portrait
-        title: "Relatório SisArthro", //add title to report
-      });
-    },
-    download_json() {
-      if (this.expColumns == undefined || this.expColumns.lenght == 0) {
-        this.tabulator.download("json", "data.json");
-      } else {
-        this.tabulatorExp.download("json", "data.json");
-      }
-
-    },
-    toggleFilter(e) {
-      this.filter = e.target.checked;
-    },
-  },
-  props: ["tableData", "columns", "filtered", "exports", "tableName", "expColumns"],
-  watch: {
-    tableData(value) {
-      this.isLoading = true;
-      this.tabulator = new Tabulator(this.$refs.table, {
-        langs: lang,
-        locale: "pt-br",
-        data: value, //link data to table
-        responsiveLayout: 'hide',
-        layout: "fitColumns",
-        placeholder: "Nenhum registro atende aos critérios escolhidos!",
-        reactiveData: true, //enable data reactivity
-        columns: this.columns, //define table columns
-        pagination: "local",
-        paginationSize: 10,
-        paginationInitialPage: this.initial,
-        dataLoader: true,
-        dataLoaderLoading: "<div style='display:inline-block; border:4px solid #333; border-radius:10px; background:#fff; font-weight:bold; font-size:16px; color:#000; padding:10px 20px;'>Carregando</div>",
-        paginationSizeSelector: [5, 10, 15, 20],
-        movableColumns: true,
-        paginationCounter: "rows",
-      });
-      this.cbColumns = this.columns.filter(el => el.title !== "Ações");
-
-      if (this.filter) {
-        this.tabulator.setFilter(this.arrFilter);//this.form.column, this.form.operator, this.form.value);
-      }
-
-      if (this.expColumns != undefined) {
-        //       if (this.expColumns.lenght > 0){
-        this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
-          langs: lang,
-          locale: "pt-br",
-          layout: "fitColumns",
-          heigth: 10,
-          data: this.tableData,
-          columns: this.expColumns,
-        });
-        //       }
-      }
-      let me = this;
-      this.tabulator.on("tableBuilt", function () {
-        me.tabulator.on("pageLoaded", (function (pageno) {
-          me.initial = pageno;
-          let name = me.tableName + '_page';
-          localStorage.setItem(name, me.initial);
-        }).bind(this));
-        //  me.tabulator.setPageToRow(me.initial);
-        me.isLoading = false;
-      });
-      
-    },
-    expColumns(value) {
-      if (this.tableData != undefined) {
-        if (this.tableData.lenght > 0) {
-          this.tabulatorExp = new Tabulator(this.$refs.tableExp, {
-            langs: lang,
-            locale: "pt-br",
-            layout: "fitColumns",
-            heigth: 10,
-            data: this.tableData,
-            columns: value,
-          });
-        }
-      }
-    }
-  },
-  mounted() {
-    window.addEventListener("resize", () => {
-      this.tabela.redraw(true);
-    });
-    
-    let externalScript = document.createElement("script");
-    externalScript.setAttribute(
-      "src",
-      "https://cdn.sheetjs.com/xlsx-0.20.0/package/dist/xlsx.full.min.js"
-    );
-    document.head.appendChild(externalScript);
-
-    let stFilter = JSON.parse(localStorage.getItem(this.tableName));
-
-    if (stFilter) {
-      if (Array.isArray(stFilter)) {
-        this.arrFilter = stFilter;
-        var obj = stFilter[0];
-        this.form = obj;//JSON.parse(obj);
-        this.filter = true;
-      } else {
-        localStorage.removeItem(this.tableName);
-      }
-    }
-
-    let name = this.tableName + '_page';
-    let pg = localStorage.getItem(name);
-
-    if (pg) {
-      this.initial = parseInt(pg);
-    }
-
-    let externalScript1 = document.createElement("script");
-    externalScript1.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
-    );
-    document.head.appendChild(externalScript1);
-    let externalScript2 = document.createElement("script");
-    externalScript2.setAttribute(
-      "src",
-      "https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"
-    );
-    document.head.appendChild(externalScript2);
-  },
-};
-</script>
-<style scoped>
-.tabela {
-  width: 800px;
-  height: auto;
-}
-
+<style>
 .button {
-  margin-right: 1rem;
+    margin-left: 1rem;
+    padding: 1rem;
+    border-radius: 0.4rem !important;
 }
 
-/** slider classes */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 3rem;
-  height: 1.5rem;
-}
-
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: -0.2rem;
-  left: 0;
-  right: 0;
-  bottom: -0.2rem;
-  background-color: #ccc;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 1rem;
-  width: 1rem;
-  left: 0.5rem;
-  bottom: 0.5rem;
-  background-color: white;
-  -webkit-transition: 0.4s;
-  transition: 0.4s;
-}
-
-input:checked+.slider {
-  background-color: #2a455a;
-}
-
-input:focus+.slider {
-  box-shadow: 0 0 1px #2a455a;
-}
-
-input:checked+.slider:before {
-  -webkit-transform: translateX(1rem);
-  -ms-transform: translateX(1rem);
-  transform: translateX(1rem);
-}
-
-/* Rounded sliders */
-.slider.round {
-  border-radius: 0.75rem;
-}
-
-.slider.round:before {
-  border-radius: 50%;
+.export {
+    padding: 1rem;
 }
 </style>

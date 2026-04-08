@@ -13,45 +13,32 @@
             </button>
           </header>
           <div class="card-content">
-            <Message
-              v-if="showMessage"
-              @do-close="closeMessage"
-              :msg="message"
-              :type="type"
-              :caption="caption"
-            />
+            <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
             <div class="columns">
-                <div class="field column is-3 is-offset-3">
-                  <label class="label">Município</label>
-                  <div class="control">
-                    <CmbListaMun
-                        :tabela="tableName"
-                        :id_prop="currentUser.id"
-                        @selMun="filtMun = $event"
-                      />
-                  </div>
+              <div class="field column is-3 is-offset-3">
+                <label class="label">Município</label>
+                <div class="control">
+                  <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" @selMun="filtMun = $event" />
+                </div>
               </div>
               <div class="field column is-1 is-offset-2">
-                  <label class="label">&nbsp;</label>
-                  <div class="control">
-                    <button class="button is-link is-fullwidth" @click="loadData">
-                      <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
-                      Carregar
-                    </button>
-                  </div>
+                <label class="label">&nbsp;</label>
+                <div class="control">
+                  <button class="button is-link is-fullwidth" @click="loadData">
+                    <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
+                    Carregar
+                  </button>
+                </div>
               </div>
-          </div>
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :table-name="tableName"/>
+            </div>
+            <section v-if="hasData">
+              <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
+                :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
+                :calcHeight="false" @delete="onDeleteRow" />
+            </section>
           </div>
         </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
-        </div>
+
       </div>
     </div>
   </div>
@@ -77,9 +64,10 @@ export default {
       type: "",
       showMessage: false,
       columns: [],
-      myspan: null,
+      hasData: false,
       myspan2: null,
-      id_user: 0
+      id_user: 0,
+      tpUser: 0
     };
   },
   components: {
@@ -92,18 +80,39 @@ export default {
     newCapt() {
       this.$router.push("/captura");
     },
-    editCapt(id) {
+    onEditRow(id) {
       this.$router.push(`/editCapt/${id}`);
     },
-    loadData(){
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        capturaService.delete(id)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Captura";
+            setTimeout(() => (this.showMessage = false), 3000);
+          })
+      }
+    },
+    loadData() {
       capturaService.getCapturas(this.filtMun)
-      .then((response) => {
-        this.dataTable = response.data;
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-      .finally(() => {});
+        .then((response) => {
+          this.dataTable = response.data;
+          this.hasData = true
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => { });
     },
     getFormat(row) {
       return {
@@ -117,72 +126,16 @@ export default {
   },
   mounted() {
     this.id_user = this.currentUser.id;
-
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan2 = document.getElementsByName("coisa2")[0];
-    
-    
+    this.tpUser = this.currentUser.role;
 
     this.columns = [
-      { title: "Número", field: "codigo", minWidth: 200 },
-      { title: "Atividade", field: "atividade", minWidth: 200, responsive:1, },
-      { title: "Agravo", field: "agravo", minWidth: 200, responsive:1, },
-      { title: "Município", field: "municipio", minWidth: 250, responsive:1, },
-      { title: "Data", field: "dt_captura", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
-          format:"dd/MM/yyyy",
-          alignEmptyValues:"top",
-      }},
-      {
-        title: "Ações", minWidth: 200, responsive:0,
-        formatter: (cell, formatterParams) => {
-          const row = cell.getRow().getData();
-
-          const btEdit = document.createElement("button");
-          btEdit.type = "button";
-          btEdit.title = "Editar";
-          btEdit.disabled = this.id_user != row.id_usuario;
-          btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btEdit.classList.add("button", "is-primary", "is-outlined");
-          btEdit.innerHTML = this.myspan.innerHTML;
-          btEdit.addEventListener("click", () => {
-            this.$router.push(`/editCapt/${row.id_captura}`);
-          });
-
-          const btDel = document.createElement("button");
-          btDel.type = "button";
-          btDel.title = "Excluir";
-          btDel.disabled = this.id_user != row.id_usuario;
-          btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btDel.classList.add("button", "is-danger", "is-outlined");
-          btDel.innerHTML = this.myspan2.innerHTML;
-          btDel.addEventListener("click", async () => {
-            const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
-                okButton: 'Confirmar',
-            })
-            if (ok) {
-              capturaService.delete(row.id_captura)
-              .then(()=>{
-                location.reload();
-              })
-              .catch((err)=>{
-                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Captura";
-                setTimeout(() => (this.showMessage = false), 3000);
-              })
-            }
-          });
-
-          const buttonHolder = document.createElement("span");
-          buttonHolder.appendChild(btEdit);
-          buttonHolder.appendChild(btDel);
-
-          return buttonHolder;
-        },
-      },
+      { headerName: 'ID', field: 'id', hide: true },
+      { headername: "Número", field: "codigo" },
+      { headername: "Atividade", field: "atividade" },
+      { headername: "Agravo", field: "agravo" },
+      { headername: "Município", field: "municipio" },
+      { headername: "Data", field: "data" },
+      { headerName: 'Prop', field: 'owner_id', hide: true },
     ];
   },
   computed: {

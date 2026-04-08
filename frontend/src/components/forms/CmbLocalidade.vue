@@ -3,12 +3,7 @@
     <div class="select">
       <select @change="onChange($event)" class="input" :class="errclass">
         <option value="0">-- Selecione --</option>
-        <option
-          v-for="loc in localidades"
-          :key="loc.id_localidade"
-          :value="loc.id_localidade"
-          :selected="sel == loc.id_localidade"
-        >
+        <option v-for="loc in localidades" :key="loc.id" :value="loc.id" :selected="sel == loc.id">
           {{ loc.nome }}
         </option>
       </select>
@@ -26,20 +21,20 @@ export default {
       localidades: [],
     };
   },
-  props: ['id_mun','sel', 'errclass'],
+  props: ['id_mun', 'sel', 'errclass'],
   methods: {
     onChange(event) {
-      this.$emit('selLoc',event.target.value);
+      this.$emit('selLoc', event.target.value);
     },
     loadData() {
       localidadeService.getLocalidades(this.id_mun)
-      .then((res) => {
-        this.localidades = res.data;
-      })
-      .catch((err) => {
-        console.log(err.response);
-        this.localidades = [];
-      })
+        .then((res) => {
+          this.localidades = res.data;
+        })
+        .catch((err) => {
+          console.log(err.response);
+          this.localidades = [];
+        })
     }
   },
   watch: {
@@ -50,7 +45,7 @@ export default {
   mounted() {
     this.loadData();
   },
-  
+
 };
 </script>
 

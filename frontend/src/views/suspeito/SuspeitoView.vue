@@ -302,7 +302,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <footerCard @submit="create" @cancel="null" @aux="detail" :cFooter="cFooter" />
                     </footer>
                 </div>
             </div>
@@ -377,8 +377,8 @@ export default {
             cFooter: {
                 strSubmit: 'Salvar',
                 strCancel: 'Cancelar',
-                strAux: '',
-                aux: false
+                strAux: 'Identiificação',
+                aux: true
             }
         };
     },
@@ -415,6 +415,9 @@ export default {
         },
     },
     methods: {
+        detail() {
+
+        },
         setDate($event) {
             if ($event) {
                 this.suspeito.dt_encontro = moment(String($event)).format('YYYY-MM-DD');

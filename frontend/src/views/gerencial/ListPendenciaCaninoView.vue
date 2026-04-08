@@ -1,15 +1,16 @@
 <template>
     <div class="main-container">
         <div class="columns is-centered">
-            <div class="column is-11">
+            <div class="column is-8">
                 <Loader v-if="isLoading" />
                 <div class="card">
                     <header class="card-header">
                         <p class="card-header-title is-centered">{{ title }}</p>
                     </header>
                     <div class="card-content">
-                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"
-                            :tableName="tableName" />
+                        <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
+                            :pagination="true" :buttons="['boletim']" :has-exports="true" @boletim="gerar"
+                            :calcHeight="false" />
                     </div>
                 </div>
                 <div style="display: none">
@@ -51,11 +52,11 @@ export default {
     },
     methods: {
         gerar(quart) {
-            if (this.tipo == 1){
+            if (this.tipo == 1) {
                 caninoService.getPendencias(quart).then(
                     (response) => {
                         let data = response.data;
-                        gerarPDF(data);  
+                        gerarPDF(data);
                     },
                     (error) => {
                         this.message =
@@ -75,7 +76,7 @@ export default {
                 caninoService.getInquerito(quart).then(
                     (response) => {
                         let data = response.data;
-                        gerarPDFRisco(data);  
+                        gerarPDFRisco(data);
                     },
                     (error) => {
                         this.message =
@@ -116,33 +117,11 @@ export default {
                     .finally(() => (this.isLoading = false));
 
                 this.columns = [
-                    { title: "Municipio", field: "municipio", minWidth: 200, responsive: 1, },
-                    { title: "Área", field: "area", minWidth: 200, responsive: 3, },
-                    { title: "Quarteirao", field: "quarteirao", minWidth: 200, responsive: 3, },
-                    { title: "Total Pendentes", field: "pendentes", minWidth: 200, responsive: 2, },
-                    {
-                        title: "Ações", minWidth: 350, responsive: 0,
-                        formatter: (cell, formatterParams) => {
-                            const row = cell.getRow().getData();
-
-                            const btBoletim = document.createElement("button");
-                            btBoletim.type = "button";
-                            btBoletim.title = "Boletim";
-                            btBoletim.style.cssText = "height: fit-content; margin-left: 1rem;";
-                            btBoletim.classList.add("button", "is-info", "is-outlined");
-                            btBoletim.innerHTML = this.myspan.innerHTML;
-                            btBoletim.addEventListener("click", () => {
-                                this.gerar(row.id_quarteirao);
-                            });
-
-                            const buttonHolder = document.createElement("span");
-                            buttonHolder.appendChild(btBoletim);
-
-
-
-                            return buttonHolder;
-                        },
-                    },
+                    { headerName: 'ID', field: 'id', hide: true },
+                    { headerName: "Municipio", field: "municipio" },
+                    { headerName: "Área", field: "area" },
+                    { headerName: "Quarteirao", field: "quarteirao" },
+                    { headerName: "Total Pendentes", field: "pendentes" },
                 ];
             } else {
                 caninoService.getListInquerito()
@@ -156,33 +135,11 @@ export default {
                     .finally(() => (this.isLoading = false));
 
                 this.columns = [
-                    { title: "Municipio", field: "municipio", minWidth: 200, responsive: 1, },
-                    { title: "Área", field: "area", minWidth: 200, responsive: 3, },
-                    { title: "Quarteirao", field: "quarteirao", minWidth: 200, responsive: 3, },
-                    { title: "Total Animais", field: "animais", minWidth: 200, responsive: 2, },
-                    {
-                        title: "Ações", minWidth: 350, responsive: 0,
-                        formatter: (cell, formatterParams) => {
-                            const row = cell.getRow().getData();
-
-                            const btBoletim = document.createElement("button");
-                            btBoletim.type = "button";
-                            btBoletim.title = "Boletim";
-                            btBoletim.style.cssText = "height: fit-content; margin-left: 1rem;";
-                            btBoletim.classList.add("button", "is-info", "is-outlined");
-                            btBoletim.innerHTML = this.myspan.innerHTML;
-                            btBoletim.addEventListener("click", () => {
-                                this.gerar(row.id_quarteirao);
-                            });
-
-                            const buttonHolder = document.createElement("span");
-                            buttonHolder.appendChild(btBoletim);
-
-
-
-                            return buttonHolder;
-                        },
-                    },
+                    { headerName: 'ID', field: 'id', hide: true },
+                    { headername: "Municipio", field: "municipio" },
+                    { headername: "Área", field: "area" },
+                    { headername: "Quarteirao", field: "quarteirao" },
+                    { headername: "Total Animais", field: "animais" },
                 ];
             }
 
@@ -192,22 +149,30 @@ export default {
     },
     mounted() {
         this.id_user = this.currentUser.id;
-
-        this.myspan = document.getElementsByName("coisa")[0];
-
-        this.tipo = this.$route.params.id;
-
-        this.title = this.tipo == 1 ? 'Imóveis Pendentes no Cadastro de Cães' : 'Imóveis para Inquérito Canino';
-
-        this.loadData(0);
-
     },
     computed: {
         currentUser() {
             return this.$store.getters["auth/loggedUser"];
         },
     },
+    watch: {
+        // Escuta mudanças especificamente no parâmetro "id"
+        '$route.params.id': {
+            handler(newId) {
+                // 1. Atualiza o tipo
+                this.tipo = newId;
 
+                // 2. Atualiza o título baseado no novo ID
+                this.title = this.tipo == 1
+                    ? 'Imóveis Pendentes no Cadastro de Cães'
+                    : 'Imóveis para Inquérito Canino';
+
+                // 3. Recarrega os dados da API/Store
+                this.loadData(0);
+            },
+            immediate: true // Isso faz a lógica rodar assim que o componente é criado
+        }
+    },
 };
 </script>
 

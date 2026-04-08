@@ -69,8 +69,7 @@
                                 <div class="field column is-3 is-offset-1">
                                     <label class="label">Localidade(ATL)</label>
                                     <div class="control">
-                                        <CmbLocalidade :id_mun="foco.id_municipio"
-                                            @selLoc="foco.id_localidade = $event"
+                                        <CmbLocalidade :id_mun="foco.id_municipio" @selLoc="foco.id_localidade = $event"
                                             :errclass="{ 'is-danger': v$.foco.id_localidade.$error }" />
                                         <span class="is-error" v-if="v$.foco.id_localidade.$error">
                                             {{ v$.foco.id_localidade.$errors[0].$message }}
@@ -100,7 +99,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <footerCard @submit="create" @cancel="null" @aux="null" :cFooter="cFooter" />
                     </footer>
                 </div>
             </div>

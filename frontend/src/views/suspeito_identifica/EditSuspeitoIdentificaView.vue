@@ -160,7 +160,9 @@
                         </div>
                       </div>
                       <hr>
-                      <MySimpleTable :tableData="dataTable" :columns="columns" />
+                      <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
+                        :buttons="['edit', 'delete']" :has-exports="false" :calcHeight="true" @edit="editRow"
+                        @delete="deleteRow" />
                     </article>
                   </div>
                 </div>
@@ -169,14 +171,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div style="display: none">
-      <span class="icon is-small is-left" name="coisa">
-        <font-awesome-icon icon="fa-solid fa-edit" />
-      </span>
-      <span class="icon is-small is-left" name="coisa2">
-        <font-awesome-icon icon="fa-solid fa-trash" />
-      </span>
     </div>
   </div>
 </template>
@@ -199,11 +193,11 @@ import {
   integer$,
   maxLength$,
 } from "../../components/forms/validators.js";
-import MySimpleTable from "@/components/forms/MySimpleTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 
 export default {
   components: {
-    MySimpleTable,
+    MyTable,
     Loader,
     CmbMunicipio,
     footerCard,
@@ -271,6 +265,21 @@ export default {
     };
   },
   methods: {
+    async editRow(idx) {
+      const obj = await suspeitoIdentificaService.getIdentificaDet(idx)
+      this.identifica_det = Object.assign({}, this.identifica_det, obj.data);
+    },
+    async deleteRow(idx) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        suspeitoIdentificaService.deleteDet(idx);
+        location.reload();
+      }
+    },
     startCalendar() {
       var options = {
         type: "date",
@@ -551,68 +560,13 @@ export default {
         });
     },
     getTable() {
-      this.myspan = document.getElementsByName("coisa")[0];
-      this.myspan2 = document.getElementsByName("coisa2")[0];
-
-      /*   this.isLoading = true;
-         suspeitoIdentificaService.getidentificaDets(this.identifica.id_suspeito_identifica)
-           .then((response) => {
-             this.dataTable = response.data;
-             this.isLoading = false;
-           })
-           .catch((err) => {
-             console.log(err);
-           })
-           .finally(() => (this.isLoading = false));*/
-
 
       this.columns = [
-        { title: "Espécie", field: "especie", minWidth: 200, responsive: 2, },
-        { title: "Macho", field: "macho", minWidth: 50, responsive: 2, },
-        { title: "Fêmea", field: "femea", minWidth: 50, responsive: 2, },
-        { title: "Fêmea ing", field: "femea_ing", minWidth: 50, responsive: 3, },
-        { title: "Imaturos", field: "imaturas", minWidth: 50, responsive: 3, },
-        {
-          title: "Ações", minWidth: 200, responsive: 0,
-          formatter: (cell, formatterParams) => {
-            const row = cell.getRow().getData();
-
-            const btEdit = document.createElement("button");
-            btEdit.type = "button";
-            btEdit.title = "Editar";
-            btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-            btEdit.classList.add("button", "is-primary", "is-outlined");
-            btEdit.innerHTML = this.myspan.innerHTML;
-            btEdit.addEventListener("click", async () => {
-              const obj = await suspeitoIdentificaService.getIdentificaDet(row.id_suspeito_identifica_det)
-              this.identifica_det = Object.assign({}, this.identifica_det, obj.data);
-            });
-
-            const btDel = document.createElement("button");
-            btDel.type = "button";
-            btDel.title = "Excluir";
-            btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-            btDel.classList.add("button", "is-danger", "is-outlined");
-            btDel.innerHTML = this.myspan2.innerHTML;
-            btDel.addEventListener("click", async () => {
-              const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
-                okButton: 'Confirmar',
-              })
-              if (ok) {
-                suspeitoIdentificaService.deleteDet(row.id_identificacao_det);
-                location.reload();
-              }
-            });
-
-            const buttonHolder = document.createElement("span");
-            buttonHolder.appendChild(btEdit);
-            buttonHolder.appendChild(btDel);
-
-            return buttonHolder;
-          },
-        },
+        { headerName: "Espécie", field: "especie" },
+        { headerName: "Macho", field: "macho" },
+        { headerName: "Fêmea", field: "femea" },
+        { headerName: "Fêmea ing", field: "femea_ing" },
+        { headerName: "Imaturos", field: "imaturas" },
       ];
     },
     applyDataMask(field) {

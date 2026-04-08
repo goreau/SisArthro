@@ -12,41 +12,31 @@
               <span>Novo</span>
             </button>
           </header>
-          <div class="columns">
-            <div class="field column is-3 is-offset-3">
-              <label class="label">Município</label>
-              <div class="control">
-                <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" @selMun="filtMun = $event" />
-              </div>
-            </div>
-            <div class="field column is-1 is-offset-2">
-              <label class="label">&nbsp;</label>
-              <div class="control">
-                <button class="button is-link is-fullwidth" @click="loadData">
-                  <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
-                  Carregar
-                </button>
-              </div>
-            </div>
-          </div>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"
-              :tableName="tableName" />
+            <div class="columns">
+              <div class="field column is-3 is-offset-3">
+                <label class="label">Município</label>
+                <div class="control">
+                  <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" @selMun="filtMun = $event" />
+                </div>
+              </div>
+              <div class="field column is-1 is-offset-2">
+                <label class="label">&nbsp;</label>
+                <div class="control">
+                  <button class="button is-link is-fullwidth" @click="loadData">
+                    <span class="btico"><font-awesome-icon icon="fa-solid fa-check" /></span>
+                    Carregar
+                  </button>
+                </div>
+              </div>
+            </div>
+            <section v-if="hasData">
+              <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
+                :pagination="true" :buttons="['edit', 'delete', 'caracteriza', 'animais']" :has-exports="true"
+                @edit="onEditRow" :calcHeight="false" @delete="onDeleteRow" @caracteriza="onCaracteriza"
+                @animais="onAnimais" />
+            </section>
           </div>
-        </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
-          <span class="icon is-small is-left" name="coisa1">
-            <font-awesome-icon icon="fa-solid fa-image" />
-          </span>
-          <span class="icon is-small is-left" name="coisa3">
-            <font-awesome-icon icon="fa-solid fa-dog" />
-          </span>
         </div>
       </div>
     </div>
@@ -68,8 +58,7 @@ export default {
       dataTable: [],
       columns: [],
       tableName: 'codend',
-      myspan: null,
-      myspan2: null,
+      hasData: false,
       id_user: 0,
       quart: 0,
     };
@@ -83,8 +72,27 @@ export default {
     newEnd() {
       this.$router.push("/codend");
     },
-    editCapt(id) {
-      this.$router.push(`/editEnd/${id}`);
+    onEditRow(id) {
+      // this.$router.push(`/editEnd/${id}`);
+      this.$router.push(`/editCod/${id}`);
+    },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir esse endereço?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        codendService.delete(id);
+        //location.reload();
+        this.$router.replace("/codends");
+      }
+    },
+    onCaracteriza(id) {
+      this.$router.push(`/caracteriza/${id}/0`);
+    },
+    onAnimais(id) {
+      this.$router.push(`/editCaninoCodend/${id}`);
     },
     getFormat(row) {
       return {
@@ -100,106 +108,28 @@ export default {
         .then((response) => {
           this.dataTable = response.data;
           localStorage.setItem('codendMun', this.filtMun);
+          this.hasData = true;//this.dataTable.length > 0
         })
         .catch((err) => {
           console.log(err);
         })
         .finally(() => { });
 
-      this.columns = [
-        { title: "Municipio", field: "municipio", minWidth: 200, responsive: 1, },
-        { title: "Quarteirao", field: "quarteirao", minWidth: 200, responsive: 4, },
-        { title: "Código", field: "codigo", minWidth: 200, responsive: 2, },
-        { title: "Endereço", field: "endereco", minWidth: 300, responsive: 1, },
-        { title: "Localidade", field: "localidade", minWidth: 200, responsive: 3, },
-        { title: "Responsável", field: "owner", minWidth: 200, responsive: 3, },
-        {
-          title: "Ações", minWidth: 350, responsive: 0,
-          formatter: (cell, formatterParams) => {
-            const row = cell.getRow().getData();
-
-            const btEdit = document.createElement("button");
-            btEdit.type = "button";
-            btEdit.title = "Editar";
-            btEdit.disabled = this.id_user != row.id_usuario;
-            btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-            btEdit.classList.add("button", "is-primary", "is-outlined");
-            btEdit.innerHTML = this.myspan.innerHTML;
-            btEdit.addEventListener("click", () => {
-              this.$router.push(`/editCod/${row.id_codend}`);
-            });
-
-            /* const teste = document.createElement('div'); 
-                teste.classList.add('icon', 'is-small');
-                teste.innerHTML='<span><font-awesome-icon icon=\"fa-solid fa-envelope\" /></span>';*/
-
-            const btDel = document.createElement("button");
-            btDel.type = "button";
-            btDel.title = "Excluir";
-            btDel.disabled = this.id_user != row.id_usuario;
-            btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-            btDel.classList.add("button", "is-danger", "is-outlined");
-            btDel.innerHTML = this.myspan2.innerHTML;
-            btDel.addEventListener("click", async () => {
-              const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir esse endereço?',
-                okButton: 'Confirmar',
-              })
-              if (ok) {
-                codendService.delete(row.id_codend);
-                //location.reload();
-                this.$router.replace("/codends");
-              }
-            });
-
-            const btCaract = document.createElement("button");
-            btCaract.type = "button";
-            btCaract.title = "Caracterização";
-            //btCaract.disabled = this.id_user != row.id_usuario;
-            btCaract.style.cssText = "height: fit-content; margin-left: 1rem;";
-            btCaract.classList.add("button", "is-info", "is-outlined");
-            btCaract.innerHTML = this.myspan1.innerHTML;
-
-            btCaract.addEventListener("click", () => {
-              this.$router.push(`/caracteriza/${row.id_codend}/0`);
-            });
-
-            const btAnimal = document.createElement("button");
-            btAnimal.type = "button";
-            btAnimal.title = "Animal";
-            //btCaract.disabled = this.id_user != row.id_usuario;
-            btAnimal.style.cssText = "height: fit-content; margin-left: 1rem;";
-            btAnimal.classList.add("button", "is-success", "is-outlined");
-            btAnimal.innerHTML = this.myspan3.innerHTML;
-
-            btAnimal.addEventListener("click", () => {
-              this.$router.push(`/editCaninoCodend/${row.id_codend}`);
-            });
-
-            const buttonHolder = document.createElement("span");
-            buttonHolder.appendChild(btEdit);
-            buttonHolder.appendChild(btDel);
-            buttonHolder.appendChild(btCaract);
-            buttonHolder.appendChild(btAnimal);
-
-
-            return buttonHolder;
-          },
-        },
-      ];
     },
   },
   mounted() {
     this.id_user = this.currentUser.id;
 
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan2 = document.getElementsByName("coisa2")[0];
-    this.myspan1 = document.getElementsByName("coisa1")[0];
-    this.myspan3 = document.getElementsByName("coisa3")[0];
-    //document.createElement('span');
-    // this.myspan.innerHTML='<p>teste</p>';;
-    //
+    this.columns = [
+      { headerName: 'ID', field: 'id', hide: true },
+      { headerName: "Municipio", field: "municipio" },
+      { headerName: "Quarteirao", field: "quarteirao" },
+      { headerName: "Código", field: "codigo" },
+      { headerName: "Endereço", field: "endereco" },
+      { headerName: "Localidade", field: "localidade" },
+      { headerName: "Responsável", field: "owner" },
+      { headerName: 'Prop', field: 'owner_id', hide: true },
+    ];
 
     if (this.$route.params.quart) {
       var cd = this.$route.params.quart;

@@ -326,7 +326,9 @@
                             </div>
                             <div class="columns">
                                 <div class="column is-8 is-offset-2">
-                                    <MySimpleTable :tableData="dataTable" :columns="columns" />
+                                    <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
+                                        :pagination="false" :buttons="['edit', 'delete']" :has-exports="false"
+                                        :calcHeight="true" @edit="editDesloca" @delete="delDesloca" />
                                 </div>
                             </div>
                             <hr>
@@ -364,7 +366,7 @@ import caninoService from "@/services/canino.service";
 import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
-import MySimpleTable from "@/components/forms/MySimpleTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 import moment from 'moment';
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
 import "bulma-calendar/dist/css/bulma-calendar.min.css";
@@ -385,7 +387,7 @@ export default {
         CmbMunicipio,
         CmbAuxiliares,
         footerCard,
-        MySimpleTable,
+        MyTable,
     },
     data() {
         return {
@@ -519,7 +521,12 @@ export default {
                 this.editing = -1;
             }
 
-            this.dataTable = JSON.parse(JSON.stringify(this.teste));
+            let p_data = this.teste.map((item, index) => ({
+                ...item,
+                id: index
+            }));
+
+            this.dataTable = JSON.parse(JSON.stringify(p_data));
         },
         getSinais() {
             notificaService.getComboSinais()
@@ -693,42 +700,9 @@ export default {
         this.startCalendar();
 
         this.columns = [
-            { title: "Município/UF", field: "municipio" },
-            { title: "Zona", field: "zona" },
-            { title: "Permanência", field: "permanencia" },
-            {
-                title: "Ações",
-                formatter: (cell, formatterParams) => {
-                    const row = cell.getRow().getData();
-                    const idx = cell.getRow().getPosition();
-
-                    const btEdit = document.createElement("button");
-                    btEdit.type = "button";
-                    btEdit.title = "Editar";
-                    btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btEdit.classList.add("button", "is-primary", "is-outlined");
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                    btEdit.addEventListener("click", () => {
-                        this.editDesloca(idx - 1);
-                    });
-
-                    const btDel = document.createElement("button");
-                    btDel.type = "button";
-                    btDel.title = "Excluir";
-                    btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btDel.classList.add("button", "is-danger", "is-outlined");
-                    btDel.innerHTML = this.myspan2.innerHTML;
-                    btDel.addEventListener("click", async () => {
-                        this.delDesloca(idx - 1);
-                    });
-
-                    const buttonHolder = document.createElement("span");
-                    buttonHolder.appendChild(btEdit);
-                    buttonHolder.appendChild(btDel);
-
-                    return buttonHolder;
-                },
-            }
+            { headerName: "Município/UF", field: "municipio" },
+            { headerName: "Zona", field: "zona" },
+            { headerName: "Permanência", field: "permanencia" },
         ]
     },
 }

@@ -150,8 +150,9 @@
                 <h5>Animais Cadastrados</h5>
               </div>
               <div class="columns">
-                <div class="column is-10 is-offset-1">
-                  <MySimpleTable :tableData="dataTable" :columns="columns" />
+                <div class="column is-6 is-offset-3">
+                  <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
+                    :buttons="[]" :has-exports="false" :calcHeight="true" />
                 </div>
               </div>
             </div>
@@ -187,7 +188,7 @@ import {
 } from "../../components/forms/validators.js";
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import CoordenadaMixin from "@/mixins/CoordenadaMixin.js";
-import MySimpleTable from "@/components/forms/MySimpleTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 
 
 export default {
@@ -197,7 +198,7 @@ export default {
     CmbMunicipio,
     CmbAuxiliares,
     footerCard,
-    MySimpleTable,
+    MyTable,
   },
   mixins: [
     CoordenadaMixin,
@@ -529,10 +530,10 @@ export default {
     this.loadData();
 
     this.columns = [
-      { title: "Tipo", field: "tipo", minWidth: 200 },
-      { title: "Nome", field: "nome", minWidth: 200 },
-      { title: "Raça", field: "raca", minWidth: 200 },
-      { title: "Sexo", field: "sexo", minWidth: 200, responsive: 3 },
+      { headerName: "Tipo", field: "tipo" },
+      { headerName: "Nome", field: "nome" },
+      { headerName: "Raça", field: "raca" },
+      { headerName: "Sexo", field: "sexo" },
     ]
   },
   created() {

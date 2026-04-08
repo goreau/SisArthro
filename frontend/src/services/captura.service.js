@@ -83,6 +83,16 @@ class CapturaService {
     })
   } 
 
+  getAux(id) {
+    return axios.get(`/auxiliar/${id}`)
+    .then(response => {
+        return {data: response.data};
+    },
+    (error) => {
+        return error;
+    })
+  } 
+
   getAuxiliaresEd(tp) {
     return axios.get(`/auxiliaresEd/${tp}`)
     .then(response => {

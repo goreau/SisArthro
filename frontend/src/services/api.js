@@ -1,73 +1,72 @@
-import axios from "axios";
-import authService from "./auth.service";
+import axios from 'axios'
+import authService from './auth.service'
 import router from '../router'
 
 const api = axios.create({
- baseURL: process.env.VUE_APP_BACK_API,
-});
+  baseURL: process.env.VUE_APP_BACK_API,
+})
 
 api.interceptors.request.use(
-  config => {
-    let user = JSON.parse(localStorage.getItem('user'));
+  (config) => {
+    let user = JSON.parse(localStorage.getItem('user'))
     if (user && user.token) {
-      config.headers.Authorization = `Bearer ${user.token}`;
-    } 
+      config.headers.Authorization = `Bearer ${user.token}`
+    }
 
-    return config;
+    return config
   },
-  error => {
-    return Promise.reject(error);
-  }
-);
+  (error) => {
+    return Promise.reject(error)
+  },
+)
 
 api.interceptors.response.use(
-  response => {
+  (response) => {
     if (response.status === 200 || response.status === 201) {
-      return Promise.resolve(response);
+      return Promise.resolve(response)
     } else {
-      return Promise.reject(response);
+      return Promise.reject(response)
     }
   },
-error => {
-  //console.log(this.$router)
+  (error) => {
+    //console.log(this.$router)
     if (error.response.status) {
       switch (error.response.status) {
-       /* case 400:
+        /* case 400:
           alert(error.response.data.message);
          //do something
      //     return Promise.resolve({ error: error.response.data });
           break;  */
         case 401:
-          authService.logout();
+          authService.logout()
           router.replace({
-            path: "/login",
-            query: { redirect: router.currentRoute.fullPath }
-          });
-          break;
+            path: '/login',
+            query: { redirect: router.currentRoute.fullPath },
+          })
+          break
         case 403:
-          authService.logout();
+          authService.logout()
           router.replace({
-            path: "/login",
-            query: { redirect: router.currentRoute.fullPath }
-          });
-           break;
+            path: '/login',
+            query: { redirect: router.currentRoute.fullPath },
+          })
+          break
         case 404:
-          alert('page not exist');
-          break;
+          alert('page not exist')
+          break
         case 502:
-         setTimeout(() => {
-          router.replace({
-              path: "/login",
+          setTimeout(() => {
+            router.replace({
+              path: '/login',
               query: {
-                redirect: router.currentRoute.fullPath
-              }
-            });
-          }, 1000);
+                redirect: router.currentRoute.fullPath,
+              },
+            })
+          }, 1000)
       }
-      return Promise.reject(error.response);
-      
+      return Promise.reject(error.response)
     }
-  }
-);
+  },
+)
 
-export default api;
+export default api

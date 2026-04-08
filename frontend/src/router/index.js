@@ -667,6 +667,17 @@ const routes = [
     }
   },
   {
+    path: '/deluser',
+    name: 'deluser',
+    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/RemoveUserView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Adm - Remover Usuário',
+        root: true
+      }
+    }
+  },
+  {
     path: '/propmun',
     name: 'propmun',
     component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/EditPropMunView.vue'),

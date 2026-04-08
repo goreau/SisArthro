@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        
+
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Identificações</p>
@@ -14,23 +14,11 @@
             </button>
           </header>
           <div class="card-content">
-            <Message
-              v-if="showMessage"
-              @do-close="closeMessage"
-              :msg="message"
-              :type="type"
-              :caption="caption"
-            />
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
+            <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
+            <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
+              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
+              @delete="onDeleteRow" />
           </div>
-        </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
         </div>
       </div>
     </div>
@@ -58,6 +46,7 @@ export default {
       myspan: null,
       myspan2: null,
       id_user: 0,
+      toUser: 0
     };
   },
   components: {
@@ -69,8 +58,29 @@ export default {
     newIdent() {
       this.$router.push("/identifica");
     },
-    editIdent(id) {
+    onEditRow(id) {
       this.$router.push(`/editIdent/${id}`);
+    },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa identificação e todas as informações associada a ela?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        identificaService.delete(id)
+          .then(() => {
+            location.reload();
+          })
+          .catch((err) => {
+            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Identificação";
+            setTimeout(() => (this.showMessage = false), 3000);
+          })
+
+      }
     },
     getFormat(row) {
       return {
@@ -83,11 +93,9 @@ export default {
     },
   },
   mounted() {
-    this.myspan = document.getElementsByName("coisa")[0];
-    this.myspan2 = document.getElementsByName("coisa2")[0];
-
     this.id_user = this.currentUser.id;
-    
+    this.tpUser = this.currentUser.role;
+
     identificaService.getidentificas({})
       .then((response) => {
         this.dataTable = response.data;
@@ -95,67 +103,14 @@ export default {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {});
+      .finally(() => { });
 
     this.columns = [
-      { title: "Município", field: "municipio", minWidth: 250, responsive:1, },
-      { title: "Captura", field: "codigo", minWidth: 200, responsive:1, },
-      { title: "Data", field: "dt_identificacao", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
-          format:"dd/MM/yyyy",
-          alignEmptyValues:"top",
-      }},
-      {
-        title: "Ações", minWidth: 200, responsive:0,
-        formatter: (cell, formatterParams) => {
-          const row = cell.getRow().getData();
-
-          const btEdit = document.createElement("button");
-          btEdit.type = "button";
-          btEdit.title = "Editar";
-          btEdit.disabled = this.id_user != row.id_usuario;
-          btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btEdit.classList.add("button", "is-primary", "is-outlined");
-          btEdit.innerHTML = this.myspan.innerHTML;
-          btEdit.addEventListener("click", () => {
-            this.$router.push(`/editIdent/${row.id_identificacao}`);
-          });
-
-          const btDel = document.createElement("button");
-          btDel.type = "button";
-          btDel.title = "Excluir";
-          btDel.disabled = this.id_user != row.id_usuario;
-          btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-          btDel.classList.add("button", "is-danger", "is-outlined");
-          btDel.innerHTML = this.myspan2.innerHTML;
-          btDel.addEventListener("click", async () => {
-            const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir essa identificação e todas as informações associada a ela?',
-                okButton: 'Confirmar',
-            })
-            if (ok) {
-              identificaService.delete(row.id_identificacao)
-              .then(()=>{
-                location.reload();
-              })
-              .catch((err)=>{
-                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
-              })
-              
-            }
-          });
-
-          const buttonHolder = document.createElement("span");
-          buttonHolder.appendChild(btEdit);
-          buttonHolder.appendChild(btDel);
-
-          return buttonHolder;
-        },
-      },
+      { headerName: 'ID', field: 'id', hide: true },
+      { headerName: "Município", field: "municipio" },
+      { headerName: "Captura", field: "codigo" },
+      { headerName: "Data", field: "data" },
+      { headerName: 'Prop', field: 'owner_id', hide: true },
     ];
   },
   computed: {

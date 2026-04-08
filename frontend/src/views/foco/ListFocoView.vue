@@ -15,16 +15,10 @@
                     <div class="card-content">
                         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type"
                             :caption="caption" />
-                        <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"  :table-name="tableName"/>
+                        <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
+                            :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
+                            :calcHeight="false" @delete="onDeleteRow" />
                     </div>
-                </div>
-                <div style="display: none">
-                    <span class="icon is-small is-left" name="coisa">
-                        <font-awesome-icon icon="fa-solid fa-edit" />
-                    </span>
-                    <span class="icon is-small is-left" name="coisa2">
-                        <font-awesome-icon icon="fa-solid fa-trash" />
-                    </span>
                 </div>
             </div>
         </div>
@@ -51,7 +45,8 @@ export default {
             columns: [],
             myspan: null,
             myspan2: null,
-            id_user: 0
+            id_user: 0,
+            tpUser: 0
         };
     },
     components: {
@@ -62,8 +57,28 @@ export default {
         newCapt() {
             this.$router.push("/foco");
         },
-        editCapt(id) {
+        onEditRow(id) {
             this.$router.push(`/editFoco/${id}`);
+        },
+        async onDeleteRow(id) {
+            const ok = await this.$refs.confirmDialog.show({
+                title: 'Excluir',
+                message: 'Deseja mesmo excluir esse inquérito e todas as coletas associada a ele?',
+                okButton: 'Confirmar',
+            })
+            if (ok) {
+                focoService.delete(id)
+                    .then(() => {
+                        location.reload();
+                    })
+                    .catch((err) => {
+                        this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                        this.showMessage = true;
+                        this.type = "alert";
+                        this.caption = "Inquérito";
+                        setTimeout(() => (this.showMessage = false), 3000);
+                    })
+            }
         },
         getFormat(row) {
             return {
@@ -77,9 +92,7 @@ export default {
     },
     mounted() {
         this.id_user = this.currentUser.id;
-
-        this.myspan = document.getElementsByName("coisa")[0];
-        this.myspan2 = document.getElementsByName("coisa2")[0];
+        this.tpUser = this.currentUser.role;
 
         focoService.getFocos({})
             .then((response) => {
@@ -88,75 +101,15 @@ export default {
             .catch((err) => {
                 console.log(err);
             })
-            .finally(() => {});
+            .finally(() => { });
 
         this.columns = [
-            { title: "Município", field: "municipio", minWidth: 200, responsive: 1, },
-            { title: "Quarteirão", field: "quadra", minWidth: 200, responsive: 2, },
-            { title: "Número", field: "numero", minWidth: 200, responsive: 1, },
-            {
-                title: "Data", field: "dt_foco", sorter: "date", sorterParams: {
-                    format: "dd/MM/yyyy",
-                    alignEmptyValues: "top",
-                },
-                minWidth: 200, responsive: 3,
-                formatter:function(cell, formatterParams, onRendered){
-                        var value = cell.getValue();
-                        value = moment(value).format("DD/MM/YYYY");
-                        return value;
-                    }
-            },
-            {
-                title: "Ações", minWidth: 200, responsive:0,
-                formatter: (cell, formatterParams) => {
-                    const row = cell.getRow().getData();
-
-                    const btEdit = document.createElement("button");
-                    btEdit.type = "button";
-                    btEdit.title = "Editar";
-                    btEdit.disabled = this.id_user != row.id_usuario;
-                    btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btEdit.classList.add("button", "is-primary", "is-outlined");
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                    btEdit.addEventListener("click", () => {
-                        this.$router.push(`/editFoco/${row.id_foco}`);
-                    });
-
-                    const btDel = document.createElement("button");
-                    btDel.type = "button";
-                    btDel.title = "Excluir";
-                    btDel.disabled = this.id_user != row.id_usuario;
-                    btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btDel.classList.add("button", "is-danger", "is-outlined");
-                    btDel.innerHTML = this.myspan2.innerHTML;
-                    btDel.addEventListener("click", async () => {
-                        const ok = await this.$refs.confirmDialog.show({
-                            title: 'Excluir',
-                            message: 'Deseja mesmo excluir esse inquérito e todas as coletas associada a ele?',
-                            okButton: 'Confirmar',
-                        })
-                        if (ok) {
-                            focoService.delete(row.id_foco)
-                                .then(() => {
-                                    location.reload();
-                                })
-                                .catch((err) => {
-                                    this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                                    this.showMessage = true;
-                                    this.type = "alert";
-                                    this.caption = "Inquérito";
-                                    setTimeout(() => (this.showMessage = false), 3000);
-                                })
-                        }
-                    });
-
-                    const buttonHolder = document.createElement("span");
-                    buttonHolder.appendChild(btEdit);
-                    buttonHolder.appendChild(btDel);
-
-                    return buttonHolder;
-                },
-            },
+            { headerName: 'ID', field: 'id', hide: true },
+            { headerName: "Município", field: "municipio" },
+            { headerName: "Quarteirão", field: "quadra" },
+            { headerName: "Número", field: "numero" },
+            { headerName: "Data", field: "data" },
+            { headerName: 'Prop', field: 'owner_id', hide: true },
         ];
     },
     computed: {

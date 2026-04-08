@@ -23,10 +23,10 @@
                                     <label class="label">Cod End</label>
                                     <div class="select">
                                         <select v-model="foco_det.id_codend" class="input">
-                                        <option value="0">-- Selecione --</option>
-                                        <option v-for="reg in codends" :key="reg.id_codend" :value="reg.id_codend">
-                                            {{ reg.codigo }}
-                                        </option>
+                                            <option value="0">-- Selecione --</option>
+                                            <option v-for="reg in codends" :key="reg.id_codend" :value="reg.id_codend">
+                                                {{ reg.codigo }}
+                                            </option>
                                         </select>
                                     </div>
                                     <span class="is-error" v-if="v$.foco_det.id_codend.$error">
@@ -37,10 +37,11 @@
                                     <label class="label">Animal</label>
                                     <div class="select">
                                         <select v-model="foco_det.id_canino_det" class="input">
-                                        <option value="0">-- Selecione --</option>
-                                        <option v-for="reg in caninos" :key="reg.id_canino_det" :value="reg.id_canino_det">
-                                            {{ reg.animal }}
-                                        </option>
+                                            <option value="0">-- Selecione --</option>
+                                            <option v-for="reg in caninos" :key="reg.id_canino_det"
+                                                :value="reg.id_canino_det">
+                                                {{ reg.animal }}
+                                            </option>
                                         </select>
                                     </div>
                                     <span class="is-error" v-if="v$.foco_det.id_canino_det.$error">
@@ -65,8 +66,9 @@
                             <div class="columns">
                                 <div class="column is-1" v-for="reg in sinais" :key="reg.id_auxiliares">
                                     <label class="checkbox sinal">
-                                            <input type="checkbox" name="sinais" :value="reg.id_auxiliares" @click="()=>{selectSinal(reg.id_auxiliares)}" />
-                                            <br>{{ reg.descricao }}
+                                        <input type="checkbox" name="sinais" :value="reg.id_auxiliares"
+                                            @click="() => { selectSinal(reg.id_auxiliares) }" />
+                                        <br>{{ reg.descricao }}
                                     </label>
                                 </div>
                             </div>
@@ -79,10 +81,10 @@
                                     <div class="control">
                                         <CmbAuxiliares :tipo="22" @selValue="setParasTipo($event)" :errclass="{
                                             'is-danger': v$.foco_det.paras_tipo.$error,
-                                        }" :sel="parasito.paras_tipo"/>
+                                        }" :sel="parasito.paras_tipo" />
                                         <span class="is-error" v-if="v$.foco_det.paras_tipo.$error">
                                             {{ v$.foco_det.paras_tipo.$errors[0].$message }}
-                                        </span>     
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="field column is-2">
@@ -103,7 +105,7 @@
                                         <span class="is-error" v-if="v$.foco_det.paras_result.$error">
                                             {{ v$.foco_det.paras_result.$errors[0].$message }}
                                         </span>
-                                        
+
                                     </div>
                                 </div>
                                 <div class="field column is-2">
@@ -130,7 +132,9 @@
                             </div>
                             <div class="columns">
                                 <div class="column is-10 is-offset-1">
-                                    <MySimpleTable :tableData="dataTable" :columns="columns" />
+                                    <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
+                                        :pagination="false" :buttons="['edit', 'delete']" :has-exports="false"
+                                        :calcHeight="true" @edit="editParas" @delete="delParas" />
                                 </div>
                             </div>
                             <hr>
@@ -140,7 +144,7 @@
                                 <div class="column is-4 has-text-centered cabeca">Laboratório</div>
                             </div>
                             <div class="columns">
-                                
+
                                 <div class="field column is-2">
                                     <label class="label">Data Exame</label>
                                     <div class="control">
@@ -161,8 +165,8 @@
                                         </span>
                                     </div>
                                 </div>
-                                
-                               <!-- <div class="field column is-2">
+
+                                <!-- <div class="field column is-2">
                                     <label class="label">Data Exame</label>
                                     <div class="control">
                                         <input type="text" id="ddtElisa">
@@ -200,7 +204,7 @@
                                     Desfecho
                                 </div>
                             </div>
-                            <div class="columns">    
+                            <div class="columns">
                                 <div class="field column is-4 is-offset-1">
                                     <label class="label">Código</label>
                                     <div class="control">
@@ -211,7 +215,7 @@
                                             {{ v$.foco_det.id_desfecho.$errors[0].$message }}
                                         </span>
                                     </div>
-                                </div>    
+                                </div>
                                 <div class="field column is-2">
                                     <label class="label">Data</label>
                                     <div class="control">
@@ -220,7 +224,7 @@
                                     <span class="is-error" v-if="v$.foco_det.dt_desfecho.$error">
                                         {{ v$.foco_det.dt_desfecho.$errors[0].$message }}
                                     </span>
-                                </div> 
+                                </div>
                                 <div class="field column is-4">
                                     <label class="label">Responsável Eutanásia</label>
                                     <div class="control">
@@ -231,9 +235,9 @@
                                             {{ v$.foco_det.resp_eutanasia.$errors[0].$message }}
                                         </span>
                                     </div>
-                                </div>                                
-                            </div>                           
-                        </div>                        
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <footer class="card-footer">
                         <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
@@ -241,12 +245,12 @@
                 </div>
             </div>
             <div style="display: none">
-                    <span class="icon is-small is-left" name="coisa">
-                        <font-awesome-icon icon="fa-solid fa-edit" />
-                    </span>
-                    <span class="icon is-small is-left" name="coisa2">
-                        <font-awesome-icon icon="fa-solid fa-trash" />
-                    </span>
+                <span class="icon is-small is-left" name="coisa">
+                    <font-awesome-icon icon="fa-solid fa-edit" />
+                </span>
+                <span class="icon is-small is-left" name="coisa2">
+                    <font-awesome-icon icon="fa-solid fa-trash" />
+                </span>
             </div>
         </div>
     </div>
@@ -259,12 +263,12 @@ import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import focoService from "@/services/foco.service";
 import codendService from "@/services/codend.service";
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
-import "bulma-calendar/dist/css/bulma-calendar.min.css"; 
+import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
 import footerCard from "@/components/forms/FooterCard.vue";
 import useValidate from "@vuelidate/core";
 import { required$, combo$, integer$, requiredIf$, maxLength$, } from "../../components/forms/validators.js";
-import MySimpleTable from "@/components/forms/MySimpleTable.vue";
+import MyTable from "@/components/forms/MyTable.vue";
 
 
 export default {
@@ -273,30 +277,30 @@ export default {
         Message,
         CmbAuxiliares,
         footerCard,
-        MySimpleTable
+        MyTable
     },
     data() {
         return {
             master: {},
-            quart:{},
+            quart: {},
             codends: [],
             caninos: [],
             sinais: [],
             foco_det: {
                 id_foco: 0,
-                id_codend: 0, 
-                id_canino_det: 0, 
-                id_situacao: 0, 
-                parasito:[],
+                id_codend: 0,
+                id_canino_det: 0,
+                id_situacao: 0,
+                parasito: [],
                 dpp_dt_ex: '',
                 dpp_result: 0,
                 elisa_result: 0,
                 sinais: [],
-                id_desfecho: 0, 
+                id_desfecho: 0,
                 dt_desfecho: '',
                 resp_exame: '',
                 resp_eutanasia: '',
-                
+
             },
             parasito: {
                 paras_tipo: 0,
@@ -305,7 +309,7 @@ export default {
                 paras_result: 0,
                 paras_fant_result: '',
                 paras_resp: '',
-            },  
+            },
             teste: [],
             dataTable: [],
             columns: [],
@@ -329,16 +333,16 @@ export default {
     validations() {
         return {
             foco_det: {
-                paras_dt_ex: {  },
-                paras_result: {  },
-                paras_tipo: { },
-                dpp_dt_ex: { },
-                dpp_result: {  },
-                elisa_result: {  },
+                paras_dt_ex: {},
+                paras_result: {},
+                paras_tipo: {},
+                dpp_dt_ex: {},
+                dpp_result: {},
+                elisa_result: {},
                 id_codend: { minValue: combo$(1) },
                 id_canino_det: { minValue: combo$(1) },
-                dt_desfecho: { requiredIf: requiredIf$(this.foco_det.id_desfecho > 0)},
-                id_desfecho: {  },
+                dt_desfecho: { requiredIf: requiredIf$(this.foco_det.id_desfecho > 0) },
+                id_desfecho: {},
                 id_situacao: { minValue: combo$(1) },
                 resp_exame: {
                     requiredIf: requiredIf$((this.foco_det.dpp_result + this.foco_det.elisa_result) > 0),
@@ -356,54 +360,59 @@ export default {
         };
     },
     methods: {
-        editParas(idx){
+        editParas(idx) {
+            // let dados = this.dataTable.find(item => item.id === idx);
             let dados = this.teste[idx];
             this.parasito = dados;
             this.editing = idx;
 
-	        document.querySelector('#dt_pex').bulmaCalendar.value(dados.paras_dt_ex);
+            document.querySelector('#dt_pex').bulmaCalendar.value(dados.paras_dt_ex);
         },
-        delParas(idx){
-            this.teste.splice(idx,1);
+        delParas(idx) {
+            this.teste.splice(idx, 1);
             this.dataTable = JSON.parse(JSON.stringify(this.teste));
         },
-        setParasTipo(e){
+        setParasTipo(e) {
             this.parasito.paras_tipo = e;
             const select = document.getElementById('22');
             this.parasito.paras_fant_tipo = select.options[select.selectedIndex].text;
         },
-        setParasRes(e){
+        setParasRes(e) {
             this.parasito.paras_result = e;
             const select = document.getElementById('23');
             this.parasito.paras_fant_result = select.options[select.selectedIndex].text;
         },
-        newParasito(){
-            if (this.editing < 0){
+        newParasito() {
+            if (this.editing < 0) {
                 this.teste.push(JSON.parse(JSON.stringify(this.parasito)));
             } else {
                 this.teste[this.editing] = JSON.parse(JSON.stringify(this.parasito));
                 this.editing = -1;
             }
-            
-            this.dataTable = JSON.parse(JSON.stringify(this.teste));
+            let p_data = this.teste.map((item, index) => ({
+                ...item,
+                id: index
+            }));
+
+            this.dataTable = JSON.parse(JSON.stringify(p_data));
         },
         details() {
             this.$router.push("/foco_dets/" + this.foco_det.id_foco);
         },
-        selectSinal(id){
-            if(this.foco_det.sinais.includes(id)){
+        selectSinal(id) {
+            if (this.foco_det.sinais.includes(id)) {
                 const idx = this.foco_det.sinais.indexOf(id);
                 this.foco_det.sinais.splice(idx, 1);
-            }else{
+            } else {
                 this.foco_det.sinais.push(id)
             }
         },
-        startSinais(){
+        startSinais() {
             const chks = document.querySelectorAll('input[type="checkbox"]');
             for (let i = 0; i < chks.length; i++) {
                 console.log(chks[i].value);
-                if (this.foco_det.sinais.includes(parseInt(chks[i].value))){
-                    chks[i].setAttribute('checked','checked');
+                if (this.foco_det.sinais.includes(parseInt(chks[i].value))) {
+                    chks[i].setAttribute('checked', 'checked');
                 }
             }
         },
@@ -422,7 +431,12 @@ export default {
                     this.foco_det.id_desfecho = data.id_desfecho;
                     this.foco_det.id_situacao = data.id_situacao;
                     this.teste = data.parasito;
-                    this.dataTable = [...this.teste];
+                    this.dataTable = this.teste.map((item, index) => ({
+                        ...item,
+                        id: index
+                    }));
+                    //  this.teste = data.parasito;
+                    // this.dataTable = [...this.teste];
                     this.foco_det.dpp_dt_ex = data.dpp_dt_ex;
                     this.foco_det.dpp_result = data.dpp_result;
                     this.foco_det.elisa_result = data.elisa_result;
@@ -452,7 +466,7 @@ export default {
 
             this.isLoading = false;
         },
-        edit() {           
+        edit() {
             this.v$.$validate(); // checks all inputs
 
             if (!this.v$.$error) {
@@ -497,30 +511,30 @@ export default {
         },
         getCodends() {
             codendService.getCodendsByQuadra(this.quart)
-            .then((res) => {
-                this.codends = res.data;
-            })
-            .catch((err) => {
-                this.codends = [];
-            })
+                .then((res) => {
+                    this.codends = res.data;
+                })
+                .catch((err) => {
+                    this.codends = [];
+                })
         },
         getAnimais() {
             codendService.getAnimalByCodend(this.foco_det.id_codend)
-            .then((res) => {
-                this.caninos = res.data;
-            })
-            .catch((err) => {
-                this.caninos = [];
-            })
+                .then((res) => {
+                    this.caninos = res.data;
+                })
+                .catch((err) => {
+                    this.caninos = [];
+                })
         },
         getSinais() {
             focoService.getComboSinais()
-            .then((res) => {
-                this.sinais = res.data;
-            })
-            .catch((err) => {
-                this.sinais = [];
-            })
+                .then((res) => {
+                    this.sinais = res.data;
+                })
+                .catch((err) => {
+                    this.sinais = [];
+                })
         },
         applyDataMask(field) {
             var mask = field.dataset.mask.split('');
@@ -572,7 +586,7 @@ export default {
                 todayLabel: 'Hoje',
                 maxDate: new Date(),
             };
-        
+
             var caldpp = bulmaCalendar.attach('#dt_pex', options);
             options.startDate = this.foco_det.dpp_dt_ex;
             var calcolex = bulmaCalendar.attach('#dt_dppex', options);
@@ -582,9 +596,9 @@ export default {
             const element1 = document.querySelector('#dt_pex');
             const element2 = document.querySelector('#dt_dppex');
             const element3 = document.querySelector('#dtDesfecho');
-            
+
             var calcol = bulmaCalendar.attach('#dtColeta', options);
-            
+
 
             const input = document.querySelectorAll('.datetimepicker-dummy-input');
             for (let i = 0; i < input.length; i++) {
@@ -594,7 +608,7 @@ export default {
                 this.applyDataMask(input[i]);
 
                 input[i].addEventListener('blur', (e) => {
-                    switch(i){
+                    switch (i) {
                         case 0:
                             this.parasito.paras_dt_ex = moment(e.value).format('YYYY-MM-DD');
                             break;
@@ -605,11 +619,11 @@ export default {
                             this.foco_det.dt_desfecho = moment(e.value).format('YYYY-MM-DD');
                             break;
                     }
-                    
+
                 })
 
             }
-            
+
             if (element1) {
                 // bulmaCalendar instance is available as element.bulmaCalendar
                 element1.bulmaCalendar.on('select', datepicker => {
@@ -622,7 +636,7 @@ export default {
                     this.foco_det.dpp_dt_ex = moment(datepicker.data.startDate).format('YYYY-MM-DD');
                 });
             }
-            
+
             if (element3) {
                 // bulmaCalendar instance is available as element.bulmaCalendar
                 element3.bulmaCalendar.on('select', datepicker => {
@@ -636,50 +650,17 @@ export default {
         this.myspan2 = document.getElementsByName("coisa2")[0];
 
         this.columns = [
-            { title: "Tipo Amostra", field: "paras_fant_tipo" },
-            { title: "Data Exame", field: "paras_dt_ex" },
-            { title: "Resultado", field: "paras_fant_result" },
-            { title: "Responsável", field: "paras_resp" },
-            {
-                title: "Ações",
-                formatter: (cell, formatterParams) => {
-                    const row = cell.getRow().getData();
-                    const idx = cell.getRow().getPosition();
-
-                    const btEdit = document.createElement("button");
-                    btEdit.type = "button";
-                    btEdit.title = "Editar";
-                    btEdit.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btEdit.classList.add("button", "is-primary", "is-outlined");
-                    btEdit.innerHTML = this.myspan.innerHTML;
-                    btEdit.addEventListener("click", () => {                       
-                        this.editParas(idx - 1);
-                    });
-
-                    const btDel = document.createElement("button");
-                    btDel.type = "button";
-                    btDel.title = "Excluir";
-                    btDel.style.cssText = "height: fit-content; margin-left: 1rem;";
-                    btDel.classList.add("button", "is-danger", "is-outlined");
-                    btDel.innerHTML = this.myspan2.innerHTML;
-                    btDel.addEventListener("click", async () => {
-                        this.delParas(idx - 1);
-                    });
-
-                    const buttonHolder = document.createElement("span");
-                    buttonHolder.appendChild(btEdit);
-                    buttonHolder.appendChild(btDel);
-
-                    return buttonHolder;
-                },
-            },
+            { headerName: "Tipo Amostra", field: "paras_fant_tipo" },
+            { headerName: "Data Exame", field: "paras_dt_ex" },
+            { headerName: "Resultado", field: "paras_fant_result" },
+            { headerName: "Responsável", field: "paras_resp" },
         ]
     },
     created() {
         this.foco_det.id_foco_det = this.$route.params.id;
-        this.getSinais(); 
-        this.loadData(); 
-        
+        this.getSinais();
+        this.loadData();
+
     },
     watch: {
         'foco_det.id_codend'(value) {
@@ -695,6 +676,7 @@ export default {
     border-bottom: 1px solid;
     font-weight: bold;
 }
+
 .sinal {
     font-size: x-small;
 }
