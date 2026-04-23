@@ -18,7 +18,8 @@
               <div class="field column is-3 is-offset-3">
                 <label class="label">Município</label>
                 <div class="control">
-                  <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" @selMun="filtMun = $event" />
+                  <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" :sel="filtMun"
+                    @selMun="filtMun = $event" />
                 </div>
               </div>
               <div class="field column is-1 is-offset-2">
@@ -34,7 +35,7 @@
             <section v-if="hasData">
               <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                 :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                :calcHeight="false" @delete="onDeleteRow" />
+                :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
             </section>
           </div>
         </div>
@@ -65,7 +66,7 @@ export default {
       showMessage: false,
       columns: [],
       hasData: false,
-      myspan2: null,
+      delId: null,
       id_user: 0,
       tpUser: 0
     };
@@ -92,7 +93,7 @@ export default {
       if (ok) {
         capturaService.delete(id)
           .then(() => {
-            location.reload();
+            this.delId = id
           })
           .catch((err) => {
             this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
@@ -104,6 +105,7 @@ export default {
       }
     },
     loadData() {
+      localStorage.setItem('last_filtMun', this.filtMun);
       capturaService.getCapturas(this.filtMun)
         .then((response) => {
           this.dataTable = response.data;
@@ -137,6 +139,12 @@ export default {
       { headername: "Data", field: "data" },
       { headerName: 'Prop', field: 'owner_id', hide: true },
     ];
+
+    const savedMun = localStorage.getItem('last_filtMun');
+    if (savedMun) {
+      this.filtMun = savedMun;
+      this.loadData()
+    }
   },
   computed: {
     currentUser() {

@@ -216,14 +216,6 @@
                     </footer>
                 </div>
             </div>
-            <div style="display: none">
-                <span class="icon is-small is-left" name="coisa">
-                    <font-awesome-icon icon="fa-solid fa-edit" />
-                </span>
-                <span class="icon is-small is-left" name="coisa2">
-                    <font-awesome-icon icon="fa-solid fa-trash" />
-                </span>
-            </div>
         </div>
     </div>
 </template>
@@ -350,14 +342,18 @@ export default {
             this.amostra.fant_exame = select.options[select.selectedIndex].text;
         },
         newAmostra() {
-            if (this.editing < 0) {
-                this.teste.push(JSON.parse(JSON.stringify(this.amostra)));//this.criarNovoObjeto(this.parasito));
-            } else {
-                this.teste[this.editing] = JSON.parse(JSON.stringify(this.amostra));
-                this.editing = -1;
-            }
+            this.v$.amostra.$validate(); // checks all inputs
 
-            this.dataTable = JSON.parse(JSON.stringify(this.teste));
+            if (!this.v$.amostra.$error) {
+                if (this.editing < 0) {
+                    this.teste.push(JSON.parse(JSON.stringify(this.amostra)));//this.criarNovoObjeto(this.parasito));
+                } else {
+                    this.teste[this.editing] = JSON.parse(JSON.stringify(this.amostra));
+                    this.editing = -1;
+                }
+
+                this.dataTable = JSON.parse(JSON.stringify(this.teste));
+            }
         },
         applyDataMask(field) {
             var mask = field.dataset.mask.split('');
@@ -502,9 +498,9 @@ export default {
             this.isLoading = false;
         },
         create() {
-            this.v$.$validate(); // checks all inputs
+            this.v$.notifica_exame.$validate(); // checks all inputs
 
-            if (!this.v$.$error) {
+            if (!this.v$.notifica_exame.$error) {
                 document.getElementById("login").classList.add("is-loading");
 
                 this.notifica_exame.amostras = this.teste;
@@ -556,7 +552,7 @@ export default {
 
         },
         update() {
-            this.notifica_exame.id_notificacao_exame = this.id_notificacao_exame;
+            this.notifica_exame.id_notifica_exame = this.id_notificacao_exame;
             notificaService
                 .editDet(this.notifica_exame)
                 .then((response) => {
@@ -589,8 +585,6 @@ export default {
         },
     },
     mounted() {
-        this.myspan = document.getElementsByName("coisa")[0];
-        this.myspan2 = document.getElementsByName("coisa2")[0];
         this.loadData();
 
 

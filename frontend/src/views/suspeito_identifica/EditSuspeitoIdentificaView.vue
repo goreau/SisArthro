@@ -162,7 +162,7 @@
                       <hr>
                       <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
                         :buttons="['edit', 'delete']" :has-exports="false" :calcHeight="true" @edit="editRow"
-                        @delete="deleteRow" />
+                        :deleted-id="delId" @delete="deleteRow" />
                     </article>
                   </div>
                 </div>
@@ -243,8 +243,7 @@ export default {
       tableName: "identifica_det",
       isLoading: false,
       columns: [],
-      myspan: null,
-      myspan2: null,
+      delId: null,
     };
   },
   validations() {
@@ -277,7 +276,8 @@ export default {
       })
       if (ok) {
         suspeitoIdentificaService.deleteDet(idx);
-        location.reload();
+        this.delId = idx;
+        //  location.reload();
       }
     },
     startCalendar() {
@@ -352,10 +352,10 @@ export default {
             .create(this.identifica)
             .then(
               (response) => {
-                this.identifica.id_identificacao =
-                  response.data.master.id_identificacao;
-                this.identifica_det.id_identificacao =
-                  response.data.master.id_identificacao;
+                this.identifica.id_suspeito_identifica =
+                  response.data.master.id_suspeito_identifica;
+                this.identifica_det.id_suspeito_identifica =
+                  response.data.master.id_suspeito_identifica;
                 this.message = "Identificação inserida com sucesso.";
                 this.showMessage = true;
                 this.type = "success";
@@ -394,7 +394,7 @@ export default {
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
-        if (this.identifica_det.id_identificacao_det > 0) {
+        if (this.identifica_det.id_suspeito_identifica_det > 0) {
           suspeitoIdentificaService
             .updateDet(this.identifica_det)
             .then(
@@ -447,7 +447,7 @@ export default {
         this.caption = "Captura";
         setTimeout(() => (this.showMessage = false), 3000);
       }
-
+      this.loadData()
     },
     loadData() {
       this.isLoading = true;
@@ -459,6 +459,7 @@ export default {
             this.susp_codigo = data.suspeito.codigo;
             if (Object.keys(data.master).length > 0) {
               this.identifica = data.master;
+              this.identifica_det.id_suspeito_identifica = this.identifica.id_suspeito_identifica;
               this.getTable()
               if (data.detail.length > 0) {
                 this.dataTable = data.detail;

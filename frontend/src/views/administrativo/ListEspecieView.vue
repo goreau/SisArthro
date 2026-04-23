@@ -16,7 +16,7 @@
           <div class="card-content">
             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
               :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
-              @delete="onDeleteRow" />
+              @delete="onDeleteRow" :deletedId="delId" />
           </div>
         </div>
       </div>
@@ -76,8 +76,7 @@ export default {
       generos: [],
       isLoading: false,
       columns: [],
-      myspan: null,
-      myspan2: null,
+      delId: null,
       isModalVisible: false,
       especie: {
         id_especie: 0,
@@ -150,7 +149,7 @@ export default {
       })
       if (ok) {
         especieService.deleteSpp(id);
-        location.reload();
+        this.delId = id
       }
     }
   },

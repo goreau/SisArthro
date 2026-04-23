@@ -17,7 +17,8 @@
               <div class="field column is-3 is-offset-3">
                 <label class="label">Município</label>
                 <div class="control">
-                  <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" @selMun="filtMun = $event" />
+                  <CmbListaMun :tabela="tableName" :id_prop="currentUser.id" :sel="filtMun"
+                    @selMun="filtMun = $event" />
                 </div>
               </div>
               <div class="field column is-1 is-offset-2">
@@ -34,7 +35,7 @@
               <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                 :pagination="true" :buttons="['edit', 'delete', 'caracteriza', 'animais']" :has-exports="true"
                 @edit="onEditRow" :calcHeight="false" @delete="onDeleteRow" @caracteriza="onCaracteriza"
-                @animais="onAnimais" />
+                @animais="onAnimais" :deletedId="delId" />
             </section>
           </div>
         </div>
@@ -61,6 +62,7 @@ export default {
       hasData: false,
       id_user: 0,
       quart: 0,
+      delId: null
     };
   },
   components: {
@@ -84,8 +86,8 @@ export default {
       })
       if (ok) {
         codendService.delete(id);
-        //location.reload();
-        this.$router.replace("/codends");
+        this.delId = id;
+        // this.$router.replace("/codends");
       }
     },
     onCaracteriza(id) {
@@ -104,6 +106,7 @@ export default {
       };
     },
     loadData(filter) {
+      localStorage.setItem('last_filtMun', this.filtMun);
       codendService.getCodends(this.filtMun, filter)
         .then((response) => {
           this.dataTable = response.data;
@@ -157,7 +160,11 @@ export default {
     },
   },
   created() {
-
+    const savedMun = localStorage.getItem('last_filtMun');
+    if (savedMun) {
+      this.filtMun = savedMun;
+      this.loadData(null)
+    }
   },
 };
 </script>

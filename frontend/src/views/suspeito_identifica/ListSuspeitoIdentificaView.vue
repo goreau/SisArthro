@@ -2,10 +2,10 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        
+
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title is-centered">Identificações</p>
+            <p class="card-header-title is-centered">Identificações poode excluir?</p>
             <button class="button is-primary is-outlined" @click="newIdent">
               <span class="icon">
                 <font-awesome-icon icon="fa-solid fa-plus-circle" />
@@ -14,23 +14,10 @@
             </button>
           </header>
           <div class="card-content">
-            <Message
-              v-if="showMessage"
-              @do-close="closeMessage"
-              :msg="message"
-              :type="type"
-              :caption="caption"
-            />
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"/>
+            <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"
+              :tableName="tableName" />
           </div>
-        </div>
-        <div style="display: none">
-          <span class="icon is-small is-left" name="coisa">
-            <font-awesome-icon icon="fa-solid fa-edit" />
-          </span>
-          <span class="icon is-small is-left" name="coisa2">
-            <font-awesome-icon icon="fa-solid fa-trash" />
-          </span>
         </div>
       </div>
     </div>
@@ -87,7 +74,7 @@ export default {
     this.myspan2 = document.getElementsByName("coisa2")[0];
 
     this.id_user = this.currentUser.id;
-    
+
     identificaService.getidentificas({})
       .then((response) => {
         this.dataTable = response.data;
@@ -95,17 +82,19 @@ export default {
       .catch((err) => {
         console.log(err);
       })
-      .finally(() => {});
+      .finally(() => { });
 
     this.columns = [
-      { title: "Município", field: "municipio", minWidth: 250, responsive:1, },
-      { title: "Captura", field: "codigo", minWidth: 200, responsive:1, },
-      { title: "Data", field: "dt_identificacao", sorter: "date", minWidth: 200, responsive:2, sorterParams:{
-          format:"dd/MM/yyyy",
-          alignEmptyValues:"top",
-      }},
+      { title: "Município", field: "municipio", minWidth: 250, responsive: 1, },
+      { title: "Captura", field: "codigo", minWidth: 200, responsive: 1, },
       {
-        title: "Ações", minWidth: 200, responsive:0,
+        title: "Data", field: "dt_identificacao", sorter: "date", minWidth: 200, responsive: 2, sorterParams: {
+          format: "dd/MM/yyyy",
+          alignEmptyValues: "top",
+        }
+      },
+      {
+        title: "Ações", minWidth: 200, responsive: 0,
         formatter: (cell, formatterParams) => {
           const row = cell.getRow().getData();
 
@@ -129,23 +118,23 @@ export default {
           btDel.innerHTML = this.myspan2.innerHTML;
           btDel.addEventListener("click", async () => {
             const ok = await this.$refs.confirmDialog.show({
-                title: 'Excluir',
-                message: 'Deseja mesmo excluir essa identificação e todas as informações associada a ela?',
-                okButton: 'Confirmar',
+              title: 'Excluir',
+              message: 'Deseja mesmo excluir essa identificação e todas as informações associada a ela?',
+              okButton: 'Confirmar',
             })
             if (ok) {
               identificaService.delete(row.id_identificacao)
-              .then(()=>{
-                location.reload();
-              })
-              .catch((err)=>{
-                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
-              })
-              
+                .then(() => {
+                  location.reload();
+                })
+                .catch((err) => {
+                  this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+                  this.showMessage = true;
+                  this.type = "alert";
+                  this.caption = "Identificação";
+                  setTimeout(() => (this.showMessage = false), 3000);
+                })
+
             }
           });
 

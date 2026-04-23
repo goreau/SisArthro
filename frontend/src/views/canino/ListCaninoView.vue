@@ -17,7 +17,7 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" />
+                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
                     </div>
                 </div>
             </div>
@@ -31,6 +31,7 @@ import caninoService from "@/services/canino.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import moment from 'moment';
+import Message from "@/components/general/Message.vue";
 
 export default {
     name: "ListaCaninos",
@@ -43,8 +44,7 @@ export default {
             showMessage: false,
             columns: [],
             tableName: 'canino',
-            myspan: null,
-            myspan2: null,
+            delId: null,
             id_user: 0,
             tpUser: 0
         };
@@ -52,6 +52,7 @@ export default {
     components: {
         MyTable,
         ConfirmDialog,
+        Message
     },
     methods: {
         newCapt() {
@@ -67,9 +68,9 @@ export default {
                 okButton: 'Confirmar',
             })
             if (ok) {
-                caninoService.delete(row.id_canino)
+                caninoService.delete(id)
                     .then(() => {
-                        location.reload();
+                        this.delId = id
                     })
                     .catch((err) => {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";

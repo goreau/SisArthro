@@ -210,8 +210,18 @@
                         </div>
                       </div>
                       <div class="columns">
-                        <footerCard @submit="createDet" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <footerCard @submit="createDet" @cancel="null" @aux="null" :cFooter="cFooter" />
                       </div>
+                    </article>
+                    <article class="tile is-child conteudo" v-if="identifica.id_identificacao > 0">
+                      <div class="columns">
+                        <div class="field column is-2 is-offset-5">
+                          <label class="label">Identificações</label>
+                        </div>
+                      </div>
+                      <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
+                        :buttons="['edit', 'delete']" :has-exports="false" :calcHeight="true" @edit="onEditRow"
+                        :deleted-id="delId" @delete="onDeleteRow" />
                     </article>
                   </div>
                 </div>
@@ -243,6 +253,7 @@ import {
   integer$,
   maxLength$,
 } from "../../components/forms/validators.js";
+import MyTable from "@/components/forms/MyTable.vue";
 
 export default {
   components: {
@@ -250,6 +261,7 @@ export default {
     Message,
     CmbMunicipio,
     footerCard,
+    MyTable,
   },
   data() {
     return {
@@ -257,8 +269,11 @@ export default {
       amostras: [],
       generos: [],
       especies: [],
+      dataTable: [],
+      columns: [],
       marcaGen: 99,
       agravo: 0,
+      delId: null,
       identifica: {
         id_identificacao: 0,
         id_captura: 0,
@@ -267,7 +282,9 @@ export default {
         dt_identificacao: "",
       },
       identifica_det: {
+        id: 0,
         id_identificacao: 0,
+        id_identificacao_det: 0,
         amostra: "",
         id_especie: 0,
         macho: "",
@@ -280,6 +297,7 @@ export default {
       id_municipio: 0,
       v$: useValidate(),
       showMessage: false,
+      isLoading: false,
       cFooter: {
         strSubmit: "Salvar",
         strCancel: "Cancelar",
@@ -304,10 +322,26 @@ export default {
         larva: { integer: integer$ },
         ninfa: { integer: integer$ },
         pool: { maxLength: maxLength$(20) },
+        id_identificacao: 0
       },
     };
   },
   methods: {
+    onEditRow(id) {
+      const row = this.dataTable.find(item => item.id === id);
+      this.identifica_det = Object.assign({}, this.identifica_det, row);
+    },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        identificaService.deleteDet(id);
+        this.delId = id;
+      }
+    },
     setDate(e) {
       if (e) {
         this.identifica.dt_identificacao = moment(String(e)).format('YYYY-MM-DD');
@@ -354,37 +388,79 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
+    loadAmostras() {
+      this.isLoading = true;
+      identificaService.getidentificaDets(this.identifica.id_identificacao)
+        .then((response) => {
+          this.dataTable = response.data;
+          this.isLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => (this.isLoading = false));
+    },
+    limpaDet() {
+      this.identifica_det.amostra = "";
+      this.identifica_det.id_especie = 0;
+      this.identifica_det.id_genero = 0;
+      this.identifica_det.macho = "";
+      this.identifica_det.femea = "";
+      this.identifica_det.femea_ing = "";
+      this.identifica_det.larva = "";
+      this.identifica_det.ninfa = "";
+      this.identifica_det.pool = "";
+      this.v$.identifica_det.$reset();
+    },
     createDet() {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
-        identificaService
-          .createDet(this.identifica_det)
-          .then((response) => {
-            this.showMessage = true;
-            this.message = "Identificação inserida com sucesso!";
-            this.type = "success";
-            this.caption = "Identificação";
-            setTimeout(() => (this.showMessage = false), 3000);
-            (error) => {
-              this.message = error;
+        if (this.identifica_det.id_identificacao_det > 0) {
+          identificaService
+            .updateDet(this.identifica_det)
+            .then(
+              (response) => {
+                this.loadAmostras();
+                this.limpaDet();
+              },
+              (error) => {
+                this.message = error;
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Identificação";
+                setTimeout(() => (this.showMessage = false), 3000);
+              }
+            )
+            .finally(() => {
+              document.getElementById("login").classList.remove("is-loading");
+            });
+        } else {
+          identificaService
+            .createDet(this.identifica_det)
+            .then((response) => {
+              this.loadAmostras();
+              this.limpaDet();
+              (error) => {
+                this.message = error;
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Identificação";
+                setTimeout(() => (this.showMessage = false), 3000);
+              };
+            })
+            .catch((err) => {
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
               this.showMessage = true;
               this.type = "alert";
               this.caption = "Identificação";
               setTimeout(() => (this.showMessage = false), 3000);
-            };
-          })
-          .catch((err) => {
-            this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-            this.showMessage = true;
-            this.type = "alert";
-            this.caption = "Identificação";
-            setTimeout(() => (this.showMessage = false), 3000);
-          })
-          .finally(() => {
-            document.getElementById("login").classList.remove("is-loading");
-          });
+            })
+            .finally(() => {
+              document.getElementById("login").classList.remove("is-loading");
+            });
+        }
       } else {
         this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
@@ -512,6 +588,12 @@ export default {
     if (cUser) {
       this.identifica.id_usuario = cUser.id;
     }
+
+    this.columns = [
+      { headerName: "Amostra", field: "amostra" },
+      { headerName: "Espécie", field: "especie" },
+      { headerName: "Pool", field: "pool" },
+    ];
 
     const options = {
       type: "date",

@@ -193,7 +193,7 @@ export default {
         prepare() {
             this.canino_det.peso = this.canino_det.peso == "" ? '0' : this.canino_det.peso;
 
-            this.canino_det.peso.replace(',','.');
+            this.canino_det.peso.replace(',', '.');
         },
         loadData() {
             this.isLoading = true;
@@ -238,7 +238,7 @@ export default {
                 this.prepare();
 
                 caninoService
-                    .createDet(this.canino_det)
+                    .editDet(this.canino_det)
                     .then((response) => {
                         this.showMessage = true;
                         this.message = "Animal alterado com sucesso!";

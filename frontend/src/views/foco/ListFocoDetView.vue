@@ -18,7 +18,7 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" />
+                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
                     </div>
                 </div>
             </div>
@@ -47,8 +47,7 @@ export default {
             type: "",
             showMessage: false,
             columns: [],
-            myspan: null,
-            myspan2: null,
+            delId: null,
             master: 0,
             quart: 0,
             id_user: 0
@@ -75,7 +74,7 @@ export default {
             if (ok) {
                 focoService.deleteDet(row.id_foco_det)
                     .then(() => {
-                        location.reload();
+                        this.delId = id
                     })
                     .catch((err) => {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";

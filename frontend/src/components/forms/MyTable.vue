@@ -13,15 +13,18 @@ import {
     TextFilterModule,
     themeAlpine,
     ValidationModule,
+    ClientSideRowModelModule,
+    ClientSideRowModelApiModule
 } from 'ag-grid-community'
 
 import localeText from '@/utils/agGridLocale'
-import { ClientSideRowModelModule } from 'ag-grid-community'
 import { CsvExportModule } from 'ag-grid-community'
 import tickCrossRenderer from '@/components/general/tickCrossRender.vue'
+import { integer } from '@vuelidate/validators'
 
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
+    ClientSideRowModelApiModule,
     CsvExportModule,
     ValidationModule,
     ColumnAutoSizeModule,
@@ -74,6 +77,10 @@ const props = defineProps({
         type: Array,
         default: () => [],
     },
+    deletedId: {
+        type: Number,
+        default: null
+    }
 })
 const emit = defineEmits([
     'edit',
@@ -238,7 +245,7 @@ async function download_pdf() {
         body: rows,
     })
 
-    doc.save('Sisaweb3.pdf')
+    doc.save('Sisarthro.pdf')
 }
 
 function toGrafico() {
@@ -247,13 +254,29 @@ function toGrafico() {
 
 watch(
     () => props.data,
-    (val) => {
+    async (val) => {
         rows.value = [...val]
+
         if (columnApi.value) {
             nextTick(() => autoSizeAll())
         }
     },
     { deep: true },
+)
+
+watch(
+    () => props.deletedId,
+    (id) => {
+        if (!id || !gridApi.value) return
+
+        const rowNode = gridApi.value.getRowNode(id)
+
+        if (rowNode) {
+            gridApi.value.applyTransaction({
+                remove: [rowNode.data]
+            })
+        }
+    }
 )
 
 watch(
@@ -360,7 +383,7 @@ defineExpose({
         gridApi.value?.setFilterModel(null)
     },
 })
-
+//
 
 /**
  *  //height: 40rem"
@@ -387,9 +410,9 @@ defineExpose({
         </div>
     </div>
     <div ref="gridWrapper">
-        <AgGridVue :theme="themeAlpine" :style="{ width: '100%', height: gridHeight }" :rowData="rows"
-            :treeData="treeData" :columnDefs="agGridColumns" :pagination="pagination" :paginationPageSize="12"
-            :pagination-auto-page-size="false" :localeText="localeText"
+        <AgGridVue :theme="themeAlpine" :style="{ width: '100%', height: gridHeight }" :treeData="treeData"
+            :columnDefs="agGridColumns" :pagination="pagination" :paginationPageSize="12" :rowData="rows"
+            :pagination-auto-page-size="false" :localeText="localeText" :getRowId="params => params.data.id.toString()"
             :paginationPageSizeSelector="paginationPageSizeSelector" @grid-ready="onGridReady"
             :autoGroupColumnDef="myAutoGroupColumnDef" :groupDefaultExpanded="1" :groupDisplayType="'singleColumn'"
             @first-data-rendered="onFirstDataRendered" />

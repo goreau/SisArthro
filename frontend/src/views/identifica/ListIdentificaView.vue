@@ -16,7 +16,7 @@
           <div class="card-content">
             <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
-              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
+              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false" :deletedId="delId"
               @delete="onDeleteRow" />
           </div>
         </div>
@@ -46,7 +46,9 @@ export default {
       myspan: null,
       myspan2: null,
       id_user: 0,
-      toUser: 0
+      tpUser: 0,
+      isLoading: false,
+      delId: 0
     };
   },
   components: {
@@ -70,7 +72,8 @@ export default {
       if (ok) {
         identificaService.delete(id)
           .then(() => {
-            location.reload();
+            this.delId = id
+            //  location.reload();
           })
           .catch((err) => {
             this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";

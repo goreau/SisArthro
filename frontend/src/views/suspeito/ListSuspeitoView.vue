@@ -35,7 +35,8 @@
                         </div>-->
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete', 'identifica']" :has-exports="true"
-                            @edit="onEditRow" :calcHeight="false" @delete="onDeleteRow" @identifica="onIdentifica" />
+                            @edit="onEditRow" :calcHeight="false" @delete="onDeleteRow" @identifica="onIdentifica"
+                            :deletedId="delId" />
                     </div>
                 </div>
             </div>
@@ -63,9 +64,7 @@ export default {
             type: "",
             showMessage: false,
             columns: [],
-            myspan: null,
-            myspan2: null,
-            myspan3: null,
+            delId: null,
             id_user: 0,
             tpUser: 0
         };
@@ -92,7 +91,7 @@ export default {
             if (ok) {
                 suspeitoService.delete(id)
                     .then(() => {
-                        location.reload();
+                        this.delId = id
                     })
                     .catch((err) => {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";

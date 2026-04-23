@@ -16,7 +16,7 @@
           <div class="card-content">
             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
               :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
-              @delete="onDeleteRow" />
+              @delete="onDeleteRow" :deletedId="delId" />
           </div>
         </div>
       </div>
@@ -39,8 +39,7 @@ export default {
       isLoading: false,
       columns: [],
       tableName: 'localidade',
-      myspan: null,
-      myspan2: null,
+      delId: null,
       id_user: 0,
       tpUser: 0
     };
@@ -65,7 +64,7 @@ export default {
       })
       if (ok) {
         localidadeService.delete(row.id_localidade);
-        location.reload();
+        this.delId = id
       }
     },
     getFormat(row) {

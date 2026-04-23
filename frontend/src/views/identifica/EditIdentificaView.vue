@@ -17,27 +17,21 @@
                       <div class="columns">
                         <div class="field column is-6">
                           <label class="label">CodSis - Município</label>
-                          <div class="control" v-if="identifica_det.id_identificacao_det > 0">
-                            <input class="input" type="text" placeholder="Nome" v-model="municipio" readonly />
-                          </div>
-                          <div class="control" v-else>
-                            <CmbMunicipio :id_prop="currentUser.id" :sel="identifica.id_municipio"
-                              @selMun="identifica.id_municipio = $event" />
+                          <div class="control">
+                            <CmbMunicipio :id_prop="currentUser.id" @selMun="id_municipio = $event"
+                              :sel="id_municipio" />
                           </div>
                         </div>
                         <div class="field column is-6">
                           <label class="label">Captura</label>
-                          <div class="control" v-if="identifica_det.id_identificacao_det > 0">
-                            <input class="input" type="text" placeholder="Captura" v-model="codigo" readonly />
-                          </div>
-                          <div class="control" v-else>
+                          <div class="control">
                             <div class="select">
                               <select v-model="identifica.id_captura" class="input" :class="{
                                 'is-danger': v$.identifica.id_captura.$error,
                               }">
                                 <option value="0">-- Selecione --</option>
                                 <option v-for="reg in capturas" :key="reg.id_captura" :value="reg.id_captura"
-                                  :selected="reg.id_capturao == identifica.id_captura">
+                                  :selected="reg.id_captura == identifica.id_captura">
                                   {{ reg.codigo }}
                                 </option>
                               </select>
@@ -53,35 +47,36 @@
                       <div class="columns">
                         <div class="field column is-6">
                           <label class="label">Responsável</label>
-                          <div class="control" v-if="identifica_det.id_identificacao_det > 0">
+                          <div class="control">
                             <input class="input" type="text" placeholder="Identificado por"
-                              v-model="identifica.responsavel" readonly />
-                          </div>
-                          <div class="control" v-else>
-                            <input class="input" type="text" placeholder="Identificado por"
-                              v-model="identifica.responsavel" />
+                              v-model="identifica.responsavel"
+                              :class="{ 'is-danger': v$.identifica.responsavel.$error }" />
+                            <span class="is-error" v-if="v$.identifica.responsavel.$error">
+                              {{ v$.identifica.responsavel.$errors[0].$message }}
+                            </span>
                           </div>
                         </div>
                         <div class="field column is-3">
                           <label class="label">Data</label>
-                          <div class="control" v-if="identifica_det.id_identificacao_det > 0">
-                            <input type="date" class="input" v-model="identifica.dt_identificacao" readonly>
-                          </div>
-                          <div class="control" v-else>
+                          <div class="control">
                             <input type="date" id="dtIdent">
                           </div>
+                          <span class="is-error" v-if="v$.identifica.dt_identificacao.$error">
+                            {{
+                              v$.identifica.dt_identificacao.$errors[0].$message
+                            }}
+                          </span>
                         </div>
                         <div class="field column is-3">
                           <label class="label">&nbsp;</label>
-                          <button class="button is-outlined is-success" @click="update">
-                            Atualizar
+                          <button class="button is-outlined is-success" id="btAbreId" @click="create">
+                            Alterar
                           </button>
                         </div>
-
                       </div>
                     </article>
-                    <article class="tile is-child conteudo">
-                      <div class="columns" v-if="identifica.id_identificacao > 0">
+                    <article class="tile is-child conteudo" v-if="identifica.id_identificacao > 0">
+                      <div class="columns">
                         <div class="field column is-2">
                           <label class="label">Amostra</label>
                           <div class="control">
@@ -107,7 +102,7 @@
                           <div class="control">
                             <div class="field has-addons">
                               <div class="select">
-                                <select class="input" @change="getEspeciesN($event)" v-model="genero">
+                                <select class="input" v-model="identifica_det.id_genero">
                                   <option value="0">-- Selecione --</option>
                                   <option v-for="reg in generos" :value="reg.id_genero" :key="reg.id_genero">
                                     {{ reg.nome }}
@@ -217,8 +212,18 @@
                         </div>
                       </div>
                       <div class="columns">
-                        <footerCard @submit="createDet" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <footerCard @submit="createDet" @cancel="null" @aux="null" :cFooter="cFooter" />
                       </div>
+                    </article>
+                    <article class="tile is-child conteudo" v-if="identifica.id_identificacao > 0">
+                      <div class="columns">
+                        <div class="field column is-2 is-offset-5">
+                          <label class="label">Identificações</label>
+                        </div>
+                      </div>
+                      <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
+                        :buttons="['edit', 'delete']" :has-exports="false" :calcHeight="true" @edit="onEditRow"
+                        :deleted-id="delId" @delete="onDeleteRow" />
                     </article>
                   </div>
                 </div>
@@ -236,8 +241,8 @@ import Message from "@/components/general/Message.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import identificaService from "@/services/identifica.service";
-import capturaService from "@/services/captura.service";
 import especieService from "@/services/especie.service";
+import capturaService from "@/services/captura.service";
 import moment from "moment";
 import footerCard from "@/components/forms/FooterCard.vue";
 import bulmaCalendar from 'bulma-calendar/dist/js/bulma-calendar.min.js';
@@ -250,34 +255,38 @@ import {
   integer$,
   maxLength$,
 } from "../../components/forms/validators.js";
+import MyTable from "@/components/forms/MyTable.vue";
 
 export default {
   components: {
     Loader,
+    Message,
     CmbMunicipio,
     footerCard,
-    Message
+    MyTable,
   },
   data() {
     return {
-      Identificas: [],
       capturas: [],
       amostras: [],
       generos: [],
       especies: [],
-      genero: 0,
+      dataTable: [],
+      columns: [],
       marcaGen: 99,
       agravo: 0,
+      delId: null,
       identifica: {
         id_identificacao: 0,
         id_captura: 0,
         id_usuario: 0,
-        responsavel: "",
+        reponsavel: "",
         dt_identificacao: "",
       },
       identifica_det: {
-        id_identificacao_det: 0,
+        id: 0,
         id_identificacao: 0,
+        id_identificacao_det: 0,
         amostra: "",
         id_especie: 0,
         macho: "",
@@ -287,23 +296,22 @@ export default {
         ninfa: "",
         pool: "",
       },
-      municipio: "",
-      codigo: "",
+      id_municipio: 0,
       v$: useValidate(),
-      edt_date: "",
       showMessage: false,
+      isLoading: false,
       cFooter: {
         strSubmit: "Salvar",
         strCancel: "Cancelar",
-        strAux: "Identificações",
-        aux: true,
+        strAux: "",
+        aux: false,
       },
     };
   },
   validations() {
     return {
       identifica: {
-        id_captura: { required: required$, minValue: combo$(1) },
+        id_captura: { minValue: combo$(1) },
         responsavel: { maxLength: maxLength$(50) },
         dt_identificacao: { required: required$ },
       },
@@ -316,56 +324,42 @@ export default {
         larva: { integer: integer$ },
         ninfa: { integer: integer$ },
         pool: { maxLength: maxLength$(20) },
+        id_identificacao: 0
       },
     };
   },
   methods: {
-    startCalendar() {
-      var options = {
-        type: "date",
-        dateFormat: "dd/MM/yyyy",
-        startDate: this.identifica.dt_identificacao,
-        showHeader: false,
-        color: "info",
-        cancelLabel: 'Cancelar',
-        showClearButton: false,
-        todayLabel: 'Hoje',
-        maxDate: new Date(),
-      };
-
-      var calini = bulmaCalendar.attach('#dtIdent', options);
-
-      const input = document.querySelector('.datetimepicker-dummy-input');
-      if (input) {
-        input.removeAttribute('readonly');
-        input.setAttribute('value', "__/__/____");
-        input.setAttribute('data-mask', "__/__/____");
-        this.applyDataMask(input);
-
-        input.addEventListener('blur', () => {
-          this.identifica.dt_identificacao = moment(input.value).format('YYYY-MM-DD');
-        });
-      }
-
-      const element = document.querySelector('#dtIdent');
-      if (element) {
-        element.bulmaCalendar.on('select', datepicker => {
-          this.identifica.dt_identificacao = moment(datepicker.data.startDate).format('YYYY-MM-DD');
-        });
+    onEditRow(id) {
+      const row = this.dataTable.find(item => item.id === id);
+      this.identifica_det = Object.assign({}, this.identifica_det, row);
+    },
+    async onDeleteRow(id) {
+      const ok = await this.$refs.confirmDialog.show({
+        title: 'Excluir',
+        message: 'Deseja mesmo excluir essa captura e todas as informações associada a ela?',
+        okButton: 'Confirmar',
+      })
+      if (ok) {
+        identificaService.deleteDet(id);
+        this.delId = id;
       }
     },
-    details() {
-      this.$router.push("/identifica_dets/" + this.identifica.id_identificacao);
+    setDate(e) {
+      if (e) {
+        this.identifica.dt_identificacao = moment(String(e)).format('YYYY-MM-DD');
+      }
     },
-    update() {
-      this.v$.identifica.$validate(); // checks all inputs
+    create() {
+      this.v$.$validate(); // checks all inputs
+      console.log(this.v$.identifica.$error);
       if (!this.v$.identifica.$error) {
+        document.getElementById("btAbreId").classList.add("is-loading");
 
         identificaService
           .update(this.identifica)
           .then(
             (response) => {
-              this.message = "Identificação alterada com sucesso.";
+              this.message = "Identifiicação alterada";
               this.showMessage = true;
               this.type = "success";
               this.caption = "Identificação";
@@ -397,8 +391,70 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
     },
+    loadData() {
+      this.isLoading = true;
+
+      identificaService.getIdentifica(this.identifica.id_identificacao)
+        .then(
+          (response) => {
+            let data = response.data;
+            this.id_municipio = data.id_municipio;
+            this.identifica.id_captura = data.id_captura;
+            this.identifica.dt_identificacao = data.dt_identificacao;
+            this.identifica.responsavel = data.responsavel;
+            this.edt_date = moment(String(data.dt_identificacao)).format(
+              "DD/MM/YYYY"
+            );
+            this.municipio = data.municipio;
+            this.codigo = data.codigo;
+
+            this.startCalendar();
+
+            this.loadAmostras();
+          },
+          (error) => {
+            this.message =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.response.data ||
+              error.message ||
+              error.toString();
+            this.showMessage = true;
+            this.type = "alert";
+            this.caption = "Identificação";
+            setTimeout(() => (this.showMessage = false), 3000);
+          }
+        );
+
+      this.isLoading = false;
+    },
+    loadAmostras() {
+      this.isLoading = true;
+      identificaService.getidentificaDets(this.identifica.id_identificacao)
+        .then((response) => {
+          this.dataTable = response.data;
+          this.isLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        })
+        .finally(() => (this.isLoading = false));
+    },
+    limpaDet() {
+      this.identifica_det.amostra = "";
+      this.identifica_det.id_especie = 0;
+      this.identifica_det.id_genero = 0;
+      this.identifica_det.macho = "";
+      this.identifica_det.femea = "";
+      this.identifica_det.femea_ing = "";
+      this.identifica_det.larva = "";
+      this.identifica_det.ninfa = "";
+      this.identifica_det.pool = "";
+      this.v$.identifica_det.$reset();
+    },
     createDet() {
-      this.v$.identifica_det.$validate(); // checks all inputs
+      this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
@@ -407,11 +463,8 @@ export default {
             .updateDet(this.identifica_det)
             .then(
               (response) => {
-                this.showMessage = true;
-                this.message = "Identificação alterada!";
-                this.type = "success";
-                this.caption = "Identificação";
-                setTimeout(() => (this.showMessage = false), 3000);
+                this.loadAmostras();
+                this.limpaDet();
               },
               (error) => {
                 this.message = error;
@@ -425,136 +478,47 @@ export default {
               document.getElementById("login").classList.remove("is-loading");
             });
         } else {
-          if (this.identifica_det.amostra > 0) {
-            identificaService
-              .createDet(this.identifica_det)
-              .then(
-                (response) => {
-                  this.showMessage = true;
-                  this.message = "Identificação inserida!";
-                  this.type = "success";
-                  this.caption = "Identificação";
-                  setTimeout(() => (this.showMessage = false), 3000);
-                },
-                (error) => {
-                  this.message = error;
-                  this.showMessage = true;
-                  this.type = "alert";
-                  this.caption = "Identificação";
-                  setTimeout(() => (this.showMessage = false), 3000);
-                }
-              )
-              .finally(() => {
-                document.getElementById("login").classList.remove("is-loading");
-              });
-
-          } else {
-            identificaService
-              .update(this.identifica)
-              .then(
-                (response) => {
-                  this.showMessage = true;
-                  this.message = "Identificação alterada!";
-                  this.type = "success";
-                  this.caption = "Identificação";
-                  setTimeout(() => (this.showMessage = false), 3000);
-                },
-                (error) => {
-                  this.message = error;
-                  this.showMessage = true;
-                  this.type = "alert";
-                  this.caption = "Identificação";
-                  setTimeout(() => (this.showMessage = false), 3000);
-                }
-              )
-              .finally(() => {
-                document.getElementById("login").classList.remove("is-loading");
-              });
-
-          }
-
-
+          identificaService
+            .createDet(this.identifica_det)
+            .then((response) => {
+              this.loadAmostras();
+              this.limpaDet();
+              (error) => {
+                this.message = error;
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Identificação";
+                setTimeout(() => (this.showMessage = false), 3000);
+              };
+            })
+            .catch((err) => {
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Identificação";
+              setTimeout(() => (this.showMessage = false), 3000);
+            })
+            .finally(() => {
+              document.getElementById("login").classList.remove("is-loading");
+            });
         }
       } else {
         this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
         this.type = "alert";
-        this.caption = "Captura";
+        this.caption = "Identificação";
         setTimeout(() => (this.showMessage = false), 3000);
       }
-
     },
-    loadData() {
-      this.isLoading = true;
-
-      identificaService.getIdentifica(this.identifica.id_identificacao)
-        .then(
-          (response) => {
-            let data = response.data;
-            this.identifica.id_municipio = data.id_municipio;
-            this.identifica.id_captura = data.id_captura;
-            this.identifica.dt_identificacao = data.dt_identificacao;
-            this.identifica.responsavel = data.responsavel;
-            this.edt_date = moment(String(data.dt_identificacao)).format(
-              "DD/MM/YYYY"
-            );
-            this.municipio = data.municipio;
-            this.codigo = data.codigo;
-
-            this.startCalendar();
-          },
-          (error) => {
-            this.message =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.response.data ||
-              error.message ||
-              error.toString();
-            this.showMessage = true;
-            this.type = "alert";
-            this.caption = "Identificação";
-            setTimeout(() => (this.showMessage = false), 3000);
-          }
-        );
-
-      this.isLoading = false;
-    },
-    loadDet() {
-      this.isLoading = true;
-
-      identificaService.getIdentificaDet(this.identifica_det.id_identificacao_det)
-        .then(
-          async (response) => {
-            let data = response.data;
-            this.identifica_det.amostra = data.amostra;
-
-            this.genero = data.id_genero;
-            await this.getEspecies(this.genero);
-            this.identifica_det.id_especie = data.id_especie;
-            this.identifica_det.macho = data.macho;
-            this.identifica_det.femea = data.femea;
-            this.identifica_det.femea_ing = data.femea_ing;
-            this.identifica_det.larva = data.larva;
-            this.identifica_det.ninfa = data.ninfa;
-            this.identifica_det.pool = data.pool;
-          },
-          (error) => {
-            this.message =
-              (error.response &&
-                error.response.data &&
-                error.response.data.message) ||
-              error.response.data ||
-              error.message ||
-              error.toString();
-            this.showMessage = true;
-            this.type = "alert";
-            this.caption = "Identificação";
-            setTimeout(() => (this.showMessage = false), 3000);
-          }
-        );
-
-      this.isLoading = false;
+    getCapturas() {
+      capturaService
+        .getCombo(this.id_municipio, false)
+        .then((res) => {
+          this.capturas = res.data;
+        })
+        .catch((err) => {
+          this.capturas = [];
+        });
     },
     getAmostras() {
       capturaService
@@ -578,49 +542,24 @@ export default {
       }
       this.getGeneros()
     },
-    getCapturas() {
-      capturaService
-        .getCombo(this.identifica.id_municipio, true)
-        .then((res) => {
-          this.capturas = res.data;
-        })
-        .catch((err) => {
-          this.capturas = [];
-        });
-    },
     getGeneros() {
       especieService
         .comboGen(this.agravo)
         .then((res) => {
           this.generos = res.data;
-          let idx = this.generos.find(item => item.id_genero === this.genero);
-          if (!idx && this.marcaGen == 99) {
-            this.trocaListaGen()
-          }
         })
         .catch((err) => {
           this.generos = [];
         });
     },
-    getEspeciesN(e) {
-      let gen = e.target.value;
+    getEspecies() {
       especieService
-        .comboEsp(gen)
+        .getCombo({})
         .then((res) => {
           this.especies = res.data;
         })
         .catch((err) => {
-          this.especies = [];
-        });
-    },
-    getEspecies(gen) {
-      especieService
-        .comboEsp(gen)
-        .then((res) => {
-          this.especies = res.data;
-        })
-        .catch((err) => {
-          this.especies = [];
+          this.capturas = [];
         });
     },
     applyDataMask(field) {
@@ -659,36 +598,81 @@ export default {
 
       field.addEventListener('click', changed)
       field.addEventListener('keyup', changed)
-    }
+    },
+    startCalendar() {
+      var options = {
+        type: "date",
+        dateFormat: "dd/MM/yyyy",
+        startDate: this.identifica.dt_identificacao,
+        showHeader: false,
+        color: "info",
+        cancelLabel: 'Cancelar',
+        showClearButton: false,
+        todayLabel: 'Hoje',
+        maxDate: new Date(),
+      };
+
+      var calini = bulmaCalendar.attach('#dtIdent', options);
+
+      const input = document.querySelector('.datetimepicker-dummy-input');
+      if (input) {
+        input.removeAttribute('readonly');
+        input.setAttribute('value', "__/__/____");
+        input.setAttribute('data-mask', "__/__/____");
+        this.applyDataMask(input);
+
+        input.addEventListener('blur', () => {
+          this.identifica.dt_identificacao = moment(input.value).format('YYYY-MM-DD');
+        });
+      }
+
+      const element = document.querySelector('#dtIdent');
+      if (element) {
+        element.bulmaCalendar.on('select', datepicker => {
+          this.identifica.dt_identificacao = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+        });
+      }
+    },
   },
   computed: {
     currentUser() {
       return this.$store.getters["auth/loggedUser"];
     },
   },
-  created() {
-    this.identifica.id_identificacao = this.$route.params.id;
-    this.identifica_det.id_identificacao = this.$route.params.id;
-    this.loadData();
-
-    if (this.$route.params.det) {
-      this.identifica_det.id_identificacao_det = this.$route.params.det;
-      this.loadDet();
-    }
-  },
   watch: {
-    "identifica.id_municipio"(value) {
+    id_municipio(value) {
       this.getCapturas();
     },
     "identifica.id_captura"(value) {
       this.getAmostras();
     },
+    "identifica_det.id_genero"(value) {
+      especieService
+        .comboEsp(value)
+        .then((res) => {
+          this.especies = res.data;
+        })
+        .catch((err) => {
+          this.especies = [];
+        });
+    }
   },
   mounted() {
     let cUser = this.currentUser;
     if (cUser) {
       this.identifica.id_usuario = cUser.id;
     }
+
+    this.columns = [
+      { headerName: "Amostra", field: "amostra" },
+      { headerName: "Espécie", field: "especie" },
+      { headerName: "Pool", field: "pool" },
+    ];
+  },
+  created() {
+    this.identifica.id_identificacao = this.$route.params.id;
+    this.identifica_det.id_identificacao = this.$route.params.id;
+    this.loadData();
   },
 };
 </script>

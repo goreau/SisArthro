@@ -5,7 +5,7 @@
         <Loader v-if="isLoading" />
         <div class="card">
           <header class="card-header">
-            <p class="card-header-title is-centered">Identificações</p>
+            <p class="card-header-title is-centered">Identificações Pode excluir?</p>
             <button class="button is-primary is-outlined" @click="newIdent">
               <span class="icon">
                 <font-awesome-icon icon="fa-solid fa-plus-circle" />

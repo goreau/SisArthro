@@ -1,897 +1,1093 @@
-import { createRouter, createWebHashHistory } from 'vue-router';
-import { publicPath } from '../../vue.config';
+import { createRouter, createWebHashHistory } from 'vue-router'
+import { publicPath } from '../../vue.config'
 //https://github.com/vuejs/vue-router/issues/1735
 const routes = [
   {
     path: '/',
     name: 'loginHome',
-    component: () => import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue'),
     meta: {
       breadcrumb: {
         name: 'Login',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/home',
     name: 'home',
-    component: () => import(/* webpackChunkName: "home" */ '../views/general/HomeView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "home" */ '../views/general/HomeView.vue'),
     meta: {
       breadcrumb: {
         name: 'Início',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/mycad',
     name: 'cadastro',
-    component: () => import(/* webpackChunkName: "home" */ '../views/usuario/MyCadastroView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "home" */ '../views/usuario/MyCadastroView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Meu Cadastro',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/about',
     name: 'about',
-    component: () => import(/* webpackChunkName: "about" */ '../views/general/AboutView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/general/AboutView.vue'),
     meta: {
       breadcrumb: {
         name: 'Sobre',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
+  },
+  {
+    path: '/downloads',
+    name: 'downloads',
+    component: () =>
+      import(
+        /* webpackChunkName: "about" */ '../views/general/MainDownlodsView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Material de Apoio',
+        root: true,
+      },
+    },
   },
   {
     path: '/login',
     name: 'login',
-    component: () => import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue')
+    component: () =>
+      import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue'),
   },
   {
     path: '/user',
     name: 'user',
-    component: () => import(/* webpackChunkName: "user" */ '../views/usuario/UsuarioView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/usuario/UsuarioView.vue'),
     meta: {
       breadcrumb: {
         name: 'Usuário',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/users',
     name: 'users',
-    component: () => import(/* webpackChunkName: "user" */ '../views/usuario/ListUsersView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/usuario/ListUsersView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Usuários',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editUser/:id',
     name: 'editUser',
-    component: () => import(/* webpackChunkName: "user" */ '../views/usuario/EditUsuarioView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/usuario/EditUsuarioView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Usuário',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/forgot',
     name: 'forgot',
-    component: () => import('../views/usuario/ForgotView.vue'), 
+    component: () => import('../views/usuario/ForgotView.vue'),
   },
   {
     path: '/reset/:token',
     name: 'reset',
-    component: () => import('../views/usuario/ResetView.vue'), 
+    component: () => import('../views/usuario/ResetView.vue'),
   },
   {
     path: '/localidade',
     name: 'localidade',
-    component: () => import(/* webpackChunkName: "user" */ '../views/localidade/LocalidadeView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/localidade/LocalidadeView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Localidade',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/localidades',
     name: 'localidades',
-    component: () => import(/* webpackChunkName: "user" */ '../views/localidade/ListLocalidadeView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/localidade/ListLocalidadeView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Localidades',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editLoc/:id',
     name: 'editloc',
-    component: () => import(/* webpackChunkName: "user" */ '../views/localidade/EditLocalidadeView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/localidade/EditLocalidadeView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Localidade',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/codend',
     name: 'codend',
-    component: () => import(/* webpackChunkName: "user" */ '../views/codend/CodendView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/codend/CodendView.vue'),
     meta: {
       breadcrumb: {
         name: 'CodEnd',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/codends/:quart?',
     name: 'codends',
-    component: () => import(/* webpackChunkName: "user" */ '../views/codend/ListCodendView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/codend/ListCodendView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista CodEnds',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/duplicaCaracterizacao',
     name: 'duplicaCaracterizacao',
-    component: () => import(/* webpackChunkName: "user" */ '../views/codend/DuplicaCaracterizacaoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/codend/DuplicaCaracterizacaoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Novo Ciclo de Caracterização',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editCod/:id',
     name: 'editcod',
-    component: () => import(/* webpackChunkName: "user" */ '../views/codend/EditCodendView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/codend/EditCodendView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar CodEnd',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/caracteriza/:master/:id',
     name: 'caracteriza',
-    component: () => import(/* webpackChunkName: "user" */ '../views/caracteriza/CaracterizaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/caracteriza/CaracterizaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Caracterização',
-        root: false
-      }
-    }
-  },
-  {
-    path: '/editCaracteriza/:id',
-    name: 'editCaracteriza',
-    component: () => import(/* webpackChunkName: "user" */ '../views/caracteriza/EditCaracterizaView.vue'),
-    meta: {
-      breadcrumb: {
-        name: 'Editar Caracterização',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/captura',
     name: 'captura',
-    component: () => import(/* webpackChunkName: "user" */ '../views/captura/CapturaView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/captura/CapturaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Captura',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/captura_det/:master',
     name: 'captura_det',
-    component: () => import(/* webpackChunkName: "user" */ '../views/captura/CapturaDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/captura/CapturaDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Captura - Item',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/captura_dets/:master',
     name: 'captura_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/captura/ListCapturaDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/captura/ListCapturaDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Itens Captura',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/capturas',
     name: 'capturas',
-    component: () => import(/* webpackChunkName: "user" */ '../views/captura/ListCapturaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/captura/ListCapturaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Capturas',
         root: false,
       },
-    }
+    },
   },
   {
     path: '/editCapt/:id',
     name: 'editcapt',
-    component: () => import(/* webpackChunkName: "user" */ '../views/captura/EditCapturaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/captura/EditCapturaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Captura',
         root: false,
       },
-    }
+    },
   },
   {
     path: '/editCaptDet/:id',
     name: 'editcaptdet',
-    component: () => import(/* webpackChunkName: "user" */ '../views/captura/EditCapturaDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/captura/EditCapturaDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Captura Item',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
-    {
+  {
     path: '/suspeito',
     name: 'suspeito',
-    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito/SuspeitoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/suspeito/SuspeitoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Notificação de Artrópodes',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/suspeitos',
     name: 'suspeitos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito/ListSuspeitoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/suspeito/ListSuspeitoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Notificação de Artrópodes',
         root: false,
       },
-    }
+    },
   },
   {
     path: '/editSuspeito/:id',
     name: 'editsuspeito',
-    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito/EditSuspeitoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/suspeito/EditSuspeitoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Notiificação',
         root: false,
       },
-    }
+    },
   },
   {
     path: '/canino',
     name: 'canino',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/CaninoView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/canino/CaninoView.vue'),
     meta: {
       breadcrumb: {
         name: 'Animal - Endereço',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/canino_det/:master',
     name: 'canino_det',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/CaninoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/canino/CaninoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Animal',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/caninos',
     name: 'caninos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/ListCaninoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/canino/ListCaninoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Endereços',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/canino_dets/:master',
     name: 'canino_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/ListCaninoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/canino/ListCaninoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Animais',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editCanino/:id',
     name: 'editcanino',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/EditCaninoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/canino/EditCaninoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Endereço',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editCaninoCodend/:codend',
     name: 'editcaninocodend',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/EditCaninoCodendView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/canino/EditCaninoCodendView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Endereço',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editCaninoDet/:id',
     name: 'editcaninodet',
-    component: () => import(/* webpackChunkName: "user" */ '../views/canino/EditCaninoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/canino/EditCaninoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Animal',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/inquerito',
     name: 'inquerito',
-    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/InqueritoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/inquerito/InqueritoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Inquérito',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/inquerito_det/:master/:quart/:coleira',
     name: 'inquerito_det',
-    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/InqueritoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/inquerito/InqueritoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Coletas',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/inqueritos',
     name: 'inqueritos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Inquéritos',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/inquerito_dets/:master/:tipo',
     name: 'inquerito_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/inquerito/ListInqueritoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Coletas',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editInquerito/:id',
     name: 'editinquerito',
-    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Inquérito',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editInqueritoDet/:id',
     name: 'editinqueritodet',
-    component: () => import(/* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/inquerito/EditInqueritoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Inquérito',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/foco',
     name: 'foco',
-    component: () => import(/* webpackChunkName: "user" */ '../views/foco/FocoView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/foco/FocoView.vue'),
     meta: {
       breadcrumb: {
         name: 'Inv. Foco',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/foco_det/:master/:quart',
     name: 'foco_det',
-    component: () => import(/* webpackChunkName: "user" */ '../views/foco/FocoDetView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/foco/FocoDetView.vue'),
     meta: {
       breadcrumb: {
         name: 'Coletas',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/focos',
     name: 'focos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/foco/ListFocoView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/foco/ListFocoView.vue'),
     meta: {
       breadcrumb: {
         name: 'Lista Inquéritos',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/foco_dets/:master/:quart',
     name: 'foco_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/foco/ListFocoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/foco/ListFocoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Coletas',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editFoco/:id',
     name: 'editfoco',
-    component: () => import(/* webpackChunkName: "user" */ '../views/foco/EditFocoView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/foco/EditFocoView.vue'),
     meta: {
       breadcrumb: {
         name: 'Inquérito',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/editFocoDet/:id',
     name: 'editfocodet',
-    component: () => import(/* webpackChunkName: "user" */ '../views/foco/EditFocoDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/foco/EditFocoDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Animal',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/identifica',
     name: 'identifica',
-    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/IdentificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/identifica/IdentificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Identificação',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/identificas',
     name: 'identificas',
-    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/ListIdentificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/identifica/ListIdentificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Amostra Identificação',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editIdent/:id',
     name: 'editident',
-    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/EditIdentificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/identifica/EditIdentificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Identificação',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editIdent/:id/:det',
     name: 'editident2',
-    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/EditIdentificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/identifica/EditIdentificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Amostra Identificação',
-        root: false
-      }
-    }
-  },
-  {
-    path: '/identifica_dets/:master',
-    name: 'identifica_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/identifica/ListIdentificaDetView.vue'),
-    meta: {
-      breadcrumb: {
-        name: 'Lista Amostras Identificação',
-        root: true
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editSuspeitoIdent/:id',
     name: 'editsuspeitoident',
-    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito_identifica/EditSuspeitoIdentificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/suspeito_identifica/EditSuspeitoIdentificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Identificação Artrópode',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editSuspeitoIdent/:id/:det',
     name: 'editsuspeitoident2',
-    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito_identifica/EditSuspeitoIdentificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/suspeito_identifica/EditSuspeitoIdentificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Amostra Artrópodes',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/suspeito_identifica_dets/:master',
     name: 'suspeito_identifica_dets',
-    component: () => import(/* webpackChunkName: "user" */ '../views/suspeito_identifica/ListSuspeitoIdentificaDetView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/suspeito_identifica/ListSuspeitoIdentificaDetView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Lista Amostras Artrópodes',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/notifica',
     name: 'notifica',
-    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/NotificacaoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/notifica/NotificacaoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Notificação',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/notificas',
     name: 'notificas',
-    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/ListNotificaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/notifica/ListNotificaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Notificações',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/editNotifica/:id',
     name: 'editNotifica',
-    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/EditNotificacaoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/notifica/EditNotificacaoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Editar Notificação',
         root: true,
       },
-    }
+    },
   },
   {
     path: '/notifica_exame/:master',
     name: 'notifica_exame',
-    component: () => import(/* webpackChunkName: "user" */ '../views/notifica/NotificaExameView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/notifica/NotificaExameView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Notificação - Exames',
-        root: false
-      }
-    }
+        root: false,
+      },
+    },
   },
   {
     path: '/generos',
     name: 'generos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListGeneroView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/ListGeneroView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Genero',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/especies',
     name: 'especies',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListEspecieView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/ListEspecieView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Espécie',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/auxiliares',
     name: 'auxiliares',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListAuxiliaresView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/ListAuxiliaresView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Auxiliares',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/deluser',
     name: 'deluser',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/RemoveUserView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/RemoveUserView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Remover Usuário',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/propmun',
     name: 'propmun',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/EditPropMunView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/EditPropMunView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Usuário/Município',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/listfiles',
     name: 'listfiles',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/ListTabletView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/ListTabletView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Arquivos Tablet',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/refactor',
     name: 'refactor',
-    component: () => import(/* webpackChunkName: "user" */ '../views/administrativo/RefactorCodendView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/RefactorCodendView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Refatorar Codends',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/coords',
     name: 'coords',
-    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/ListCoordenadasView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/gerencial/ListCoordenadasView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Adm - Lista Coordenadas',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/report',
     name: 'report',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainReportView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/MainReportView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Relatório',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/report/:id',
     name: 'report_id',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/ReportView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/report/ReportView.vue'),
     meta: {
       breadcrumb: {
         name: 'Relatórios',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/reportN/:id',
     name: 'reportN_id',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/ReportNestedView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/ReportNestedView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Relatórios',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/indicadores',
     name: 'indicadores',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainIndicadoresView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/MainIndicadoresView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Indicadores',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/mapas',
     name: 'mapas',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainMapasView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/MainMapasView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Mapas',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/mapa/:id',
     name: 'mapa',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/MapaView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/report/MapaView.vue'),
     meta: {
       breadcrumb: {
         name: 'Mapa',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/cluster',
     name: 'cluster',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/ClusterView.vue'),
+    component: () =>
+      import(/* webpackChunkName: "user" */ '../views/report/ClusterView.vue'),
     meta: {
       breadcrumb: {
         name: 'Cluster',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/clusterCaptura',
     name: 'clustercaptura',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/CapturasClusterView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/CapturasClusterView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Cluster Capturas',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/indicadores/:id',
     name: 'indicadores_id',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/IndicadoresView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/IndicadoresView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Indicadores',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/indicadoresVetor/:id',
     name: 'indicadoresvetor_id',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/IndicadoresVetorView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/IndicadoresVetorView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Indicadores',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/pendlistcaracteriza/:id',
     name: 'pendlistcaracteriza',
-    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/ListPendenciaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/gerencial/ListPendenciaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Caracterização - Pendência',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/pendcaracteriza',
     name: 'pendcaracteriza',
-    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/CaracterizacaoPendenciaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/gerencial/CaracterizacaoPendenciaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Caracterização - Pendência',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/pendlistcanino/:id',
     name: 'pendlistcanino',
-    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/ListPendenciaCaninoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/gerencial/ListPendenciaCaninoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Canino - Pendência',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/pendcanino',
     name: 'pendcanino',
-    component: () => import(/* webpackChunkName: "user" */ '../views/gerencial/CaracterizacaoPendenciaView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/gerencial/CaracterizacaoPendenciaView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Canino - Pendência',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
   {
     path: '/estratos',
     name: 'estratos',
-    component: () => import(/* webpackChunkName: "user" */ '../views/report/MainEstratoView.vue'),
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/MainEstratoView.vue'
+      ),
     meta: {
       breadcrumb: {
         name: 'Estratos',
-        root: true
-      }
-    }
+        root: true,
+      },
+    },
   },
 ]
 
 const router = createRouter({
   history: createWebHashHistory(process.env.BASE_URL),
   routes,
-  base: publicPath
-});
+  base: publicPath,
+})
 
 export default router

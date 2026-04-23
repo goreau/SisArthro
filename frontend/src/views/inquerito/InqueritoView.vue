@@ -14,7 +14,8 @@
                                 <div class="field column is-4">
                                     <label class="label">Município</label>
                                     <div class="control">
-                                        <CmbMunicipio :id_prop="currentUser.id" @selMun="inquerito.id_municipio = $event"
+                                        <CmbMunicipio :id_prop="currentUser.id"
+                                            @selMun="inquerito.id_municipio = $event"
                                             :errclass="{ 'is-danger': v$.inquerito.id_municipio.$error }" />
                                         <span class="is-error" v-if="v$.inquerito.id_municipio.$error">
                                             {{ v$.inquerito.id_municipio.$errors[0].$message }}
@@ -77,7 +78,8 @@
                                     <label class="label">Ciclo</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="" v-model="inquerito.ciclo"
-                                            :class="{ 'is-danger': v$.inquerito.ciclo.$error }" :disabled="inquerito.id_tipo == 1"/>
+                                            :class="{ 'is-danger': v$.inquerito.ciclo.$error }"
+                                            :disabled="inquerito.id_tipo == 1" />
                                         <span class="is-error" v-if="v$.inquerito.ciclo.$error">
                                             {{ v$.inquerito.ciclo.$errors[0].$message }}
                                         </span>
@@ -87,8 +89,8 @@
                                     <label class="label">Atividade com encoleiramento</label>
                                     <div class="control has-icons-left has-icons-right">
                                         <label class="checkbox">
-                                            <input type="checkbox" name="encoleiramento" value="1" :disabled="inquerito.id_tipo == 1"
-                                                v-model="inquerito.encoleiramento" />
+                                            <input type="checkbox" name="encoleiramento" value="1"
+                                                :disabled="inquerito.id_tipo == 1" v-model="inquerito.encoleiramento" />
                                             Sim
                                         </label>
                                     </div>
@@ -126,7 +128,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                        <footerCard @submit="create" @cancel="null" @aux="null" :cFooter="cFooter" />
                     </footer>
                 </div>
             </div>
@@ -340,44 +342,44 @@ export default {
         },
     },
     mounted() {
-    let cUser = this.currentUser;
-    if (cUser) {
-      this.inquerito.id_usuario = cUser.id;
-    }
+        let cUser = this.currentUser;
+        if (cUser) {
+            this.inquerito.id_usuario = cUser.id;
+        }
 
-    const options = {
-      type: "date",
-      dateFormat: "dd/MM/yyyy",
-      showHeader: false,
-      color: "info",
-      allowInput: true,
-      cancelLabel: 'Cancelar',
-      showClearButton: false,
-      todayLabel: 'Hoje',
-      maxDate: new Date(),
-    };
+        const options = {
+            type: "date",
+            dateFormat: "dd/MM/yyyy",
+            showHeader: false,
+            color: "info",
+            allowInput: true,
+            cancelLabel: 'Cancelar',
+            showClearButton: false,
+            todayLabel: 'Hoje',
+            maxDate: new Date(),
+        };
 
-    var calini = bulmaCalendar.attach('#dtInquerito', options);
+        var calini = bulmaCalendar.attach('#dtInquerito', options);
 
-    const element = document.querySelector('#dtInquerito');
+        const element = document.querySelector('#dtInquerito');
 
-    const input = document.querySelector('.datetimepicker-dummy-input');
-    input.removeAttribute('readonly');
-    input.setAttribute('value', "__/__/____");
-    input.setAttribute('data-mask', "__/__/____");
-    this.applyDataMask(input);
+        const input = document.querySelector('.datetimepicker-dummy-input');
+        input.removeAttribute('readonly');
+        input.setAttribute('value', "__/__/____");
+        input.setAttribute('data-mask', "__/__/____");
+        this.applyDataMask(input);
 
-    input.addEventListener('blur', () => {
-      this.inquerito.dt_inquerito = moment(input.value).format('YYYY-MM-DD');
-    })
+        input.addEventListener('blur', () => {
+            this.inquerito.dt_inquerito = moment(input.value).format('YYYY-MM-DD');
+        })
 
-    if (element) {
-      // bulmaCalendar instance is available as element.bulmaCalendar
-      element.bulmaCalendar.on('select', datepicker => {
-        this.inquerito.dt_inquerito = moment(datepicker.data.startDate).format('YYYY-MM-DD');
-      });
-    }
-  },
+        if (element) {
+            // bulmaCalendar instance is available as element.bulmaCalendar
+            element.bulmaCalendar.on('select', datepicker => {
+                this.inquerito.dt_inquerito = moment(datepicker.data.startDate).format('YYYY-MM-DD');
+            });
+        }
+    },
     watch: {
         'inquerito.id_municipio'(value) {
             this.getAreas(value);

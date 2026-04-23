@@ -17,7 +17,7 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" />
+                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
                     </div>
                 </div>
             </div>
@@ -31,6 +31,7 @@ import notificaService from "@/services/notifica.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import moment from 'moment';
+import Message from "@/components/general/Message.vue";
 
 export default {
     name: "ListaNotificas",
@@ -43,15 +44,19 @@ export default {
             type: "",
             showMessage: false,
             columns: [],
-            myspan: null,
-            myspan2: null,
+            delId: null,
             id_user: 0,
-            tpUser: 0
+            tpUser: 0,
+            message: "",
+            caption: "",
+            type: "",
+            showMessage: false,
         };
     },
     components: {
         MyTable,
         ConfirmDialog,
+        Message
     },
     methods: {
         newCapt() {
@@ -69,7 +74,7 @@ export default {
             if (ok) {
                 notificaService.delete(id)
                     .then(() => {
-                        location.reload();
+                        this.delId = id
                     })
                     .catch((err) => {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";

@@ -18,7 +18,7 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" />
+                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
 
                     </div>
                 </div>
@@ -48,8 +48,7 @@ export default {
             type: "",
             showMessage: false,
             columns: [],
-            myspan: null,
-            myspan2: null,
+            delId: null,
             master: 0,
             coleira: false,
             quart: 0,
@@ -77,7 +76,7 @@ export default {
             if (ok) {
                 inqueritoService.delete(id)
                     .then(() => {
-                        location.reload();
+                        this.delId = id
                     })
                     .catch((err) => {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";

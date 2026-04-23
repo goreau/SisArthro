@@ -302,7 +302,7 @@
                         </div>
                     </div>
                     <footer class="card-footer">
-                        <footerCard @submit="create" @cancel="null" @aux="detail" :cFooter="cFooter" />
+                        <footerCard @submit="create" @cancel="null" @aux="null" :cFooter="cFooter" />
                     </footer>
                 </div>
             </div>
@@ -377,8 +377,8 @@ export default {
             cFooter: {
                 strSubmit: 'Salvar',
                 strCancel: 'Cancelar',
-                strAux: 'Identiificação',
-                aux: true
+                strAux: '',
+                aux: false
             }
         };
     },
@@ -415,9 +415,6 @@ export default {
         },
     },
     methods: {
-        detail() {
-
-        },
         setDate($event) {
             if ($event) {
                 this.suspeito.dt_encontro = moment(String($event)).format('YYYY-MM-DD');
@@ -436,6 +433,7 @@ export default {
                         this.caption = "Notificação";
                         setTimeout(() => {
                             this.showMessage = false;
+                            this.$router.push(`/editSuspeitoIdent/${response.data.master.id_suspeito}`);
                         }, 10000);
                     },
                     (error) => {

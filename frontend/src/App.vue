@@ -60,19 +60,10 @@ export default {
     }
   },
   mounted() {
-    if (this.hide) {
+    /*if (this.hide) {
       this.onToggleCollapse(true);
-    }
-    /* let cUser = this.currentUser;
-     if (cUser) {
-       this.menu = this.menu.map((item) => {
-         if (item.path === '/refactor') {
-           // Desabilita o item 'Relatórios' se o nível de acesso for menor que 3
-           item.disabled = cUser.role > 1;
-         }
-         return item;
-       });
-     }*/
+      console.log('toglou')
+    }*/
   },
   created() {
     this.updateMenuAccess();
@@ -114,6 +105,10 @@ export default {
               href: "/about",
               title: "Sobre",
             },
+            /*   {
+                 href: "/downloads",
+                 title: "Material de Apoio",
+               },*/
             {
               href: "/",
               title: "Sair",

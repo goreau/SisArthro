@@ -64,28 +64,14 @@ class AuthService {
         return response.data
       })
       .catch((error) => {
-        // Erro (Status diferente de 2xx, como o seu 406)
-
-        // 1. Verificamos se existe resposta do servidor
-        if (error.data) {
-          // 2. Pegamos a 'msg' de dentro do data retornado
-          const mensagemDoServidor = error.data.msg
-
-          if (mensagemDoServidor) {
-            throw new Error(mensagemDoServidor)
-          }
+        if (error.response) {
+          throw new Error(error.response.data.msg || 'Erro no servidor')
         }
-
-        // 3. Fallback caso o JSON não tenha 'msg' ou não haja resposta
-        throw new Error('Erro inesperado no processo')
+        throw new Error('Erro de conexão ou interceptor')
       })
   }
 
   list() {
-    /* var headers = authHeader();
-      headers['Content-Type'] = "application/json";
-      var header = { headers: headers };*/
-
     return axios.get('/users').then(
       (response) => {
         return response.data

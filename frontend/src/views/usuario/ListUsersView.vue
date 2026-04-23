@@ -19,7 +19,8 @@
           <div class="card-content">
             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
               :buttons="['edit', 'delete', 'reset', 'impersonate']" :has-exports="true" @edit="onEditRow"
-              :calcHeight="false" @delete="onDeleteRow" @impersonate="onImpersonate" @reset="onReset" />
+              :calcHeight="false" @delete="onDeleteRow" @impersonate="onImpersonate" @reset="onReset"
+              :deletedId="delId" />
           </div>
 
         </div>
@@ -44,8 +45,7 @@ export default {
       isLoading: false,
       columns: [],
       tableName: 'users',
-      myspan: null,
-      myspan2: null,
+      delId: null,
       id_user: 0,
       tpUser: 0,
       isLoading: false,
@@ -74,6 +74,8 @@ export default {
       const user = { username: row.username, password: 'AH@g654321' }
       const resp = authService.impersonate(user)
         .then((resp) => {
+          console.log(resp)
+          this.$store.dispatch('auth/impersonate', resp);
           this.$router.push({ name: 'home' });
         },
           (error) => {
@@ -134,7 +136,7 @@ export default {
       })
       if (ok) {
         authService.delete(id);
-        location.reload();
+        this.delId = id;
       }
     },
     getFormat(row) {

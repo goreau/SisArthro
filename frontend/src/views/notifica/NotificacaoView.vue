@@ -343,18 +343,10 @@
                             </div>
                         </div>
                         <footer class="card-footer">
-                            <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
+                            <footerCard @submit="create" @cancel="null" @aux="null" :cFooter="cFooter" />
                         </footer>
                     </div>
                 </div>
-            </div>
-            <div style="display: none">
-                <span class="icon is-small is-left" name="coisa">
-                    <font-awesome-icon icon="fa-solid fa-edit" />
-                </span>
-                <span class="icon is-small is-left" name="coisa2">
-                    <font-awesome-icon icon="fa-solid fa-trash" />
-                </span>
             </div>
         </div>
     </div>
