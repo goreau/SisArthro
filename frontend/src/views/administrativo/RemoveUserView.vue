@@ -77,7 +77,7 @@
                             <section v-show="hasData">
                                 <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable"
                                     :columns="columns" :pagination="false" :buttons="[]" :has-exports="false"
-                                    :calcHeight="false" />
+                                    :calcHeight="false" persistence-id="RemoveUser" />
 
                                 <div class="columns is-centered">
                                     <div class="column">

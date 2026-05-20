@@ -18,7 +18,8 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
+                            :calc-height="false" @delete="onDeleteRow" :deleted-id="delId"
+                            :persistence-id="$options.name" />
                     </div>
                 </div>
             </div>
@@ -36,7 +37,7 @@ import Message from "@/components/general/Message.vue";
 import moment from 'moment';
 
 export default {
-    name: "ListaCaninos",
+    name: "ListaFocoDets",
     data() {
         return {
             dataTable: [],

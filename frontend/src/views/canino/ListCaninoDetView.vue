@@ -16,8 +16,8 @@
             <Loader v-if="isLoading" />
             <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
             <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
-              :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow" :calcHeight="true" :deletedId="delId"
-              @delete="onDeleteRow" />
+              :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow" :calc-height="true"
+              :deleted-id="delId" @delete="onDeleteRow" :persistence-id="$options.name" />
           </div>
         </div>
       </div>
@@ -34,7 +34,7 @@ import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Message from "@/components/general/Message.vue";
 
 export default {
-  name: "ListaCaninos",
+  name: "ListaCaninosDet",
   data() {
     return {
       dataTable: [],

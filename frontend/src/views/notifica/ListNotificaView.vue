@@ -17,7 +17,8 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
+                            :calc-height="false" @delete="onDeleteRow" :deleted-id="delId"
+                            :persistence-id="$options.name" />
                     </div>
                 </div>
             </div>

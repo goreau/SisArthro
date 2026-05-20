@@ -19,7 +19,7 @@
                         <section v-show="hasData">
                             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                                 :pagination="true" :buttons="['edit']" :has-exports="true" @edit="onEditRow"
-                                :calcHeight="false" />
+                                :calc-height="false" :persistence-id="$options.name" />
                         </section>
                         <!-- Modal (Bulma) -->
                         <div class="modal" :class="{ 'is-active': modalAberto }">
@@ -80,7 +80,7 @@ import Loader from "@/components/general/Loader.vue";
 import Message from "@/components/general/Message.vue";
 
 export default {
-    name: "ListaEndereços",
+    name: "ListaCoordenadas",
     data() {
         return {
             hasData: false,

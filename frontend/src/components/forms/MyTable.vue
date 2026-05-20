@@ -80,6 +80,11 @@ const props = defineProps({
     deletedId: {
         type: Number,
         default: null
+    },
+    persistenceId: {
+        type: String,
+        required: true,
+        default: 'tabela'
     }
 })
 const emit = defineEmits([
@@ -118,11 +123,23 @@ const onFirstDataRendered = (params) => {
   }, 0)
 }*/
 
+function onFilterChanged(params) {
+    const filterModel = params.api.getFilterModel();
+    // Salva no localStorage vinculado a uma chave específica desta tela
+    localStorage.setItem(`filter_state_${props.persistenceId}`, JSON.stringify(filterModel));
+}
+
+
 function onGridReady(params) {
     gridApi.value = params.api
     columnApi.value = params.columnApi
     //  console.log('SET columnApi', params.columnApi)
     //autoSizeColumns()
+    const savedFilter = localStorage.getItem(`filter_state_${props.persistenceId}`);
+    if (savedFilter) {
+        const model = JSON.parse(savedFilter);
+        params.api.setFilterModel(model);
+    }
 }
 
 function autoSizeAll() {
@@ -412,10 +429,11 @@ defineExpose({
     <div ref="gridWrapper">
         <AgGridVue :theme="themeAlpine" :style="{ width: '100%', height: gridHeight }" :treeData="treeData"
             :columnDefs="agGridColumns" :pagination="pagination" :paginationPageSize="12" :rowData="rows"
-            :pagination-auto-page-size="false" :localeText="localeText" :getRowId="params => params.data.id.toString()"
-            :paginationPageSizeSelector="paginationPageSizeSelector" @grid-ready="onGridReady"
-            :autoGroupColumnDef="myAutoGroupColumnDef" :groupDefaultExpanded="1" :groupDisplayType="'singleColumn'"
-            @first-data-rendered="onFirstDataRendered" />
+            :pagination-auto-page-size="false" :localeText="localeText"
+            :getRowId="params => params.data?.id?.toString()" :paginationPageSizeSelector="paginationPageSizeSelector"
+            @grid-ready="onGridReady" :autoGroupColumnDef="myAutoGroupColumnDef" :groupDefaultExpanded="1"
+            :groupDisplayType="'singleColumn'" @first-data-rendered="onFirstDataRendered"
+            @filter-changed="onFilterChanged" />
     </div>
 </template>
 

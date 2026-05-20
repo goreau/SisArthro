@@ -9,7 +9,8 @@
           <div class="card-content">
             <span class="filter">{{ strFiltro }}</span>
             <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="true"
-              :buttons="[]" :has-exports="true" :calcHeight="false" :tree-data="treeRel" />
+              :buttons="[]" :has-exports="true" :calc-height="false" :tree-data="treeRel"
+              :persistence-id="$options.name" />
           </div>
         </div>
       </div>

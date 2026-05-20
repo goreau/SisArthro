@@ -152,7 +152,7 @@
               <div class="columns">
                 <div class="column is-6 is-offset-3">
                   <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
-                    :buttons="[]" :has-exports="false" :calcHeight="true" />
+                    :buttons="[]" :has-exports="false" :calcHeight="true" persistence-id="EditCanino" />
                 </div>
               </div>
             </div>

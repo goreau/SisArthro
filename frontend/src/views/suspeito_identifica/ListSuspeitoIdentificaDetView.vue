@@ -14,8 +14,8 @@
             </button>
           </header>
           <div class="card-content">
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"
-              :table-name="tableName" />
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :table-name="tableName"
+              persistence-id="ListSuspeitoIdentifiicaDet" />
           </div>
         </div>
         <div style="display: none">

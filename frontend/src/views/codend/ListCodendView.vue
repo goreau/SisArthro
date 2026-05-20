@@ -34,8 +34,8 @@
             <section v-if="hasData">
               <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                 :pagination="true" :buttons="['edit', 'delete', 'caracteriza', 'animais']" :has-exports="true"
-                @edit="onEditRow" :calcHeight="false" @delete="onDeleteRow" @caracteriza="onCaracteriza"
-                @animais="onAnimais" :deletedId="delId" />
+                @edit="onEditRow" :calc-height="false" @delete="onDeleteRow" @caracteriza="onCaracteriza"
+                @animais="onAnimais" :deleted-id="delId" :persistence-id="$options.name" />
             </section>
           </div>
         </div>
@@ -52,7 +52,7 @@ import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import CmbListaMun from "@/components/forms/CmbListaMun.vue";
 
 export default {
-  name: "ListaEndereços",
+  name: "ListaEnderecos",
   data() {
     return {
       filtMun: 0,
@@ -61,6 +61,7 @@ export default {
       tableName: 'codend',
       hasData: false,
       id_user: 0,
+      tpUser: 0,
       quart: 0,
       delId: null
     };
@@ -122,6 +123,7 @@ export default {
   },
   mounted() {
     this.id_user = this.currentUser.id;
+    this.tpUser = this.currentUser.role;
 
     this.columns = [
       { headerName: 'ID', field: 'id', hide: true },

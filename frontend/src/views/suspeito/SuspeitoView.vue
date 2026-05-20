@@ -257,7 +257,7 @@
                                 <div class="field column is-2">
                                     <label class="label">Data Recebimento</label>
                                     <div class="control">
-                                        <div class="control">
+                                        <div class="control" style="z-index: 9000;">
                                             <input type="text" id="dtPasteur">
                                         </div>
                                         <span class="is-error" v-if="v$.suspeito.dt_pasteur.$error">
@@ -397,7 +397,6 @@ export default {
                 referencia: { maxLength: maxLength$(40) },
                 id_municipio: { minValue: combo$(1), },
                 id_ambiente: { minValue: combo$(1), },
-                id_localidade: { minValue: combo$(1) },
                 encontro: { required$, maxLength: maxLength$(30), minLength: minLength$(3) },
                 qt_insetos: { required$ },
                 tipo_ativ: { requiredIf: requiredIf$(this.suspeito.atividade == 32) },

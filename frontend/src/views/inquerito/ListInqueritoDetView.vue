@@ -18,7 +18,8 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
+                            :calc-height="false" @delete="onDeleteRow" :deleted-id="delId"
+                            :persistence-id="$options.name" />
 
                     </div>
                 </div>
@@ -34,10 +35,9 @@ import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Message from "@/components/general/Message.vue";
-import moment from 'moment';
 
 export default {
-    name: "ListaCaninos",
+    name: "ListaInqueritoDet",
     data() {
         return {
             dataTable: [],

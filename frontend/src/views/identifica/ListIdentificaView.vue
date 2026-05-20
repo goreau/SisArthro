@@ -16,8 +16,8 @@
           <div class="card-content">
             <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
-              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false" :deletedId="delId"
-              @delete="onDeleteRow" />
+              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calc-height="false"
+              :deleted-id="delId" @delete="onDeleteRow" :persistence-id="$options.name" />
           </div>
         </div>
       </div>

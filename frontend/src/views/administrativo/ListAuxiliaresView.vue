@@ -27,9 +27,9 @@
             </div>
           </header>
           <div class="card-content">
-            <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
-              :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow" :calcHeight="false"
-              @delete="onDeleteRow" :deletedId="delId" />
+            <MyTable :logged-user="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
+              :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
+              :calc-height="false" @delete="onDeleteRow" :deleted-id="delId" :persistence-id="$options.name" />
           </div>
         </div>
       </div>
@@ -76,7 +76,7 @@ import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Modal from '@/components/forms/Modal.vue';
 
 export default {
-  name: "ListaLocalidades",
+  name: "ListaAuxiliares",
   data() {
     return {
       dataTable: [],

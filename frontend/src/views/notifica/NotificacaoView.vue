@@ -328,7 +328,8 @@
                                 <div class="column is-8 is-offset-2">
                                     <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                                         :pagination="false" :buttons="['edit', 'delete']" :has-exports="false"
-                                        :calcHeight="true" @edit="editDesloca" @delete="delDesloca" />
+                                        :calcHeight="true" @edit="editDesloca" @delete="delDesloca"
+                                        persistence-id="Notifica" />
                                 </div>
                             </div>
                             <hr>

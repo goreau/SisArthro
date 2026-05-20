@@ -162,7 +162,7 @@
                       <hr>
                       <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
                         :buttons="['edit', 'delete']" :has-exports="false" :calcHeight="true" @edit="editRow"
-                        :deleted-id="delId" @delete="deleteRow" />
+                        :deleted-id="delId" @delete="deleteRow" persistence-id="EditSuspeito" />
                     </article>
                   </div>
                 </div>

@@ -19,8 +19,8 @@
           <div class="card-content">
             <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns" :pagination="true"
               :buttons="['edit', 'delete', 'reset', 'impersonate']" :has-exports="true" @edit="onEditRow"
-              :calcHeight="false" @delete="onDeleteRow" @impersonate="onImpersonate" @reset="onReset"
-              :deletedId="delId" />
+              :calcHeight="false" @delete="onDeleteRow" @impersonate="onImpersonate" @reset="onReset" :deletedId="delId"
+              persistence-id="ListUsers" />
           </div>
 
         </div>

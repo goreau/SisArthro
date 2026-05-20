@@ -126,7 +126,8 @@
                                 <div class="column is-10 is-offset-1">
                                     <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                                         :pagination="false" :buttons="['edit', 'delete']" :has-exports="false"
-                                        :calcHeight="true" @edit="editAmostra" @delete="delAmostra" />
+                                        :calcHeight="true" @edit="editAmostra" @delete="delAmostra"
+                                        persistence-id="NotificaExame" />
                                 </div>
                             </div>
                             <div class="columns">

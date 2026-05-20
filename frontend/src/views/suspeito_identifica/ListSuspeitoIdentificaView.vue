@@ -15,8 +15,8 @@
           </header>
           <div class="card-content">
             <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
-            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true"
-              :tableName="tableName" />
+            <MyTable :tableData="dataTable" :columns="columns" :filtered="true" :exports="true" :tableName="tableName"
+              persistence-id="ListSuspeitoIdentiifica" />
           </div>
         </div>
       </div>

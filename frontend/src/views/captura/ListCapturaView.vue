@@ -35,7 +35,7 @@
             <section v-if="hasData">
               <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                 :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
+                :calc-height="false" @delete="onDeleteRow" :deleted-id="delId" :persistence-id="$options.name" />
             </section>
           </div>
         </div>
@@ -132,11 +132,11 @@ export default {
 
     this.columns = [
       { headerName: 'ID', field: 'id', hide: true },
-      { headername: "Número", field: "codigo" },
-      { headername: "Atividade", field: "atividade" },
-      { headername: "Agravo", field: "agravo" },
-      { headername: "Município", field: "municipio" },
-      { headername: "Data", field: "data" },
+      { headerName: "Número", field: "codigo" },
+      { headerName: "Atividade", field: "atividade" },
+      { headerName: "Agravo", field: "agravo" },
+      { headerName: "Município", field: "municipio" },
+      { headerName: "Data", field: "data" },
       { headerName: 'Prop', field: 'owner_id', hide: true },
     ];
 

@@ -10,7 +10,7 @@
                     <div class="card-content">
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['boletim']" :has-exports="true" @boletim="gerar"
-                            :calcHeight="false" />
+                            :calc-height="false" :persistence-id="$options.name" />
                     </div>
                 </div>
                 <div style="display: none">
@@ -31,7 +31,7 @@ import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
 
 export default {
-    name: "ListaEndereços",
+    name: "ListaPendenciaCanino",
     data() {
         return {
             dataTable: [],

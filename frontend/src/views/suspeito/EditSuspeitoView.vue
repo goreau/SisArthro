@@ -259,7 +259,7 @@
                                 <div class="field column is-2">
                                     <label class="label">Data Recebimento</label>
                                     <div class="control">
-                                        <div class="control">
+                                        <div class="control" style="z-index: 9000;">
                                             <input type="text" id="dtPasteur">
                                         </div>
                                         <span class="is-error" v-if="v$.suspeito.dt_pasteur.$error">

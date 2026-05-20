@@ -192,7 +192,7 @@
                     <div class="card-content">
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="false" :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow"
-                            :calcHeight="true" @delete="onDeleteRow" :deletedId="delId" />
+                            :calcHeight="true" @delete="onDeleteRow" :deletedId="delId" persistence-id="Caracteriza" />
                     </div>
                 </div>
 

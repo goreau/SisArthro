@@ -36,7 +36,7 @@
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete', 'identifica']" :has-exports="true"
                             @edit="onEditRow" :calcHeight="false" @delete="onDeleteRow" @identifica="onIdentifica"
-                            :deletedId="delId" />
+                            :deletedId="delId" persistence-id="ListSuspeito" />
                     </div>
                 </div>
             </div>

@@ -117,14 +117,14 @@
             </div>
           </div>
           <footer class="card-footer">
-            <footerCard @submit="edit" @cancel="null" @aux="details" :cFooter="cFooter" />
+            <footerCard @submit="edit" @cancel="null" @aux="null" :cFooter="cFooter" />
           </footer>
           <hr>
           <div class="card-content">
             <div class="columns">
               <div class="column is-6 is-offset-3">
                 <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
-                  :buttons="[]" :has-exports="false" :calcHeight="true" />
+                  :buttons="[]" :has-exports="false" :calcHeight="true" persistence-id="EditCodend" />
               </div>
             </div>
           </div>

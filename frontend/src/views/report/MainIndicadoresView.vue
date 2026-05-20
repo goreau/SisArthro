@@ -58,6 +58,7 @@
                                         <label class="label">Ano</label>
                                         <div class="select is-primary">
                                             <select v-model="filter.ano" class="input">
+                                                <option value="0">-- Selecione --</option>
                                                 <option v-for="year in years" :key="year" :value="year">{{ year }}
                                                 </option>
                                             </select>
@@ -88,12 +89,12 @@
                                 <section v-if="hasData">
                                     <Loader v-if="isLoading" />
                                     <div class="box-com-borda has-text-centered">
-                                        
+
                                         <div class="container is-wide" v-for="(indic, index) in indics" :key="index">
                                             <div class="columns is-vcentered is-fullwidth">
                                                 <!-- Coluna 1: descrição -->
                                                 <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                                    <span class="divisor" v-html="indic.titulo + ' ='"/> 
+                                                    <span class="divisor" v-html="indic.titulo + ' ='" />
                                                 </div>
 
                                                 <!-- Coluna 2: fórmula dividida -->
@@ -185,7 +186,7 @@ export default {
                 { label: "Esforço amostral por método de captura", to: "/servicos" },
                 { label: "Cobertura de Imóveis avaliados segundo as caracterísitcas ambientais", to: "/contato" },
                 { label: "Cobertura de Visitas para Orientação em Imóveis com Score ≥ 6", to: "/contato" },
-                { label: "Taxa de Imóveis de Risco por ano na área prioritária", to: "/contato" },             
+                { label: "Taxa de Imóveis de Risco por ano na área prioritária", to: "/contato" },
             ],
         };
     },
@@ -369,16 +370,16 @@ export default {
                         this.indic = this.geraIndic();
                         this.indic.numerator = dataTable.numerador;
                         this.indic.denominator = dataTable.denominador;
-                        if (this.tipo_indic == '20' ){
+                        if (this.tipo_indic == '20') {
                             this.indic.indic = dataTable.denominador > 0 ? (dataTable.numerador / dataTable.denominador).toFixed(2) + ' Ex/AIL' : 'N/D';
-                        } else if ( this.tipo_indic == '21' ){
+                        } else if (this.tipo_indic == '21') {
                             this.indic.indic = dataTable.denominador > 0 ? (dataTable.numerador / dataTable.denominador).toFixed(2) + ' Ex/Capt' : 'N/D';
                         } else {
                             this.indic.indic = dataTable.denominador > 0 ? (dataTable.numerador * 100 / dataTable.denominador).toFixed(2) + ' %' : 'N/D';
                         }
                         this.indics.push(this.indic);
                     }
-                    
+
                     this.hasData = true;
                 })
                 .catch((err) => {
@@ -428,9 +429,10 @@ li {
 }
 
 .box-com-borda {
-  border: 4px double #ff3860; /* espessura + tipo double + cor */
-  padding: 5rem;
-  background-color: aliceblue;
+    border: 4px double #ff3860;
+    /* espessura + tipo double + cor */
+    padding: 5rem;
+    background-color: aliceblue;
 }
 
 .no-wrap {

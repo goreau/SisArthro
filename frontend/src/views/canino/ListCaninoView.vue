@@ -4,7 +4,7 @@
             <div class="column is-11">
                 <div class="card">
                     <header class="card-header">
-                        <p class="card-header-title is-centered">Animais Cadastradas</p>
+                        <p class="card-header-title is-centered">Animais Cadastrados</p>
                         <button class="button is-primary is-outlined" @click="newCapt">
                             <span class="icon">
                                 <font-awesome-icon icon="fa-solid fa-plus-circle" />
@@ -17,7 +17,8 @@
                             :caption="caption" />
                         <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                             :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                            :calcHeight="false" @delete="onDeleteRow" :deletedId="delId" />
+                            :calc-height="false" @delete="onDeleteRow" :deleted-id="delId"
+                            :persistence-id="$options.name" />
                     </div>
                 </div>
             </div>
@@ -108,8 +109,11 @@ export default {
             { headerName: 'ID', field: 'id', hide: true },
             { headerName: "Município", field: "municipio" },
             { headerName: "Localidade", field: "localidade" },
-            { headerName: "Quarteirão", field: "quadra" },
+            { headerName: "Quarteirão", field: "quadra", hide: true },
             { headerName: "Codend", field: "codend" },
+            { headerName: "Nome", field: "nome" },
+            { headerName: "RA", field: "ra" },
+            { headerName: "Raça", field: "raca" },
             { headerName: "Data", field: "data" },
             { headerName: 'Prop', field: 'owner_id', hide: true },
         ];

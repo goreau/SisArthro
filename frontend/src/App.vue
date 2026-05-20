@@ -694,6 +694,11 @@ body {
   width: 100%;
 }
 
+.datetimepicker-dummy,
+.datetimepicker {
+  z-index: 9999 !important;
+}
+
 .is-error {
   font-size: smaller;
   color: red;

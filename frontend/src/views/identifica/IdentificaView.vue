@@ -221,7 +221,7 @@
                       </div>
                       <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
                         :buttons="['edit', 'delete']" :has-exports="false" :calcHeight="true" @edit="onEditRow"
-                        :deleted-id="delId" @delete="onDeleteRow" />
+                        :deleted-id="delId" @delete="onDeleteRow" persistence-id="Identifica" />
                     </article>
                   </div>
                 </div>
