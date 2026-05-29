@@ -250,7 +250,8 @@ export default {
                             this.inquerito.numero = response.data.master.numero
                             setTimeout(() => {
                                 this.showMessage = false;
-                                this.$router.push("/inquerito_det/" + response.data.master.id_inquerito + '/' + response.data.master.id_quarteirao);
+                                const col = this.inquerito.encoleiramento == 1
+                                this.$router.push("/inquerito_det/" + response.data.master.id_inquerito + '/' + response.data.master.id_quarteirao + '/' + col);
                             }, 5000);
                         },
                         (error) => {

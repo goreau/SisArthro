@@ -62,8 +62,8 @@
                                 </div>
                                 <div class="field column is-2">
                                     <label class="label">Data Coleta</label>
-                                    <div class="control">
-                                        <input type="text" data-role="date" id="dtColeta">
+                                    <div class="control" style="z-index: 9000;">
+                                        <input type="text" id="dtColeta">
                                     </div>
                                     <span class="is-error" v-if="v$.inquerito_det.dt_coleta.$error">
                                         {{ v$.inquerito_det.dt_coleta.$errors[0].$message }}
@@ -82,7 +82,7 @@
                             <div class="columns">
                                 <div class="field column is-2">
                                     <label class="label">Data Exame</label>
-                                    <div class="control">
+                                    <div class="control" style="z-index: 9000;">
                                         <input type="text" id="dtDpp">
                                     </div>
                                     <span class="is-error" v-if="v$.inquerito_det.dt_dpp.$error">
@@ -147,7 +147,7 @@
                             <div class="columns">
                                 <div class="field column is-2">
                                     <label class="label">Data Troca</label>
-                                    <div class="control">
+                                    <div class="control" style="z-index: 8000;">
                                         <input type="text" id="dtColeira">
                                     </div>
                                     <span class="is-error" v-if="v$.inquerito_det.dt_coleira.$error">
@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="field column is-2">
                                     <label class="label">Data</label>
-                                    <div class="control">
+                                    <div class="control" style="z-index: 8000;">
                                         <input type="text" id="dtDesfecho">
                                     </div>
                                     <span class="is-error" v-if="v$.inquerito_det.dt_desfecho.$error">
@@ -266,7 +266,7 @@ export default {
         };
         return {
             inquerito_det: {
-                dt_coleta: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115)},
+                dt_coleta: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115) },
                 dt_dpp: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_dpp > 0 && this.inquerito_det.res_dpp != 1123) },
                 dt_elisa: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_elisa > 0 && this.inquerito_det.res_elisa != 1123) },
                 dt_coleira: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115 && this.inquerito_det.res_coleira == 1124) },
@@ -274,10 +274,10 @@ export default {
                 id_codend: { minValue: combo$(1) },
                 id_situacao: { minValue: combo$(1) },
                 id_canino_det: { minValue: combo$(1) },
-                res_dpp: {  },
-                res_elisa: {  },
+                res_dpp: {},
+                res_elisa: {},
                 res_final: { requiredIf: requiredIf$(this.inquerito_det.id_situacao == 1115) },
-                res_coleira: { requiredIf: requiredIf$(this.hasColeira)},
+                res_coleira: { requiredIf: requiredIf$(this.hasColeira) },
                 id_desfecho: { requiredIf: requiredIf$((this.inquerito_det.res_dpp + this.inquerito_det.res_elisa) > 0) },
             },
         };
@@ -484,7 +484,7 @@ export default {
     created() {
         this.inquerito_det.id_inquerito = this.$route.params.master;
         this.quart = this.$route.params.quart;
-        this.hasColeira = this.$route.params.coleira=='true';
+        this.hasColeira = this.$route.params.coleira == 'true';
 
         this.getCodends();
     },

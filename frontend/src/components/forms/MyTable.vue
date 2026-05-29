@@ -14,13 +14,15 @@ import {
     themeAlpine,
     ValidationModule,
     ClientSideRowModelModule,
-    ClientSideRowModelApiModule
+    ClientSideRowModelApiModule,
+    CellStyleModule
 } from 'ag-grid-community'
 
 import localeText from '@/utils/agGridLocale'
 import { CsvExportModule } from 'ag-grid-community'
 import tickCrossRenderer from '@/components/general/tickCrossRender.vue'
 import { integer } from '@vuelidate/validators'
+import { shallowRef, markRaw } from 'vue'
 
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
@@ -34,6 +36,7 @@ ModuleRegistry.registerModules([
     CustomFilterModule,
     PaginationModule,
     LocaleModule,
+    CellStyleModule,
 ])
 
 const paginationPageSizeSelector = [12, 20, 50, 100]
@@ -108,7 +111,8 @@ const alturasFixas = ref(0)
 const rowHeight = 50 // altura média de cada linha, ajuste conforme seu grid
 const baseHeight = 60 // altura base (header + margens), ajuste se necessário
 
-const rows = ref([...props.data])
+//const rows = ref([...props.data])
+const rows = shallowRef([])
 
 const onFirstDataRendered = (params) => {
     setTimeout(() => {
@@ -224,7 +228,7 @@ async function download_xlsx() {
     const workbook = XLSX.utils.book_new()
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados')
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })
-    saveAs(new Blob([excelBuffer]), 'Sisaweb3.xlsx')
+    saveAs(new Blob([excelBuffer]), 'SisArthro.xlsx')
 }
 
 function flattenColumns(columns, parentHeader = '') {
@@ -262,14 +266,14 @@ async function download_pdf() {
         body: rows,
     })
 
-    doc.save('Sisarthro.pdf')
+    doc.save('SisArthro.pdf')
 }
 
 function toGrafico() {
     emit('chart')
 }
 
-watch(
+/*watch(
     () => props.data,
     async (val) => {
         rows.value = [...val]
@@ -279,6 +283,19 @@ watch(
         }
     },
     { deep: true },
+)*/
+watch(
+    () => props.data,
+    (val) => {
+        if (gridApi.value) {
+            // markRaw protege o array contra reatividade do Vue
+            const data = markRaw(val || []);
+            gridApi.value.setGridOption('rowData', data);
+        }
+        // Se precisar do rows para outros fins, mantenha o shallowRef:
+        rows.value = val;
+    },
+    { immediate: true }
 )
 
 watch(
@@ -305,13 +322,16 @@ watch(
                 sortable: true,
                 filter: true,
                 resizable: true,
-                valueFormatter: col.repeat ? repeatFormatter(col.field) : undefined,
+                valueFormatter: col.repeat ? repeatFormatter : undefined,
+
             })),
             props.buttons?.length ? createActionsColumn() : null,
         ].filter(Boolean)
     },
     { immediate: true },
 )
+//cellClassRules: col.repeat ? repeatStyleRules : undefined,
+//(col.field)
 
 onMounted(() => {
     let footer = document.querySelector('#footer')?.offsetHeight || 0
@@ -327,17 +347,21 @@ onMounted(() => {
     }, 150)
 })
 
-const repeatFormatter = (field) => (params) => {
-    const rowIndex = params.node.rowIndex;
 
-    if (rowIndex > 0) {
-        const prevNode = params.api.getDisplayedRowAtIndex(rowIndex - 1);
+const repeatFormatter = (params) => {
+    // 1. Se for a primeira linha, sempre exibe o valor
+    if (!params.node || params.node.rowIndex === 0) return params.value;
 
-        if (prevNode && prevNode.data[field] === params.value && params.value) {
-            return '...';
-        }
+    // 2. Obtém o nó da linha anterior na visualização do Grid
+    const prevNode = params.api.getDisplayedRowAtIndex(params.node.rowIndex - 1);
+
+    // 3. Compara os IDs. Se forem iguais, retorna '...'
+    // Nota: O acesso a 'data.id' assume que seu objeto tem a propriedade 'id'
+    if (prevNode && prevNode.data && prevNode.data.master === params.data.master) {
+        return '...';
     }
 
+    // 4. Se for um ID novo, retorna o valor original
     return params.value;
 };
 
@@ -384,14 +408,33 @@ function createActionsColumn() {
     }
 }
 
+const gridHeight = ref('auto');
 
+watch(
+    () => rows.value.length,
+    async () => {
+        if (!props.calcHeight) {
+            gridHeight.value = `calc(100vh - ${alturasFixas.value}px)`
+        } else {
+            // nextTick garante que o Vue terminou de processar a nova linha no template
+            await nextTick();
 
-const gridHeight = computed(() => {
+            const qt = Math.max(rows.value.length, 1);
+            const alt = Math.min((qt * rowHeight) + baseHeight, 500);
+
+            gridHeight.value = `${alt}px`;
+        }
+    },
+    { immediate: true } // Calcula assim que o componente monta
+);
+
+/*const gridHeight = computed(() => {
+    console.log("Calculando altura. Qtd linhas:", rows.value.length);
     if (!props.calcHeight) return `calc(100vh - ${alturasFixas.value}px)`
     let qt = rows.value.length == 0 ? 1 : rows.value.length
     let alt = Math.min(qt * rowHeight + baseHeight, 500)
     return alt + 'px'
-})
+})*/
 
 defineExpose({
     getFilteredRows,
@@ -405,6 +448,13 @@ defineExpose({
 /**
  *  //height: 40rem"
     :style="{ height: gridHeight + 'px' }"
+
+      //:rowData="rows"
+
+
+
+      :autoGroupColumnDef="myAutoGroupColumnDef" :groupDefaultExpanded="1"
+            :groupDisplayType="'singleColumn'"
  */
 </script>
 
@@ -428,12 +478,11 @@ defineExpose({
     </div>
     <div ref="gridWrapper">
         <AgGridVue :theme="themeAlpine" :style="{ width: '100%', height: gridHeight }" :treeData="treeData"
-            :columnDefs="agGridColumns" :pagination="pagination" :paginationPageSize="12" :rowData="rows"
-            :pagination-auto-page-size="false" :localeText="localeText"
+            :columnDefs="agGridColumns" :pagination="pagination" :paginationPageSize="12" :rowData="null"
+            :pagination-auto-page-size="false" :localeText="localeText" :autoGroupColumnDef="myAutoGroupColumnDef"
+            :groupDefaultExpanded="1" :groupDisplayType="'singleColumn'"
             :getRowId="params => params.data?.id?.toString()" :paginationPageSizeSelector="paginationPageSizeSelector"
-            @grid-ready="onGridReady" :autoGroupColumnDef="myAutoGroupColumnDef" :groupDefaultExpanded="1"
-            :groupDisplayType="'singleColumn'" @first-data-rendered="onFirstDataRendered"
-            @filter-changed="onFilterChanged" />
+            @grid-ready="onGridReady" @first-data-rendered="onFirstDataRendered" @filter-changed="onFilterChanged" />
     </div>
 </template>
 

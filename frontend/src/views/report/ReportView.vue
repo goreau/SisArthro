@@ -79,6 +79,9 @@ export default {
         case '109':
           this.title = 'Resumo de Caracterizações';
           break;
+        case '110':
+          this.title = 'Estrato de Inquérito Canino';
+          break;
         default:
           break;
       }

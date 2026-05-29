@@ -61,7 +61,13 @@ export default {
       this.$router.push("/identifica");
     },
     onEditRow(id) {
-      this.$router.push(`/editIdent/${id}`);
+      const item = this.dataTable.find(item => item.id === id);
+      if (item.oriigem == 'Captura') {
+        this.$router.push(`/editIdent/${id}`);
+      } else {
+        this.$router.push(`/editSuspeitoIdent/${item.id_suspeito}`);
+      }
+
     },
     async onDeleteRow(id) {
       const ok = await this.$refs.confirmDialog.show({
@@ -111,7 +117,8 @@ export default {
     this.columns = [
       { headerName: 'ID', field: 'id', hide: true },
       { headerName: "Município", field: "municipio" },
-      { headerName: "Captura", field: "codigo" },
+      { headerName: "Origem", field: "origem" },
+      { headerName: "Código", field: "codigo" },
       { headerName: "Data", field: "data" },
       { headerName: 'Prop', field: 'owner_id', hide: true },
     ];

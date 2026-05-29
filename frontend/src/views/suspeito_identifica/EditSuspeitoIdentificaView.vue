@@ -52,7 +52,7 @@
                     </article>
 
                     <article class="tile is-child conteudo">
-                      <div class="columns" v-if="identifica.id_suspeito_identifica > 0">
+                      <div class="columns" v-if="identifica.id_identificacao > 0">
                         <div class="field column is-2">
                           <label class="label">Gênero</label>
                           <div class="control">
@@ -172,6 +172,7 @@
         </div>
       </div>
     </div>
+    <confirm-dialog ref="confirmDialog"></confirm-dialog>
   </div>
 </template>
 
@@ -194,6 +195,7 @@ import {
   maxLength$,
 } from "../../components/forms/validators.js";
 import MyTable from "@/components/forms/MyTable.vue";
+import ConfirmDialog from "@/components/forms/ConfirmDialog.vue";
 
 export default {
   components: {
@@ -201,7 +203,8 @@ export default {
     Loader,
     CmbMunicipio,
     footerCard,
-    Message
+    Message,
+    ConfirmDialog
   },
   data() {
     return {
@@ -214,15 +217,15 @@ export default {
       agravo: 0,
       susp_codigo: '',
       identifica: {
-        id_suspeito_identifica: 0,
+        id_identificacao: 0,
         id_suspeito: 0,
         id_usuario: 0,
         responsavel: "",
         dt_identificacao: "",
       },
       identifica_det: {
-        id_suspeito_identifica_det: 0,
-        id_suspeito_identifica: 0,
+        id_identificacao_det: 0,
+        id_identificacao: 0,
         id_especie: 0,
         macho: "",
         femea: "",
@@ -281,6 +284,11 @@ export default {
       }
     },
     startCalendar() {
+      const teste = document.querySelector('#dtIdent');
+
+      if (teste.type == 'text') {
+        return;
+      }
       var options = {
         type: "date",
         dateFormat: "dd/MM/yyyy",
@@ -352,10 +360,10 @@ export default {
             .create(this.identifica)
             .then(
               (response) => {
-                this.identifica.id_suspeito_identifica =
-                  response.data.master.id_suspeito_identifica;
-                this.identifica_det.id_suspeito_identifica =
-                  response.data.master.id_suspeito_identifica;
+                this.identifica.id_identificacao =
+                  response.data.master.id_identificacao;
+                this.identifica_det.id_identificacao =
+                  response.data.master.id_identificacao;
                 this.message = "Identificação inserida com sucesso.";
                 this.showMessage = true;
                 this.type = "success";
@@ -394,7 +402,7 @@ export default {
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
-        if (this.identifica_det.id_suspeito_identifica_det > 0) {
+        if (this.identifica_det.id_identificacao_det > 0) {
           suspeitoIdentificaService
             .updateDet(this.identifica_det)
             .then(
@@ -448,6 +456,17 @@ export default {
         setTimeout(() => (this.showMessage = false), 3000);
       }
       this.loadData()
+      this.limpaDet()
+    },
+    limpaDet() {
+      this.identifica_det.id_especie = 0;
+      this.identifica_det.id_genero = 0;
+      this.identifica_det.macho = "";
+      this.identifica_det.femea = "";
+      this.identifica_det.femea_ing = "";
+      this.identifica_det.larva = "";
+      this.identifica_det.ninfa = "";
+      this.v$.identifica_det.$reset();
     },
     loadData() {
       this.isLoading = true;
@@ -459,15 +478,16 @@ export default {
             this.susp_codigo = data.suspeito.codigo;
             if (Object.keys(data.master).length > 0) {
               this.identifica = data.master;
-              this.identifica_det.id_suspeito_identifica = this.identifica.id_suspeito_identifica;
+              this.identifica_det.id_identificacao = this.identifica.id_identificacao;
               this.getTable()
               if (data.detail.length > 0) {
                 this.dataTable = data.detail;
               } else {
-                this.identifica_det.id_suspeito_identifica = this.identifica.id_suspeito_identifica
+                this.identifica_det.id_identificacao = this.identifica.id_identificacao
               }
             } else {
               this.identifica.id_suspeito = data.suspeito.id_suspeito;
+              this.dataTable = []
             }
 
             this.getGeneros();

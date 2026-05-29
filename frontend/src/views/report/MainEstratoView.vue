@@ -51,6 +51,13 @@
                                                     5 - Caracterizações
                                                 </label>
                                             </div>
+                                            <div class="column is-4 linha">
+                                                <label class="radio">
+                                                    <input type="radio" name="execucao" value="110"
+                                                        v-model="tipo_relat" />
+                                                    6 - Inquérito Canino
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

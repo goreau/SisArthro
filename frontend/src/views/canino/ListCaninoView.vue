@@ -98,18 +98,22 @@ export default {
 
         caninoService.getCaninos({})
             .then((response) => {
-                this.dataTable = response.data;
+                //this.dataTable = response.data;
+                this.dataTable = Object.freeze(response.data);
             })
             .catch((err) => {
                 console.log(err);
             })
             .finally(() => { });
 
+
+    },
+    created() {
         this.columns = [
             { headerName: 'ID', field: 'id', hide: true },
             { headerName: "Município", field: "municipio" },
             { headerName: "Localidade", field: "localidade" },
-            { headerName: "Quarteirão", field: "quadra", hide: true },
+            { headerName: "Quarteirão", field: "quadra" },
             { headerName: "Codend", field: "codend" },
             { headerName: "Nome", field: "nome" },
             { headerName: "RA", field: "ra" },
