@@ -274,6 +274,8 @@ export default {
             this.caption = "CodEnd";
             this.recent = response.data.master.id_codend;
             this.lista();
+            this.codend.complemento = '';
+            this.codend.numero = '';
             setTimeout(() => (this.showMessage = false), 3000);
           },
           (error) => {

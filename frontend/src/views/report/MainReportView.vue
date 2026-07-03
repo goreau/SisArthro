@@ -25,6 +25,9 @@
                         <label class="radio">
                           <input type="radio" name="execucao" value="3" v-model="tipo_relat" />
                           7 - Encoleiramento </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="5" v-model="tipo_relat" />
+                          10 - Hábito Alimentar </label>
                       </div>
                       <div class="column is-4 linha">
                         <label class="radio">
@@ -32,7 +35,10 @@
                           2 - Identificações </label>
                         <label class="radio">
                           <input type="radio" name="execucao" value="109" v-model="tipo_relat" />
-                          5 - Caracterizações </label>
+                          5 - Resumo Caracterizações </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="111" v-model="tipo_relat" />
+                          8 - Lista Caracterizações </label>
                       </div>
                       <div class="column is-4 linha">
                         <label class="radio">
@@ -43,8 +49,11 @@
                           <input type="radio" name="execucao" value="106" v-model="tipo_relat" />
                           6 - Notificação de Cães
                         </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="4" v-model="tipo_relat" />
+                          9 - Infecção Natural
+                        </label>
                       </div>
-
                     </div>
                   </div>
                 </div>
@@ -189,9 +198,6 @@
               </section>
             </div>
           </div>
-          <footer class="card-footer">
-            <footerCard @submit="create" @cancel="null" @aux="details" :cFooter="cFooter" />
-          </footer>
         </div>
       </div>
     </div>
@@ -208,7 +214,6 @@ import "bulma-calendar/dist/css/bulma-calendar.min.css";
 import moment from 'moment';
 import CmbAuxiliares from "@/components/forms/CmbAuxiliares.vue";
 import CmbLocalidade from "@/components/forms/CmbLocalidade.vue";
-import { faMoneyBillTrendUp } from "@fortawesome/free-solid-svg-icons";
 
 export default {
   data() {

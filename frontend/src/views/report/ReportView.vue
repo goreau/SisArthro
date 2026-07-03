@@ -52,6 +52,12 @@ export default {
         case "3":
           this.title = 'Encoleiramento';
           break;
+        case "4":
+          this.title = 'Infecção Natural';
+          break;
+        case "5":
+          this.title = 'Hábito Alimentar';
+          break;
         case '101':
           this.title = 'Extrato de Capturas';
           break;

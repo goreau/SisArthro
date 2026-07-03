@@ -34,8 +34,8 @@
             <section v-if="hasData">
               <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                 :pagination="true" :buttons="['edit', 'delete', 'caracteriza', 'animais']" :has-exports="true"
-                @edit="onEditRow" :calc-height="false" @delete="onDeleteRow" @caracteriza="onCaracteriza"
-                @animais="onAnimais" :deleted-id="delId" :persistence-id="$options.name" />
+                @grid-ready="handleGridReady" @edit="onEditRow" :calc-height="false" @delete="onDeleteRow"
+                @caracteriza="onCaracteriza" @animais="onAnimais" :deleted-id="delId" :persistence-id="$options.name" />
             </section>
           </div>
         </div>
@@ -106,6 +106,9 @@ export default {
         "has-text-info": row.status == 7,
       };
     },
+    handleGridReady() {
+      this.loadData();
+    },
     loadData(filter) {
       localStorage.setItem('last_filtMun', this.filtMun);
       codendService.getCodends(this.filtMun, filter)
@@ -165,7 +168,7 @@ export default {
     const savedMun = localStorage.getItem('last_filtMun');
     if (savedMun) {
       this.filtMun = savedMun;
-      this.loadData(null)
+      //      this.loadData(null)
     }
   },
 };

@@ -62,7 +62,7 @@ export default {
     },
     onEditRow(id) {
       const item = this.dataTable.find(item => item.id === id);
-      if (item.oriigem == 'Captura') {
+      if (item.origem == 'Captura') {
         this.$router.push(`/editIdent/${id}`);
       } else {
         this.$router.push(`/editSuspeitoIdent/${item.id_suspeito}`);

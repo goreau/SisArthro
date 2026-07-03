@@ -1,43 +1,27 @@
 <template>
   <transition name="modale-fade">
     <div class="modale-backdrop">
-        <div
-          class="modale"
-          role="dialog"
-          aria-labelledby="modaleTitle"
-          aria-describedby="modaleDescription"
-        >
-          <header class="modale-header" id="modaleTitle">
-            <slot name="header"> This is the default tile! </slot>
-            <button
-              type="button"
-              class="btn-close"
-              @click="close"
-              aria-label="Close modale"
-            >
-              x
-            </button>
-          </header>
+      <div class="modale" role="dialog" aria-labelledby="modaleTitle" aria-describedby="modaleDescription">
+        <header class="modale-header" id="modaleTitle">
+          <slot name="header"> This is the default tile! </slot>
+          <button type="button" class="btn-close" @click="close" aria-label="Close modale">
+            x
+          </button>
+        </header>
 
-          <section class="modale-body" id="modaleDescription">
-            <slot name="body"> This is the default body! </slot>
-            
-          </section>
+        <section class="modale-body" id="modaleDescription">
+          <slot name="body"> This is the default body! </slot>
 
-          <footer class="modale-footer">
-            <button
-              id="postVal"
-              type="button"
-              class="button submit-btn is-fullwidth"
-              @click="post"
-              aria-label="Salvar"
-            >
-              Salvar
-            </button>
+        </section>
 
-            <slot name="footer">{{msg}}</slot>
-          </footer>
-        </div>
+        <footer class="modale-footer">
+          <button id="postVal" type="button" class="button submit-btn is-fullwidth" @click="post" aria-label="Salvar">
+            Salvar
+          </button>
+
+          <slot name="footer">{{ msg }}</slot>
+        </footer>
+      </div>
     </div>
   </transition>
 </template>
@@ -68,6 +52,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 9999;
 }
 
 .modale {
@@ -77,6 +62,7 @@ export default {
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  min-width: 50rem;
 }
 
 .modale-header,

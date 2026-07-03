@@ -38,12 +38,17 @@ export default {
     }
   },
   watch: {
-    id_mun(value) {
-      this.loadData();
-    }
+    id_mun: {
+    handler(value) {
+      if (value > 0) { // Opcional: só carrega se for um ID válido
+        this.loadData();
+      }
+    },
+    immediate: true // <--- ISSO resolve o problema de carga inicial
+  }
   },
   mounted() {
-    this.loadData();
+  //  this.loadData();
   },
 
 };

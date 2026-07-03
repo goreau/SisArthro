@@ -51,8 +51,8 @@
                       </div>
                     </article>
 
-                    <article class="tile is-child conteudo">
-                      <div class="columns" v-if="identifica.id_identificacao > 0">
+                    <article class="tile is-child conteudo" v-if="identifica.id_identificacao > 0">
+                      <div class="columns">
                         <div class="field column is-2">
                           <label class="label">Gênero</label>
                           <div class="control">

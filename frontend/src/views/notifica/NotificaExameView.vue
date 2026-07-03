@@ -409,7 +409,7 @@ export default {
 
 
             var caldpp = bulmaCalendar.attach('#dtEntrada', options);
-            options.dateStart = this.notifica_exame.dt_entrada;
+            options.startDate = this.notifica_exame.dt_obito;
             var calcolex = bulmaCalendar.attach('#dtObito', options);
 
             const element1 = document.querySelector('#dtEntrada');
@@ -553,7 +553,7 @@ export default {
 
         },
         update() {
-            this.notifica_exame.id_notifica_exame = this.id_notificacao_exame;
+            this.notifica_exame.id_notificacao_exame = this.id_notificacao_exame;
             notificaService
                 .editDet(this.notifica_exame)
                 .then((response) => {

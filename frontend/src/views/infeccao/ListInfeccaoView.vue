@@ -4,7 +4,7 @@
             <div class="column is-11">
                 <div class="card">
                     <header class="card-header">
-                        <p class="card-header-title is-centered">Animais Cadastrados</p>
+                        <p class="card-header-title is-centered">Infecções Naturais Cadastradas</p>
                         <button class="button is-primary is-outlined" @click="newCapt">
                             <span class="icon">
                                 <font-awesome-icon icon="fa-solid fa-plus-circle" />
@@ -28,14 +28,13 @@
 </template>
 
 <script>
-import caninoService from "@/services/canino.service";
+import infeccaoService from "@/services/infeccao.service";
 import MyTable from "@/components/forms/MyTable.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
-import moment from 'moment';
 import Message from "@/components/general/Message.vue";
 
 export default {
-    name: "ListaCaninos",
+    name: "ListaAlimentar",
     data() {
         return {
             dataTable: [],
@@ -44,7 +43,7 @@ export default {
             type: "",
             showMessage: false,
             columns: [],
-            tableName: 'canino',
+            tableName: 'infeccao',
             delId: null,
             id_user: 0,
             tpUser: 0
@@ -57,19 +56,19 @@ export default {
     },
     methods: {
         newCapt() {
-            this.$router.push("/canino");
+            this.$router.push("/infeccao/0");
         },
         onEditRow(id) {
-            this.$router.push(`/editCanino/${id}`);
+            this.$router.push(`/infeccao/${id}`);
         },
         async onDeleteRow(id) {
             const ok = await this.$refs.confirmDialog.show({
                 title: 'Excluir',
-                message: 'Deseja mesmo excluir esse animal e todas as informações associadas a ele?',
+                message: 'Deseja mesmo excluir esse registro e todas as informações associadas a ele?',
                 okButton: 'Confirmar',
             })
             if (ok) {
-                caninoService.delete(id)
+                infeccaoService.delete(id)
                     .then(() => {
                         this.delId = id
                     })
@@ -77,7 +76,7 @@ export default {
                         this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
                         this.showMessage = true;
                         this.type = "alert";
-                        this.caption = "Animais";
+                        this.caption = "Hábito Alimentar";
                         setTimeout(() => (this.showMessage = false), 3000);
                     })
             }
@@ -96,7 +95,7 @@ export default {
         this.id_user = this.currentUser.id;
         this.tpUser = this.currentUser.role;
 
-        caninoService.getCaninos({})
+        infeccaoService.getAll({})
             .then((response) => {
                 //this.dataTable = response.data;
                 this.dataTable = Object.freeze(response.data);
@@ -110,13 +109,8 @@ export default {
         this.columns = [
             { headerName: 'ID', field: 'id', hide: true },
             { headerName: "Município", field: "municipio" },
-            { headerName: "Localidade", field: "localidade" },
-            { headerName: "Quarteirão", field: "quadra" },
-            { headerName: "Codend", field: "codend" },
-            { headerName: "Nome", field: "nome" },
-            { headerName: "RA", field: "ra" },
-            { headerName: "Raça", field: "raca" },
-            { headerName: "Data", field: "data" },
+            { headerName: "Captura", field: "codigo" },
+            { headerName: "Pool", field: "pool" },
             { headerName: 'Prop', field: 'owner_id', hide: true },
         ];
     },

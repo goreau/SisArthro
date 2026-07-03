@@ -55,7 +55,7 @@ export default {
       showMessage: false,
       cFooter: {
         strSubmit: 'Entrar',
-        strCancel: 'Cancelar',
+        strCancel: '',
         strAux: '',
         aux: false
       }

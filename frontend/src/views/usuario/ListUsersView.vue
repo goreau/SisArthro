@@ -174,7 +174,7 @@ export default {
       .finally(() => this.isLoading = false);
 
     this.columns = [
-      { headerName: 'ID', field: 'id', hide: true },
+      { headerName: 'ID', field: 'id' },
       { headerName: 'Nome', field: 'name', },
       { headerName: 'Login', field: 'username', },
       { headerName: 'Município', field: 'municipio', },

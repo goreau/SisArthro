@@ -42,7 +42,7 @@
     </template>
 
     <template v-slot:body>
-      <div class="columns">
+      <div class="columns" v-if="tpAux < 50">
         <div class="column">
           <div class="field">
             <label class="label">Codigo</label>
@@ -56,6 +56,37 @@
             <label class="label">Nome</label>
             <div class="control">
               <input id="valor" class="input" type="text" placeholder="Nome" v-model="aux.descricao" />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="columns" v-else>
+        <div class="column">
+          <div class="field">
+            <label class="label">Tipo</label>
+            <div class="control">
+              <select v-model="spp.tipo" class="input" @change="selSpp">
+                <option value="0">-- Selecione --</option>
+                <option v-for="tp in tpSpp" :key=tp.id_auxiliares :value=tp.id_auxiliares>
+                  {{ tp.nome }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Codigo</label>
+            <div class="control">
+              <input id="valor" class="input" type="text" placeholder="Codigo" v-model="spp.codigo" />
+            </div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="field">
+            <label class="label">Nome</label>
+            <div class="control">
+              <input id="valor" class="input" type="text" placeholder="Nome" v-model="spp.nome" />
             </div>
           </div>
         </div>
@@ -74,6 +105,8 @@ import MyTable from "@/components/forms/MyTable.vue";
 import Loader from "@/components/general/Loader.vue";
 import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 import Modal from '@/components/forms/Modal.vue';
+import infeccaoService from "@/services/infeccao.service";
+
 
 export default {
   name: "ListaAuxiliares",
@@ -85,6 +118,7 @@ export default {
       delId: null,
       isModalVisible: false,
       tipos: [],
+      tpSpp: [],
       tableName: 'auxiliares',
       aux: {
         id_auxiliares: 0,
@@ -92,8 +126,16 @@ export default {
         codigo: '',
         tipo: 0
       },
+      spp: {
+        id_spp_infeccao: 0,
+        codigo: 0,
+        tipo: 0,
+        nome: '',
+        ordem: 0
+      },
       message: '',
       tpAux: 0,
+      sppAux: 0,
       title: '',
       id_user: 0,
       tpUser: 0
@@ -109,38 +151,72 @@ export default {
     selTipo(e) {
       this.title = e.target.options[e.target.selectedIndex].text;
     },
+    selSpp(e) {
+      const tp = e.target.options[e.target.selectedIndex].value;
+      const quantidadeExistente = this.dataTable.filter(item => item.tipo.toString() === tp).length;
+
+      const proximoNumero = quantidadeExistente + 1;
+
+      this.spp.codigo = proximoNumero.toString().padStart(3, '0');
+
+      this.spp.ordem = proximoNumero;
+    },
     newAux() {
+      if (this.tpAux < 50) {
+        this.aux.id_auxiliares = 0;
+        this.aux.descricao = '';
+        this.aux.codigo = '';
+        this.aux.tipo = this.tpAux;
+      } else {
+        this.spp.codigo = '';
+        this.spp.tipo = 0;
+        this.spp.nome = '';
+        this.loadSpp(this.tpAux == 51 ? 30 : 29);
+      }
       this.isModalVisible = true;
-      this.aux.id_auxiliares = 0;
-      this.aux.descricao = '';
-      this.aux.codigo = '';
-      this.aux.tipo = this.tpAux;
     },
     closeModal() {
       this.isModalVisible = false;
     },
     postContent() {
       document.getElementById("postVal").classList.add("is-loading");
-      if (this.aux.id_auxiliares > 0) {
-        capturaService.updateAux(this.aux)
-          .then(
-            (response) => {
-              this.message = "Informação alterada.";
-              setTimeout(() => (this.message = ''), 3000);
-            },
-            (error) => {
-              this.message = error;
-              setTimeout(() => (this.message = ''), 3000);
-            }
-          )
-          .finally(() => {
-            document.getElementById("postVal").classList.remove("is-loading");
-          });
+      if (this.tpAux < 50) {
+        if (this.aux.id_auxiliares > 0) {
+          capturaService.updateAux(this.aux)
+            .then(
+              (response) => {
+                this.message = "Informação alterada.";
+                setTimeout(() => (this.message = ''), 3000);
+              },
+              (error) => {
+                this.message = error;
+                setTimeout(() => (this.message = ''), 3000);
+              }
+            )
+            .finally(() => {
+              document.getElementById("postVal").classList.remove("is-loading");
+            });
+        } else {
+          capturaService.createAux(this.aux)
+            .then(
+              (response) => {
+                this.message = "Informação cadastrada.";
+                setTimeout(() => (this.message = ''), 3000);
+              },
+              (error) => {
+                this.message = error;
+                setTimeout(() => (this.message = ''), 3000);
+              }
+            )
+            .finally(() => {
+              document.getElementById("postVal").classList.remove("is-loading");
+            });
+        }
       } else {
-        capturaService.createAux(this.aux)
+        infeccaoService.postSpp(this.spp)
           .then(
             (response) => {
-              this.message = "Informação cadastrada.";
+              this.message = response.data.msg;
               setTimeout(() => (this.message = ''), 3000);
             },
             (error) => {
@@ -152,10 +228,17 @@ export default {
             document.getElementById("postVal").classList.remove("is-loading");
           });
       }
+
+      this.loadItens(this.tpAux);
     },
     async onEditRow(id) {
       this.isModalVisible = true;
-      this.aux = this.dataTable.find(item => item.id === id);
+      if (this.selTipo < 50) {
+        this.aux = this.dataTable.find(item => item.id === id);
+      } else {
+        this.spp = this.dataTable.find(item => item.id === id);
+        this.loadSpp(this.tpAux == 51 ? 30 : 29);
+      }
     },
     async onDeleteRow(id) {
       const ok = await this.$refs.confirmDialog.show({
@@ -164,8 +247,54 @@ export default {
         okButton: 'Confirmar',
       })
       if (ok) {
-        capturaService.deleteAux(id);
+        if (this.tpAux < 50) {
+          capturaService.deleteAux(id);
+        } else {
+          infeccaoService.deleteSpp(id);
+        }
+
         this.delId = id
+      }
+    },
+    async loadSpp(tp) {
+      capturaService.getAuxiliares(tp)
+        .then((res) => {
+          this.tpSpp = res.data;
+        })
+        .catch((err) => {
+          this.tpSpp = [];
+        });
+    },
+    async loadItens(value) {
+      if (value < 50) {
+        this.columns = [
+          { headername: "Código", field: "codigo" },
+          { headername: "Nome", field: "descricao" },
+        ];
+
+        capturaService.getAuxiliaresEd(value)
+          .then((response) => {
+            this.dataTable = response.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => (this.isLoading = false));
+      } else {
+        this.columns = [
+          { headername: "Código", field: "codigo" },
+          { headername: "Nome", field: "nome" },
+          { headername: "Tipo", field: "fant_tipo" }
+        ];
+
+        infeccaoService.getSppEd(value)
+          .then((response) => {
+            this.dataTable = response.data;
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => (this.isLoading = false));
       }
     }
   },
@@ -190,15 +319,14 @@ export default {
       { id: 21, tipo: 'Sinais e Sintomas (Invest. Foco)' },
       { id: 22, tipo: 'Tipo Amostra (Invest. Foco)' },
       { id: 23, tipo: 'Resultado Parasitológico (Invest. Foco)' },
+      { id: 51, tipo: 'Espécies (Hábito Alimentar)' },
+      { id: 52, tipo: 'Espécies (Infec. Natural)' },
     ];
 
     this.id_user = this.currentUser.id;
     this.tpUser = this.currentUser.role;
 
-    this.columns = [
-      { headername: "Código", field: "codigo" },
-      { headername: "Nome", field: "descricao" },
-    ];
+
   },
   computed: {
     currentUser() {
@@ -209,14 +337,7 @@ export default {
     tpAux(value) {
       this.isLoading = true;
 
-      capturaService.getAuxiliaresEd(value)
-        .then((response) => {
-          this.dataTable = response.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => (this.isLoading = false));
+      this.loadItens(value);
     }
   }
 };

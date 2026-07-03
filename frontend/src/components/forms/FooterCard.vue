@@ -17,7 +17,7 @@
           </button>
         </div>
       </div>
-      <div class="column is-4">
+      <div class="column is-4" v-if="cFooter.strCancel != ''">
         <div class="control">
           <button class="button is-link cancel-btn is-fullwidth" @click="cancel">
             <span class="btico"><font-awesome-icon icon="fa-solid fa-ban" /></span>
@@ -34,8 +34,8 @@ export default {
   name: "footerCard",
   props: ["cFooter"],
   methods: {
-    cancel(){
-      if (this.$route.path != "/"){
+    cancel() {
+      if (this.$route.path != "/") {
         this.$router.go(-1);
       }
     }

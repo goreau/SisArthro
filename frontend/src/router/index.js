@@ -357,6 +357,62 @@ const routes = [
     },
   },
   {
+    path: '/alimentar/:id',
+    name: 'alimentar',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/alimentar/AlimentarView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Hábito Alimentar',
+        root: true,
+      },
+    },
+  },
+  {
+    path: '/alimentars',
+    name: 'alimentars',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/alimentar/ListAlimentarView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Hábito Alimentar',
+        root: true,
+      },
+    },
+  },
+  {
+    path: '/infeccao/:id',
+    name: 'infeccao',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/infeccao/InfeccaoView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Infecção Natural',
+        root: true,
+      },
+    },
+  },
+  {
+    path: '/infeccaos',
+    name: 'infeccaos',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/infeccao/ListInfeccaoView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Lista Infecção Natural',
+        root: true,
+      },
+    },
+  },
+  {
     path: '/canino',
     name: 'canino',
     component: () =>

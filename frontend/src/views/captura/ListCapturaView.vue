@@ -35,7 +35,8 @@
             <section v-if="hasData">
               <MyTable :loggedUser="{ id: id_user, tipo: tpUser }" :data="dataTable" :columns="columns"
                 :pagination="true" :buttons="['edit', 'delete']" :has-exports="true" @edit="onEditRow"
-                :calc-height="false" @delete="onDeleteRow" :deleted-id="delId" :persistence-id="$options.name" />
+                @grid-ready="handleGridReady" :calc-height="false" @delete="onDeleteRow" :deleted-id="delId"
+                :persistence-id="$options.name" />
             </section>
           </div>
         </div>
@@ -104,6 +105,14 @@ export default {
           })
       }
     },
+    handleGridReady() {
+      // Agora temos certeza que o grid existe!
+      const savedMun = localStorage.getItem('last_filtMun');
+      if (savedMun) {
+        this.filtMun = savedMun;
+        this.loadData();
+      }
+    },
     loadData() {
       localStorage.setItem('last_filtMun', this.filtMun);
       capturaService.getCapturas(this.filtMun)
@@ -143,7 +152,7 @@ export default {
     const savedMun = localStorage.getItem('last_filtMun');
     if (savedMun) {
       this.filtMun = savedMun;
-      this.loadData()
+      // this.loadData()
     }
   },
   computed: {

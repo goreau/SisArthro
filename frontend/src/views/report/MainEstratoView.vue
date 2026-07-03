@@ -274,6 +274,10 @@ export default {
     },
     methods: {
         processar() {
+            if (this.noDate.indexOf(this.tipo_relat) > -1) {
+                this.filter.dt_inicio = ''
+                this.filter.dt_final = ''
+            }
             localStorage.setItem('filterRelArthro', JSON.stringify(this.filter));
 
 

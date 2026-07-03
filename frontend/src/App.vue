@@ -116,21 +116,8 @@ export default {
           ],
         },
         {
-          href: "/users",
-          title: "Usuarios",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-users",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          //text ou child
-        },
-        {
-          href: "/localidade",
-          title: "Localidade",
+          href: "",
+          title: "Cadastros",
           icon: {
             element: "font-awesome-icon",
             attributes: {
@@ -141,251 +128,57 @@ export default {
           },
           child: [
             {
-              href: "/localidades",
-              title: "Consultar",
+              href: "/users",
+              title: "Usuarios",
               icon: {
                 element: "font-awesome-icon",
                 attributes: {
-                  icon: "fa-solid fa-search",
+                  icon: "fa-solid fa-users",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+              //text ou child
+            },
+
+            {
+              href: "/localidades",
+              title: "Localidades",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-tree-city",
                   size: "lg",
                   transform: "shrink-8",
                 },
               },
             },
-          ],
-        },
-        {
-          href: "/codend",
-          title: "Cadastro de Endereços",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-location-pin",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
+
             {
               href: "/codends",
-              title: "Consultar",
+              title: "Endereços",
               icon: {
                 element: "font-awesome-icon",
                 attributes: {
-                  icon: "fa-solid fa-search",
+                  icon: "fa-solid fa-location-pin",
                   size: "lg",
                   transform: "shrink-8",
                 },
               },
             },
-            {
-              href: "/duplicaCaracterizacao",
-              title: "Gerar Ciclo Caracterização",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "/canino",
-          title: "Animais",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-dog",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
+
             {
               href: "/caninos",
-              title: "Consultar",
+              title: "Cães e Gatos",
               icon: {
                 element: "font-awesome-icon",
                 attributes: {
-                  icon: "fa-solid fa-search",
+                  icon: "fa-solid fa-dog",
                   size: "lg",
                   transform: "shrink-8",
                 },
               },
             },
-          ],
-        },
-        {
-          href: "/inquerito",
-          title: "Inquerito Canino",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-file-text",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
-            {
-              href: "/inqueritos",
-              title: "Consultar",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "/foco",
-          title: "Invest. Foco Canino",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-search-location",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
-            {
-              href: "/focos",
-              title: "Consultar",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "/captura",
-          title: "Captura",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-bugs",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
-            {
-              href: "/capturas",
-              title: "Consultar",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "/notifica",
-          title: "Notificação de Cães",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-bugs",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
-            {
-              href: "/notificas",
-              title: "Consultar",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "/suspeito",
-          title: "Notificação de Artrópodes",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-bugs",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
-            {
-              href: "/suspeitos",
-              title: "Consultar",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "/identifica",
-          title: "Identificação",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-vial-virus",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
-            {
-              href: "/identificas",
-              title: "Consultar",
-              icon: {
-                element: "font-awesome-icon",
-                attributes: {
-                  icon: "fa-solid fa-search",
-                  size: "lg",
-                  transform: "shrink-8",
-                },
-              },
-            },
-          ],
-        },
-        {
-          href: "",
-          title: "Administrativo",
-          icon: {
-            element: "font-awesome-icon",
-            attributes: {
-              icon: "fa-solid fa-screwdriver-wrench",
-              size: "lg",
-              transform: "shrink-8",
-            },
-          },
-          child: [
             {
               href: "/generos",
               title: "Gêneros",
@@ -417,6 +210,142 @@ export default {
                 element: "font-awesome-icon",
                 attributes: {
                   icon: "fa-solid fa-info",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ]
+        },
+        {
+          href: "",
+          title: "Atividades",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-bugs",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/inqueritos",
+              title: "Inquerito Canino",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-file-text",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/focos",
+              title: "Invest. Foco Canino",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search-location",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/capturas",
+              title: "Captura",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/alimentars",
+              title: "Hábito Alimentar",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/infeccaos",
+              title: "Infecção Natural",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/notificas",
+              title: "Notificação de Cães",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/suspeitos",
+              title: "Notificação de Artrópodes",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-bugs",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+            {
+              href: "/identificas",
+              title: "Identificação",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-vial-virus",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
+          ]
+        },
+        {
+          href: "",
+          title: "Administrativos",
+          icon: {
+            element: "font-awesome-icon",
+            attributes: {
+              icon: "fa-solid fa-screwdriver-wrench",
+              size: "lg",
+              transform: "shrink-8",
+            },
+          },
+          child: [
+            {
+              href: "/duplicaCaracterizacao",
+              title: "Gerar Ciclo Caracterização",
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-search",
                   size: "lg",
                   transform: "shrink-8",
                 },
@@ -696,7 +625,7 @@ body {
 
 .datetimepicker-dummy,
 .datetimepicker {
-  z-index: 9999 !important;
+  z-index: 9000 !important;
 }
 
 .is-error {

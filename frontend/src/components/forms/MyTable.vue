@@ -99,6 +99,7 @@ const emit = defineEmits([
     'animais',
     'boletim',
     'identifica',
+    'grid-ready',
 ])
 
 const gridApi = ref(null)
@@ -130,20 +131,22 @@ const onFirstDataRendered = (params) => {
 function onFilterChanged(params) {
     const filterModel = params.api.getFilterModel();
     // Salva no localStorage vinculado a uma chave específica desta tela
-    localStorage.setItem(`filter_state_${props.persistenceId}`, JSON.stringify(filterModel));
+    //  localStorage.setItem(`filter_state_${props.persistenceId}`, JSON.stringify(filterModel));
 }
 
 
 function onGridReady(params) {
     gridApi.value = params.api
     columnApi.value = params.columnApi
+    gridApi.value.hideOverlay();
     //  console.log('SET columnApi', params.columnApi)
     //autoSizeColumns()
-    const savedFilter = localStorage.getItem(`filter_state_${props.persistenceId}`);
+    const savedFilter = false;// localStorage.getItem(`filter_state_${props.persistenceId}`);
     if (savedFilter) {
         const model = JSON.parse(savedFilter);
         params.api.setFilterModel(model);
     }
+    emit('grid-ready');
 }
 
 function autoSizeAll() {
@@ -291,8 +294,11 @@ watch(
             // markRaw protege o array contra reatividade do Vue
             const data = markRaw(val || []);
             gridApi.value.setGridOption('rowData', data);
+
+            gridApi.value.hideOverlay();
         }
         // Se precisar do rows para outros fins, mantenha o shallowRef:
+        // gridApi.value.hideOverlay();
         rows.value = val;
     },
     { immediate: true }
