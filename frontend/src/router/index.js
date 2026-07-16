@@ -989,6 +989,20 @@ const routes = [
     },
   },
   {
+    path: '/listIndicadores',
+    name: 'listIndicadores',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/MainListIndicadoresView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Indicadores',
+        root: true,
+      },
+    },
+  },
+  {
     path: '/mapas',
     name: 'mapas',
     component: () =>

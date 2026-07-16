@@ -74,7 +74,7 @@ export default {
                 okButton: 'Confirmar',
             })
             if (ok) {
-                inqueritoService.delete(id)
+                inqueritoService.deleteDet(id)
                     .then(() => {
                         this.delId = id
                     })

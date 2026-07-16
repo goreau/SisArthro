@@ -514,6 +514,18 @@ export default {
               },
             },
             {
+              href: "/listIndicadores",
+              title: "Listagem de Indicadores",
+              icon: {
+                element: "font-awesome-icon",
+                class: "small",
+                attributes: {
+                  icon: "fa-solid fa-hand-point-up",
+                  transform: "shrink-10",
+                },
+              },
+            },
+            {
               href: "/estratos",
               title: "Estratos",
               icon: {
