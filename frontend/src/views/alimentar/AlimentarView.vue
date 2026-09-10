@@ -671,7 +671,7 @@ export default {
                 });
         },
         getSpp() {
-            alimentarService.getSpp(2)
+            alimentarService.getSpp(2594)
                 .then((res) => {
                     this.listSpp = res.data;
                 })

@@ -118,6 +118,7 @@ export default {
             { headerName: "Raça", field: "raca" },
             { headerName: "Data", field: "data" },
             { headerName: 'Prop', field: 'owner_id', hide: true },
+            { headerName: 'Proprietário', field: 'owner' },
         ];
     },
     computed: {

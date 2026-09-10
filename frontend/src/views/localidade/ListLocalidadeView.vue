@@ -63,7 +63,7 @@ export default {
         okButton: 'Confirmar',
       })
       if (ok) {
-        localidadeService.delete(row.id_localidade);
+        localidadeService.delete(id);
         this.delId = id
       }
     },
@@ -95,11 +95,12 @@ export default {
     this.columns = [
       { headerName: 'ID', field: 'id', hide: true },
       { headerName: "GVE", field: "gve" },
-      { headerName: "Municipio", field: "municipio", },
+      { headerName: "Município", field: "municipio", },
       { headerName: "Código", field: "codigo" },
       { headerName: "Nome", field: "nome" },
       { headerName: "Data", field: "data" },
-      { headerName: 'Prop', field: 'owner_id', hide: true },
+      { headerName: 'ID Prop', field: 'owner_id', hide: true },
+      { headerName: 'Proprietário', field: 'owner' },
     ];
   },
   computed: {

@@ -935,6 +935,20 @@ const routes = [
     },
   },
   {
+    path: '/exclude',
+    name: 'exclude',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/administrativo/ExclusaoView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Adm - Exclusão Segura',
+        root: true,
+      },
+    },
+  },
+  {
     path: '/report',
     name: 'report',
     component: () =>

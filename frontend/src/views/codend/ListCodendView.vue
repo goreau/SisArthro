@@ -135,7 +135,7 @@ export default {
       { headerName: "Código", field: "codigo" },
       { headerName: "Endereço", field: "endereco" },
       { headerName: "Localidade", field: "localidade" },
-      { headerName: "Responsável", field: "owner" },
+      { headerName: "Proprietário", field: "owner" },
       { headerName: 'Prop', field: 'owner_id', hide: true },
     ];
 

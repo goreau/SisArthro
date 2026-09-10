@@ -28,6 +28,9 @@
                         <label class="radio">
                           <input type="radio" name="execucao" value="5" v-model="tipo_relat" />
                           10 - Hábito Alimentar </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="8" v-model="tipo_relat" />
+                          13 - Conf. Quadra (Inquérito) </label>
                       </div>
                       <div class="column is-4 linha">
                         <label class="radio">
@@ -39,6 +42,9 @@
                         <label class="radio">
                           <input type="radio" name="execucao" value="111" v-model="tipo_relat" />
                           8 - Lista Caracterizações </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="6" v-model="tipo_relat" />
+                          11 - Resumo Notificações </label>
                       </div>
                       <div class="column is-4 linha">
                         <label class="radio">
@@ -53,6 +59,9 @@
                           <input type="radio" name="execucao" value="4" v-model="tipo_relat" />
                           9 - Infecção Natural
                         </label>
+                        <label class="radio">
+                          <input type="radio" name="execucao" value="7" v-model="tipo_relat" />
+                          12 - Intervalos em Notificação </label>
                       </div>
                     </div>
                   </div>

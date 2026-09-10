@@ -6,7 +6,7 @@
                 <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
                 <div class="card">
                     <header class="card-header">
-                        <p class="card-header-title is-centered">infecção Natural</p>
+                        <p class="card-header-title is-centered">Infecção Natural</p>
                     </header>
                     <div class="card-content">
                         <div class="tile is-ancestor">
@@ -153,32 +153,32 @@
                                             <div class="columns">
                                                 <div class="field column is-2">
                                                     <label class="label">Alphavirus</label>
-                                                    <InputButton v-model="infeccao.alpha" @click="results(1)"
+                                                    <InputButton v-model="infeccao.alpha" @click="results(1523)"
                                                         :disa="infeccao.alpha != 2" />
                                                 </div>
                                                 <div class="field column is-2">
                                                     <label class="label">Flavivirus</label>
-                                                    <InputButton v-model="infeccao.flavi" @click="results(2)"
+                                                    <InputButton v-model="infeccao.flavi" @click="results(1699)"
                                                         :disa="infeccao.flavi != 2" />
                                                 </div>
-                                                <div class="field column is-2">
+                                                <!--<div class="field column is-2">
                                                     <label class="label">Mayaro</label>
                                                     <InputButton v-model="infeccao.may" @click="results(3)"
                                                         :disa="infeccao.may != 2" />
-                                                </div>
+                                                </div>-->
                                                 <div class="column is-2">
                                                     <label class="label">Orthobunyavirus</label>
-                                                    <InputButton v-model="infeccao.orou" @click="results(4)"
+                                                    <InputButton v-model="infeccao.orou" @click="results(2054)"
                                                         :disa="infeccao.orou != 2" />
                                                 </div>
                                                 <div class="column is-2">
                                                     <label class="label">Plasmódio</label>
-                                                    <InputButton v-model="infeccao.plasm" @click="results(5)"
+                                                    <InputButton v-model="infeccao.plasm" @click="results(2233)"
                                                         :disa="infeccao.plasm != 2" />
                                                 </div>
                                                 <div class="column is-2">
                                                     <label class="label">Leishmania</label>
-                                                    <InputButton v-model="infeccao.leish" @click="results(6)"
+                                                    <InputButton v-model="infeccao.leish" @click="results(2413)"
                                                         :disa="infeccao.leish != 2" />
                                                 </div>
                                             </div>
@@ -313,9 +313,9 @@ export default {
             },
             detalhe: {
                 id: 0,
-                id_infeccao: 0,
                 id_especie: 0,
                 fant_especie: '',
+                tipo: ''
             },
             appCalendars: {},
             master: 0,
@@ -325,6 +325,7 @@ export default {
             listSpp: [],
             dataTable: [],
             dataDet: [],
+            detTotal: [],
             detalheIdCounter: 0,
             currentTp: 0,
             columnsDet: [
@@ -376,6 +377,8 @@ export default {
             this.v$.infeccao.$validate(); // checks all inputs
             if (!this.v$.infeccao.$error) {
                 document.getElementById('login').classList.add('is-loading');
+
+                this.infeccao.details = this.detTotal;
 
                 if (this.infeccao.id_infeccao == 0) {
                     infeccaoService.create(this.infeccao).then(
@@ -462,7 +465,16 @@ export default {
             this.isModalVisible = false;
         },
         postContent() {
-            this.infeccao.details = this.dataDet;
+            const detTotalFiltrado = this.detTotal.filter(item => item.tipo !== this.currentTp);
+
+            // 2. Concatena os restantes com os novos dados
+            const listaAtualizada = [...detTotalFiltrado, ...this.dataDet];
+
+            this.detTotal = []; // Limpa temporariamente
+            this.$nextTick(() => {
+                this.detTotal = listaAtualizada; // Reaplica com nova referência
+            });
+
             this.closeModal();
         },
         insert() {
@@ -526,6 +538,8 @@ export default {
                         ...item,
                         id: (++this.detalheIdCounter).toString()
                     }));
+
+                    this.detTotal = this.infeccao.details;
 
                     if (this.appCalendars['dtExtr']) {
                         let dt = moment(String(data.dt_extracao)).format('DD/MM/YYYY');

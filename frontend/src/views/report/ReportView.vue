@@ -58,6 +58,12 @@ export default {
         case "5":
           this.title = 'Hábito Alimentar';
           break;
+        case "6":
+          this.title = 'Resumo Notificação';
+          break;
+        case "7":
+          this.title = 'Intervalo entre Etapas';
+          break;
         case '101':
           this.title = 'Extrato de Capturas';
           break;

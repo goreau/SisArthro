@@ -413,6 +413,19 @@ export default {
                 },
               },
             },
+            {
+              href: "/exclude",
+              title: "Exclusão Segura",
+              disabled: false,
+              icon: {
+                element: "font-awesome-icon",
+                attributes: {
+                  icon: "fa-solid fa-trash",
+                  size: "lg",
+                  transform: "shrink-8",
+                },
+              },
+            },
           ],
         },
         {

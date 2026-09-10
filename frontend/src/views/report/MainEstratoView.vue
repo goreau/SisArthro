@@ -59,6 +59,15 @@
                                                 </label>
                                             </div>
                                         </div>
+                                        <div class="columns">
+                                            <div class="column is-4 linha">
+                                                <label class="radio">
+                                                    <input type="radio" name="execucao" value="112"
+                                                        v-model="tipo_relat" />
+                                                    7 - Notificação de Artrópodes
+                                                </label>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </section>

@@ -180,6 +180,7 @@ export default {
       { headerName: 'Município', field: 'municipio', },
       { headerName: 'Nivel', field: 'role', },
       { headerName: 'Prop', field: 'owner_id', hide: true },
+      { headerName: 'Proprietário', field: 'owner' },
     ]
   },
   computed: {
