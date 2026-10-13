@@ -87,7 +87,7 @@
                                     </div>
                                 </section>
                                 <section v-if="hasData">
-                                    <Loader v-if="isLoading" />
+                                    <Loader :active="isLoading" />
                                     <div class="box-com-borda has-text-centered">
 
                                         <div class="container is-wide" v-for="(indic, index) in indics" :key="index">
@@ -395,7 +395,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
     mounted() {

@@ -60,6 +60,28 @@ class ReportService {
       },
     )
   }
+
+  getCrossVars() {
+    return axios.get(`/cross_vars`).then(
+      (response) => {
+        return { data: response.data }
+      },
+      (error) => {
+        return error.response.data
+      },
+    )
+  }
+
+  getCrossTab(opt) {
+    return axios.post(`/cross_tab`, opt).then(
+      (response) => {
+        return response.data
+      },
+      (error) => {
+        return error.response.data
+      },
+    )
+  }
 }
 
 export default new ReportService()

@@ -2,7 +2,7 @@
     <div class="main-container">
         <div class="columns is-centered">
             <div class="column is-10 offset-1">
-                <Loader v-if="isLoading" />
+                <Loader :active="isLoading" />
                 <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
                 <div class="card">
                     <header class="card-header">
@@ -15,7 +15,8 @@
                                     <label class="label">Município</label>
                                     <div class="control">
                                         <CmbMunicipio :id_prop="currentUser.id" @selMun="foco.id_municipio = $event"
-                                            :errclass="{ 'is-danger': v$.foco.id_municipio.$error }" :sel="foco.id_municipio" />
+                                            :errclass="{ 'is-danger': v$.foco.id_municipio.$error }"
+                                            :sel="foco.id_municipio" />
                                         <span class="is-error" v-if="v$.foco.id_municipio.$error">
                                             {{ v$.foco.id_municipio.$errors[0].$message }}
                                         </span>
@@ -85,12 +86,11 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="columns">   
+                            <div class="columns">
                                 <div class="field column is-4">
                                     <label class="label">Responsável Coleta</label>
                                     <div class="control">
-                                        <input class="input" type="text" placeholder="Nome "
-                                            v-model="foco.resp_coleta"
+                                        <input class="input" type="text" placeholder="Nome " v-model="foco.resp_coleta"
                                             :class="{ 'is-danger': v$.foco.resp_coleta.$error }" />
                                         <span class="is-error" v-if="v$.foco.resp_coleta.$error">
                                             {{ v$.foco.resp_coleta.$errors[0].$message }}
@@ -194,7 +194,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
     methods: {
@@ -203,8 +203,8 @@ export default {
                 this.foco.dt_foco = moment(String($event)).format('YYYY-MM-DD');
             }
         },
-        details(){
-            this.$router.push("/foco_dets/"+this.foco.id_foco+'/'+this.foco.id_quarteirao);
+        details() {
+            this.$router.push("/foco_dets/" + this.foco.id_foco + '/' + this.foco.id_quarteirao);
         },
         loadData() {
             this.isLoading = true;
@@ -261,7 +261,7 @@ export default {
                             this.caption = "Inquérito";
                             setTimeout(() => {
                                 this.showMessage = false;
-                               // this.$router.push("/foco_det/" + response.data.master.id_foco)
+                                // this.$router.push("/foco_det/" + response.data.master.id_foco)
                             }, 5000);
                         },
                         (error) => {

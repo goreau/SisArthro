@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
@@ -231,7 +231,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser
     },
   },
   components: {

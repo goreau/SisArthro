@@ -2,7 +2,7 @@
     <div class="main-container">
         <div class="columns is-centered">
             <div class="column is-two-fifths">
-                <Loader v-if="isLoading" />
+                <Loader :active="isLoading" />
                 <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
                 <div class="card">
                     <header class="card-header">
@@ -103,7 +103,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
     methods: {
@@ -117,7 +117,7 @@ export default {
                     okButton: 'Confirmar',
                 })
                 if (ok) {
-                    caracterizaService.duplicaCaracterizacao({id_localidade: this.codend.id_localidade}).then(
+                    caracterizaService.duplicaCaracterizacao({ id_localidade: this.codend.id_localidade }).then(
                         (response) => {
                             this.showMessage = true;
                             this.message = `Ciclo ${response.data.master} gerado com sucesso.`;

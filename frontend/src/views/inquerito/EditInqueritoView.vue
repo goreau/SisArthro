@@ -2,7 +2,7 @@
     <div class="main-container">
         <div class="columns is-centered">
             <div class="column is-10 offset-1">
-                <Loader v-if="isLoading" />
+                <Loader :active="isLoading" />
                 <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
                 <div class="card">
                     <header class="card-header">
@@ -78,7 +78,8 @@
                                     <label class="label">Ciclo</label>
                                     <div class="control">
                                         <input class="input" type="text" placeholder="" v-model="inquerito.ciclo"
-                                            :class="{ 'is-danger': v$.inquerito.ciclo.$error }" :disabled="inquerito.id_tipo == 1"/>
+                                            :class="{ 'is-danger': v$.inquerito.ciclo.$error }"
+                                            :disabled="inquerito.id_tipo == 1" />
                                         <span class="is-error" v-if="v$.inquerito.ciclo.$error">
                                             {{ v$.inquerito.ciclo.$errors[0].$message }}
                                         </span>
@@ -88,8 +89,8 @@
                                     <label class="label">Atividade com encoleiramento</label>
                                     <div class="control has-icons-left has-icons-right">
                                         <label class="checkbox">
-                                            <input type="checkbox" name="encoleiramento" value="1" :disabled="inquerito.id_tipo == 1"
-                                                v-model="inquerito.encoleiramento" />
+                                            <input type="checkbox" name="encoleiramento" value="1"
+                                                :disabled="inquerito.id_tipo == 1" v-model="inquerito.encoleiramento" />
                                             Sim
                                         </label>
                                     </div>
@@ -226,7 +227,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
     methods: {
@@ -235,7 +236,7 @@ export default {
                 this.inquerito.dt_inquerito = moment(String($event)).format('YYYY-MM-DD');
             }
         },
-        details(){
+        details() {
             this.$router.push(`/inquerito_dets/${this.inquerito.id_inquerito}/${this.inquerito.encoleiramento}`);
         },
         loadData() {
@@ -293,7 +294,7 @@ export default {
                             this.caption = "Inquérito";
                             setTimeout(() => {
                                 this.showMessage = false;
-                               // this.$router.push("/inquerito_det/" + response.data.master.id_inquerito)
+                                // this.$router.push("/inquerito_det/" + response.data.master.id_inquerito)
                             }, 5000);
                         },
                         (error) => {

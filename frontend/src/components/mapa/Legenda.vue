@@ -7,46 +7,16 @@
         <section v-if="tipo == 2">
             <img src="@/assets/marker-ail.png" class="icone" /> AIL<br />
             <img src="@/assets/marker-shannon.png" class="icone" /> Shannon<br />
-            <img src="@/assets/marker-puca.png" class="icone" /> Manual
+            <img src="@/assets/marker-puca.png" class="icone" /> Manual<br />
+            <img src="@/assets/marker-nasci.png" class="icone" /> Aspiradores<br />
+            <img src="@/assets/marker-icon-red.png" class="icone" /> Outros
 
-        </section>
-        <section v-if="tipo == 3">
-            <div class="item">Clusters</div>
-            <div class="item">
-                <div class="cluster-icon small">5</div> 1 a 9
-            </div>
-            <div class="item">
-                <div class="cluster-icon medium">50</div> 10 a 99
-            </div>
-            <div class="item">
-                <div class="cluster-icon large">150</div> 100 ou mais
-            </div>
-            <div class="item">Pontos</div>
-            <div class="item">
-                <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png"
-                class="iconep" />10 ou mais
-            </div>
-            <div class="item">
-                <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png"
-                class="iconep" />5 ou mais
-            </div>
-            <div class="item">
-            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png"
-                class="iconep" /> Menos que 5
-            </div>
-        </section>
-        <section v-if="tipo == 4">
-            <i class="iconep" style="background: red;"></i>Exemplares<br />
         </section>
         <section v-if="tipo == 5">
+            <i class="iconep" style="background: rgba(0, 102, 255, 0.5)"></i>Localidade<br />
+        </section>
+        <section v-if="tipo > 2 && tipo != 5">
             <i class="iconep" style="background: red;"></i>Quantidade<br />
-            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png"
-                class="iconep" />10 ou mais<br />
-            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-yellow.png"
-                class="iconep" />5 ou mais<br />
-            <img src="https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png"
-                class="iconep" /> Menos que 5
-
         </section>
     </div>
 </template>

@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-11">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Localidades Cadastradas</p>
@@ -51,10 +51,10 @@ export default {
   },
   methods: {
     newLoc() {
-      this.$router.push("/localidade");
+      this.$router.push("/localidade/0");
     },
     onEditRow(id) {
-      this.$router.push(`/editLoc/${id}`);
+      this.$router.push(`/localidade/${id}`);
     },
     async onDeleteRow(id) {
       const ok = await this.$refs.confirmDialog.show({
@@ -105,7 +105,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser;
     },
   },
 };

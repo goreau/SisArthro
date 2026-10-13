@@ -139,6 +139,10 @@ function onGridReady(params) {
     gridApi.value = params.api
     columnApi.value = params.columnApi
     gridApi.value.hideOverlay();
+    if (props.data && props.data.length > 0) {
+        const data = markRaw(props.data);
+        gridApi.value.setGridOption('rowData', data);
+    }
     //  console.log('SET columnApi', params.columnApi)
     //autoSizeColumns()
     const savedFilter = false;// localStorage.getItem(`filter_state_${props.persistenceId}`);
@@ -348,9 +352,11 @@ onMounted(() => {
             //gridApi.value.setPaginationSetPageSize(20)
         }
     })*/
-    setTimeout(() => {
-        gridApi.value?.sizeColumnsToFit()
-    }, 150)
+    if (gridApi && typeof gridApi.sizeColumnsToFit === 'function') {
+        setTimeout(() => {
+            gridApi.sizeColumnsToFit();
+        }, 100);
+    }
 })
 
 

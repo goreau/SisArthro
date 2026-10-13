@@ -3,7 +3,7 @@
 
     <div class="columns is-centered">
       <div class="column is-11">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
 
         <div class="card">
           <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
@@ -185,7 +185,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser
     },
   },
 }

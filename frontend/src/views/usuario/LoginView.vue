@@ -67,7 +67,7 @@ export default {
   },
   created() {
     document.getElementById('main').className = "main_colapsed";
-    this.$store.dispatch("auth/logout").then(() => { });
+    this.$authStore.logout();
   },
   methods: {
     login() {
@@ -77,7 +77,7 @@ export default {
         password: this.password
       }
 
-      this.$store.dispatch("auth/login", user)
+      this.$authStore.login(user)
         .then(
           () => {
             document.getElementById('main').className = "main";

@@ -114,6 +114,7 @@ export default {
             { headerName: "Quarteirão", field: "quadra" },
             { headerName: "Codend", field: "codend" },
             { headerName: "Nome", field: "nome" },
+            { headerName: "Espécie", field: "especie" },
             { headerName: "RA", field: "ra" },
             { headerName: "Raça", field: "raca" },
             { headerName: "Data", field: "data" },
@@ -123,7 +124,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
 };

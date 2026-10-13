@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-10 offset-1">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
@@ -82,8 +82,9 @@
                 <div class="field column is-2">
                   <label class="label">Longitude</label>
                   <div class="control">
-                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude" name="longitude"
-                      :class="{ 'is-danger': v$.canino.longitude.$error }" @blur="changeComma($event)" />
+                    <input class="input" type="text" placeholder="° decimais" v-model="canino.longitude"
+                      name="longitude" :class="{ 'is-danger': v$.canino.longitude.$error }"
+                      @blur="changeComma($event)" />
                     <span class="is-error" v-if="v$.canino.longitude.$error">
                       {{ v$.canino.longitude.$errors[0].$message }}
                     </span>
@@ -94,7 +95,7 @@
                   <div class="control">
                     <CmbAuxiliares :tipo="11" @selValue="canino.id_situacao = $event" :errclass="{
                       'is-danger': v$.canino.id_situacao.$error,
-                    }" :sel="canino.id_situacao"/>
+                    }" :sel="canino.id_situacao" />
                     <span class="is-error" v-if="v$.canino.id_situacao.$error">
                       {{ v$.canino.id_situacao.$errors[0].$message }}
                     </span>
@@ -260,7 +261,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser
     },
   },
   methods: {
@@ -273,65 +274,65 @@ export default {
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById('login').classList.add('is-loading');
-        if (this.canino.id_canino>0){
-            caninoService.edit(this.canino).then(
+        if (this.canino.id_canino > 0) {
+          caninoService.edit(this.canino).then(
             (response) => {
-                this.showMessage = true;
-                this.message = "Endereço alterado";
-                this.type = "success";
-                this.caption = "Animais";
-                setTimeout(() => {
-                this.showMessage = false; 
+              this.showMessage = true;
+              this.message = "Endereço alterado";
+              this.type = "success";
+              this.caption = "Animais";
+              setTimeout(() => {
+                this.showMessage = false;
                 // this.$router.push("/canino_det/"+response.data.master.id_canino)
-                }, 5000);
+              }, 5000);
             },
             (error) => {
-                this.message = error;
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Animais";
-                setTimeout(() => (this.showMessage = false), 3000);
+              this.message = error;
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Animais";
+              setTimeout(() => (this.showMessage = false), 3000);
             }
-            )
+          )
             .catch((err) => {
-                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Animais";
-                setTimeout(() => (this.showMessage = false), 3000);
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Animais";
+              setTimeout(() => (this.showMessage = false), 3000);
             })
             .finally(() => {
-                document.getElementById('login').classList.remove('is-loading');
+              document.getElementById('login').classList.remove('is-loading');
             });
         } else {
-            caninoService.create(this.canino).then(
+          caninoService.create(this.canino).then(
             (response) => {
-                this.showMessage = true;
-                this.message = "Endereço salvo";
-                this.type = "success";
-                this.caption = "Animais";
-                setTimeout(() => {
-                this.showMessage = false; 
+              this.showMessage = true;
+              this.message = "Endereço salvo";
+              this.type = "success";
+              this.caption = "Animais";
+              setTimeout(() => {
+                this.showMessage = false;
                 this.canino.id_canino = response.data.master.id_canino;
-                }, 5000);
+              }, 5000);
             },
             (error) => {
-                this.message = error;
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Animais";
-                setTimeout(() => (this.showMessage = false), 3000);
+              this.message = error;
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Animais";
+              setTimeout(() => (this.showMessage = false), 3000);
             }
-            )
+          )
             .catch((err) => {
-                this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
-                this.showMessage = true;
-                this.type = "alert";
-                this.caption = "Animais";
-                setTimeout(() => (this.showMessage = false), 3000);
+              this.message = err.message;//"Erro inserindo o registro! Verifique o preenchimento e tente novamente!";
+              this.showMessage = true;
+              this.type = "alert";
+              this.caption = "Animais";
+              setTimeout(() => (this.showMessage = false), 3000);
             })
             .finally(() => {
-                document.getElementById('login').classList.remove('is-loading');
+              document.getElementById('login').classList.remove('is-loading');
             });
         }
       } else {
@@ -349,13 +350,13 @@ export default {
         async (response) => {
           if (response.data != '') {
             let data = response.data;
-          
+
             this.canino.id_municipio = data.id_municipio;
             await this.getAreas(data.id_municipio);
             await this.getQuarteirao(data.id_area);
             this.canino.id_area = data.id_area;
             this.canino.id_quarteirao = data.id_quarteirao;
-           // await this.getCodends();
+            // await this.getCodends();
             this.canino.proprietario = data.proprietario;
             this.canino.responsavel = data.responsavel;
             this.edt_date = moment(String(data.dt_captura)).format('DD/MM/YYYY');
@@ -369,7 +370,7 @@ export default {
           } else {
             this.loadTerritorio();
           }
-          
+
           this.startCalendar();
         },
         (error) => {
@@ -390,8 +391,8 @@ export default {
 
       this.isLoading = false;
     },
-    loadTerritorio(){
-        codendService.getCodend(this.canino.id_codend).then(
+    loadTerritorio() {
+      codendService.getCodend(this.canino.id_codend).then(
         async (response) => {
           let data = response.data[0];
           this.canino.id_municipio = data.id_municipio;
@@ -415,20 +416,20 @@ export default {
           setTimeout(() => (this.showMessage = false), 3000);
         }
       );
-//recuperar mun, area e quart do codend
-//popular combos
+      //recuperar mun, area e quart do codend
+      //popular combos
     },
-    details(){
-      if (this.canino.id_canino == 0){
-          this.message = "Vode deve primeiro informar e salvar os dados do imóvel!"      
-          this.showMessage = true;
-          this.type = "alert";
-          this.caption = "CodEnd";
-          setTimeout(() => (this.showMessage = false), 3000);
+    details() {
+      if (this.canino.id_canino == 0) {
+        this.message = "Vode deve primeiro informar e salvar os dados do imóvel!"
+        this.showMessage = true;
+        this.type = "alert";
+        this.caption = "CodEnd";
+        setTimeout(() => (this.showMessage = false), 3000);
       } else {
-        this.$router.push("/canino_dets/"+this.canino.id_canino);
+        this.$router.push("/canino_dets/" + this.canino.id_canino);
       }
-      
+
     },
     applyDataMask(field) {
       var mask = field.dataset.mask.split('');

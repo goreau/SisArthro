@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-7">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
         <div class="card">
           <header class="card-header">
             <p class="card-header-title is-centered">Espécies Cadastradas</p>
@@ -36,7 +36,7 @@
             <div class="control">
               <select v-model="especie.id_genero" class="input">
                 <option value="0">-- Selecione --</option>
-                <option v-for="reg in generos" :key="reg.id_genero" :value="reg.id_genero">
+                <option v-for="reg in generos" :key="reg.id" :value="reg.id">
                   {{ reg.nome }}
                 </option>
               </select>
@@ -185,7 +185,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser
     },
   },
 };

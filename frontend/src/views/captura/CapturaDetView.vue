@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-10 offset-1">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
@@ -357,7 +357,7 @@ export default {
   },
   computed: {
     isAil() {
-      return [42,43,44,45,46,47,49,52].includes(Number(this.captura_det.metodo))
+      return [42, 43, 44, 45, 46, 47, 49, 52].includes(Number(this.captura_det.metodo))
     }
   },
   methods: {
@@ -414,7 +414,7 @@ export default {
     },
     create() {
       this.prepare();
-this.v$.$touch()
+      this.v$.$touch()
       this.v$.$validate(); // checks all inputs
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
@@ -479,7 +479,7 @@ this.v$.$touch()
         amostra: "",
         quant_potes: "",
       })
-        this.v$.$reset()
+      this.v$.$reset()
     },
     getAreas() {
       capturaService
@@ -542,7 +542,7 @@ this.v$.$touch()
     this.getAreas();
   },
   watch: {
-    'captura_det.metodo'(value){
+    'captura_det.metodo'(value) {
       this.v$.$reset()
     },
     "captura_det.area"(value) {

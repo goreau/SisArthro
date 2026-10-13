@@ -113,7 +113,7 @@
                                         <div class="dividend">Denominador: {{ indic.divisor }}</div>
                                     </div>
                                 </div>
-                                <Loader v-if="isLoading" />
+                                <Loader :active="isLoading" />
                                 <span class="filter">{{ strFiltro }}</span>
                                 <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns"
                                     :pagination="true" :buttons="[]" :has-exports="true" :calc-height="false"
@@ -369,7 +369,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
     mounted() {

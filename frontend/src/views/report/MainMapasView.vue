@@ -17,9 +17,10 @@
                                                     <li v-for="(item, index) in operacionais" :key="item.to">
                                                         <label class="radio">
                                                             <input type="radio" name="operacional" :value="index + 1"
-                                                                v-model="tipo_mapa" v-html="index + 1 + '. ' + item.label" />
-                                                                <span v-html="index + 1 + '. ' + item.label"></span>
-                                                            </label>
+                                                                v-model="tipo_mapa"
+                                                                v-html="index + 1 + '. ' + item.label" />
+                                                            <span v-html="index + 1 + '. ' + item.label"></span>
+                                                        </label>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -63,19 +64,20 @@
                                         <div class="field column is-8 is-offset-2">
                                             <label class="label">Agravo</label>
                                             <div class="control">
-                                                <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event" :sel="filter.agravo" />
+                                                <CmbAuxiliares :tipo="2" @selValue="filter.agravo = $event"
+                                                    :sel="filter.agravo" />
                                             </div>
                                         </div>
                                     </div>
                                 </section>
                                 <section>
                                     <div class="columns">
-                                        
 
-                                        
+
+
                                     </div>
                                 </section>
-                                <section  v-show="noDate.indexOf(tipo_mapa) == -1">
+                                <section v-show="noDate.indexOf(tipo_mapa) == -1">
                                     <div class="columns">
                                         <div class="column is-2 is-offset-2">
                                             <label class="label">Ano</label>
@@ -159,9 +161,9 @@ export default {
             operacionais: [
                 { label: "Casos Novos de LVC", to: "/mapa/1" },
                 { label: "Métodos de Captura", to: "/mapa/2" },
-                { label: "Cluster de Capturas", to: "/clusterCaptura" },
+                { label: "Cluster de Capturas", to: "/mapa/3" },
                 { label: "Densidade de <i>L. longipalpis</i>", to: "/mapa/4" },
-                { label: "Densidade de <i>L. longipalpis</i> - Cluster", to: "/cluster" }
+                { label: "Localidades Cadastradas", to: "/mapa/5" }
             ],
         };
     },
@@ -199,7 +201,7 @@ export default {
     },
     computed: {
         currentUser() {
-            return this.$store.getters["auth/loggedUser"];
+            return this.$authStore.loggedUser
         },
     },
     mounted() {
@@ -215,10 +217,10 @@ export default {
         if (obj) {
             this.filter = JSON.parse(obj);
 
-            if (this.filter.dt_inicio){
+            if (this.filter.dt_inicio) {
                 this.ini_date = this.filter.dt_inicio == '' ? '' : moment(String(this.filter.dt_inicio)).format('DD/MM/YYYY');
             }
-            if (this.filter.dt_final){
+            if (this.filter.dt_final) {
                 this.fim_date = this.filter.dt_final == '' ? '' : moment(String(this.filter.dt_final)).format('DD/MM/YYYY');
             }
         }

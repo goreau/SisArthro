@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="columns is-centered">
       <div class="column is-four-fifths">
-        <Loader v-if="isLoading" />
+        <Loader :active="isLoading" />
         <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
         <div class="card">
           <header class="card-header">
@@ -83,7 +83,7 @@ export default {
   },
   computed: {
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser
     },
   },
   methods: {
@@ -125,27 +125,27 @@ export default {
           console.log(err.response);
           this.municipios = [];
         });
+    },
+    loadQuarts(mun) {
+      codendService.getQuarts(mun)
+        .then((res) => {
+          this.quarteiraos = res.data;
+        })
+        .catch((err) => {
+          console.log(err.response);
+          this.quarteiraos = [];
+        })
+    }
   },
-  loadQuarts(mun) {
-    codendService.getQuarts(mun)
-      .then((res) => {
-        this.quarteiraos = res.data;
-      })
-      .catch((err) => {
-        console.log(err.response);
-        this.quarteiraos = [];
-      })
+  mounted() {
+    this.loadMuns();
+  },
+  watch: {
+    'id_municipio'(value) {
+      this.loadQuarts(value);
+    },
   }
-},
-mounted() {
-  this.loadMuns();
-},
-watch: {
-  'id_municipio'(value) {
-    this.loadQuarts(value);
-  },
-}
-  };
+};
 </script>
 
 <style lang="scss" scoped></style>

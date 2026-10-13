@@ -2,7 +2,7 @@
     <div class="main-container">
         <div class="columns is-centered">
             <div class="column is-three-fifths">
-                <Loader v-if="isLoading" />
+                <Loader :active="isLoading" />
                 <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
 
                 <div class="card">

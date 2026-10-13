@@ -2,14 +2,14 @@
     <div class="main-container">
         <div class="columns is-centered">
             <div class="column is-11">
-                <Loader v-if="isLoading" />
+                <Loader :active="isLoading" />
                 <div class="card">
                     <header class="card-header">
                         <p class="card-header-title is-centered">{{ title }}</p>
                     </header>
                     <div class="card-content">
                         <span class="filter">{{ strFiltro }}</span>
-                        
+
                         <!--
                         {{ dataTable }}
                         {{ indic }}
@@ -78,17 +78,20 @@
                                     <div class="columns is-vcentered is-fullwidth">
                                         <!-- Coluna 1: descrição -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">5) Proporção de cães eutanasiados no município =</span>
+                                            <span class="divisor">5) Proporção de cães eutanasiados no município
+                                                =</span>
                                         </div>
 
                                         <!-- Coluna 2: fórmula dividida -->
                                         <div class="column is-narrow">
                                             <div class="long-division">
                                                 <div class="quotient">
-                                                    Nº de cães soropositivos em dois testes para LVC eutanasiados por município  por ciclo  X 100
+                                                    Nº de cães soropositivos em dois testes para LVC eutanasiados por
+                                                    município por ciclo X 100
                                                 </div>
                                                 <div class="dividend">
-                                                    Nº cães examinados soropositivos em dois testes para LVC na ATL ou no município por ciclo
+                                                    Nº cães examinados soropositivos em dois testes para LVC na ATL ou
+                                                    no município por ciclo
                                                 </div>
                                             </div>
                                         </div>
@@ -108,7 +111,7 @@
 
                                         <!-- Coluna 5: resultado final -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">=  {{ indic.indic_5 }}</span>
+                                            <span class="divisor">= {{ indic.indic_5 }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -118,14 +121,16 @@
                                     <div class="columns is-vcentered is-fullwidth">
                                         <!-- Coluna 1: descrição -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">6) Percentual de cães eutanasiados na área prioritária por ciclo =</span>
+                                            <span class="divisor">6) Percentual de cães eutanasiados na área prioritária
+                                                por ciclo =</span>
                                         </div>
 
                                         <!-- Coluna 2: fórmula dividida -->
                                         <div class="column is-narrow">
                                             <div class="long-division">
                                                 <div class="quotient">
-                                                    Nº de cães soropositivos em dois testes para LVC eutanasiados na área prioritária X 100
+                                                    Nº de cães soropositivos em dois testes para LVC eutanasiados na
+                                                    área prioritária X 100
                                                 </div>
                                                 <div class="dividend">
                                                     Nº cães soropositivos em dois testes para LVC na na área prioritária
@@ -148,7 +153,7 @@
 
                                         <!-- Coluna 5: resultado final -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">=  {{ indic.indic_6 }}</span>
+                                            <span class="divisor">= {{ indic.indic_6 }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -190,7 +195,7 @@
 
                                         <!-- Coluna 5: resultado final -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">=  {{ indic.indic_7 }}</span>
+                                            <span class="divisor">= {{ indic.indic_7 }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -200,7 +205,8 @@
                                     <div class="columns is-vcentered is-fullwidth">
                                         <!-- Coluna 1: descrição -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">8) Percentual de cães com recusa de colocação de coleira na área prioritária por ciclo =</span>
+                                            <span class="divisor">8) Percentual de cães com recusa de colocação de
+                                                coleira na área prioritária por ciclo =</span>
                                         </div>
 
                                         <!-- Coluna 2: fórmula dividida -->
@@ -230,7 +236,7 @@
 
                                         <!-- Coluna 5: resultado final -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">=  {{ indic.indic_8 }}</span>
+                                            <span class="divisor">= {{ indic.indic_8 }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +246,8 @@
                                     <div class="columns is-vcentered is-fullwidth">
                                         <!-- Coluna 1: descrição -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">9) Percentual de cães soropositivos com coleira na área prioritária por ciclo =</span>
+                                            <span class="divisor">9) Percentual de cães soropositivos com coleira na
+                                                área prioritária por ciclo =</span>
                                         </div>
 
                                         <!-- Coluna 2: fórmula dividida -->
@@ -270,7 +277,7 @@
 
                                         <!-- Coluna 5: resultado final -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">=  {{ indic.indic_9 }}</span>
+                                            <span class="divisor">= {{ indic.indic_9 }}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -280,7 +287,8 @@
                                     <div class="columns is-vcentered is-fullwidth">
                                         <!-- Coluna 1: descrição -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">10) Percentual de cães em tratamento para LVC na área prioritária por ciclo =</span>
+                                            <span class="divisor">10) Percentual de cães em tratamento para LVC na área
+                                                prioritária por ciclo =</span>
                                         </div>
 
                                         <!-- Coluna 2: fórmula dividida -->
@@ -310,7 +318,7 @@
 
                                         <!-- Coluna 5: resultado final -->
                                         <div class="column is-narrow has-text-right is-flex is-align-items-end">
-                                            <span class="divisor">=  {{ indic.indic_10 }}</span>
+                                            <span class="divisor">= {{ indic.indic_10 }}</span>
                                         </div>
                                     </div>
                                 </div>

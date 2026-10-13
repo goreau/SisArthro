@@ -13,7 +13,7 @@
             </button>
           </header>
           <div class="card-content">
-            <Loader v-if="isLoading" />
+            <Loader :active="isLoading" />
             <Message v-if="showMessage" @do-close="closeMessage" :msg="message" :type="type" :caption="caption" />
             <MyTable :loggedUser="{ id: 0, tipo: 0 }" :data="dataTable" :columns="columns" :pagination="false"
               :buttons="['edit', 'delete']" :has-exports="false" @edit="onEditRow" :calc-height="true"

@@ -74,7 +74,7 @@ export default {
       return !this.hide;
     },
     currentUser() {
-      return this.$store.getters["auth/loggedUser"];
+      return this.$authStore.loggedUser;
     },
   },
   data() {
@@ -105,10 +105,10 @@ export default {
               href: "/about",
               title: "Sobre",
             },
-            /*   {
-                 href: "/downloads",
-                 title: "Material de Apoio",
-               },*/
+            {
+              href: "/downloads",
+              title: "Material de Apoio",
+            },
             {
               href: "/",
               title: "Sair",
@@ -562,6 +562,18 @@ export default {
                 },
               },
             },
+            {
+              href: "/dinamico",
+              title: "Construir",
+              icon: {
+                element: "font-awesome-icon",
+                class: "small",
+                attributes: {
+                  icon: "fa-solid fa-dice-d6",
+                  transform: "shrink-10",
+                },
+              },
+            },
           ]
         },
 
@@ -668,7 +680,26 @@ body {
   border-right: 2px solid black !important;
 }
 
-.tabulator-col-group {
-  border-right: 2px solid black !important;
+
+.fieldset {
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, .1), 0 0 0 1px rgba(10, 10, 10, .02);
+  color: #4a4a4a;
+  display: block;
+  padding: 1.25rem;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+}
+
+.fieldset>legend {
+  color: #363636;
+  display: block;
+  font-size: 1rem;
+  font-weight: 700;
+  background-color: #fff;
+  padding: 0 5px;
+  width: max-content;
+  border: 0 none
 }
 </style>

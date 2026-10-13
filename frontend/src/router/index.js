@@ -123,7 +123,7 @@ const routes = [
     component: () => import('../views/usuario/ResetView.vue'),
   },
   {
-    path: '/localidade',
+    path: '/localidade/:id',
     name: 'localidade',
     component: () =>
       import(
@@ -151,15 +151,15 @@ const routes = [
     },
   },
   {
-    path: '/editLoc/:id',
-    name: 'editloc',
+    path: '/mapa_localidade',
+    name: 'mapa_localidade',
     component: () =>
       import(
-        /* webpackChunkName: "user" */ '../views/localidade/EditLocalidadeView.vue'
+        /* webpackChunkName: "user" */ '../views/localidade/MapaLocalidadeView.vue'
       ),
     meta: {
       breadcrumb: {
-        name: 'Editar Localidade',
+        name: 'Mapa da Localidade',
         root: false,
       },
     },
@@ -1034,36 +1034,12 @@ const routes = [
     path: '/mapa/:id',
     name: 'mapa',
     component: () =>
-      import(/* webpackChunkName: "user" */ '../views/report/MapaView.vue'),
-    meta: {
-      breadcrumb: {
-        name: 'Mapa',
-        root: true,
-      },
-    },
-  },
-  {
-    path: '/cluster',
-    name: 'cluster',
-    component: () =>
-      import(/* webpackChunkName: "user" */ '../views/report/ClusterView.vue'),
-    meta: {
-      breadcrumb: {
-        name: 'Cluster',
-        root: true,
-      },
-    },
-  },
-  {
-    path: '/clusterCaptura',
-    name: 'clustercaptura',
-    component: () =>
       import(
-        /* webpackChunkName: "user" */ '../views/report/CapturasClusterView.vue'
+        /* webpackChunkName: "user" */ '../views/report/ReportMapaView.vue'
       ),
     meta: {
       breadcrumb: {
-        name: 'Cluster Capturas',
+        name: 'Mapa',
         root: true,
       },
     },
@@ -1163,6 +1139,34 @@ const routes = [
       breadcrumb: {
         name: 'Estratos',
         root: true,
+      },
+    },
+  },
+  {
+    path: '/dinamico',
+    name: 'dinamico',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/dinamicos/TabelaCruzadaView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Estratos',
+        root: true,
+      },
+    },
+  },
+  {
+    path: '/chart',
+    name: 'chart',
+    component: () =>
+      import(
+        /* webpackChunkName: "user" */ '../views/report/dinamicos/ChartView.vue'
+      ),
+    meta: {
+      breadcrumb: {
+        name: 'Gráfico',
+        root: false,
       },
     },
   },
