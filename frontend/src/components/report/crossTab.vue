@@ -143,6 +143,7 @@ watch(tabela, (val) => {
     border: 1px solid #000;
     padding: 2rem;
     background-color: #ccc;
+    border-radius: 6px;
 }
 
 .isMother {

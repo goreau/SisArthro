@@ -257,6 +257,7 @@
             {{ message }}
         </template>
     </Modal>
+    <confirm-dialog ref="confirmDialog"></confirm-dialog>
 </template>
 
 <script>
@@ -277,6 +278,7 @@ import capturaService from '@/services/captura.service.js';
 import infeccaoService from '@/services/infeccao.service.js';
 import Modal from '@/components/forms/Modal.vue';
 import InputButton from '@/components/forms/InputButton.vue';
+import ConfirmDialog from '@/components/forms/ConfirmDialog.vue';
 
 export default {
     components: {
@@ -286,7 +288,8 @@ export default {
         FooterCard,
         MyTable,
         Modal,
-        InputButton
+        InputButton,
+        ConfirmDialog
     },
     data() {
         return {

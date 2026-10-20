@@ -1,10 +1,21 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { publicPath } from '../../vue.config'
-//https://github.com/vuejs/vue-router/issues/1735
 const routes = [
   {
     path: '/',
     name: 'loginHome',
+    component: () =>
+      import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue'),
+    meta: {
+      breadcrumb: {
+        name: 'Login',
+        root: true,
+      },
+    },
+  },
+  {
+    path: '/login',
+    name: 'login',
     component: () =>
       import(/* webpackChunkName: "login" */ '../views/usuario/LoginView.vue'),
     meta: {
@@ -967,20 +978,6 @@ const routes = [
     name: 'report_id',
     component: () =>
       import(/* webpackChunkName: "user" */ '../views/report/ReportView.vue'),
-    meta: {
-      breadcrumb: {
-        name: 'Relatórios',
-        root: true,
-      },
-    },
-  },
-  {
-    path: '/reportN/:id',
-    name: 'reportN_id',
-    component: () =>
-      import(
-        /* webpackChunkName: "user" */ '../views/report/ReportNestedView.vue'
-      ),
     meta: {
       breadcrumb: {
         name: 'Relatórios',

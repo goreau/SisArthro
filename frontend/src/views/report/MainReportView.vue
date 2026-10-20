@@ -275,12 +275,8 @@ export default {
     processar() {
       localStorage.setItem('filterRelArthro', JSON.stringify(this.filter));
 
-
-      //    if (this.tipo_relat > 100) {
       this.$router.push(`/report/${this.tipo_relat}`);
-      //    } else {
-      //       this.$router.push(`/reportN/${this.tipo_relat}`);
-      //     }
+
     },
     setDateIni($event) {
       if ($event && $event.length > 0) {

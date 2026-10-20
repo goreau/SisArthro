@@ -69,11 +69,11 @@
                                     <div class="control has-icons-left has-icons-right">
                                         <label class="radio">
                                             <input type="radio" name="sexo" value="1" v-model="canino_det.id_sexo" />
-                                            1 - Macho
+                                            1 - Fêmea
                                         </label>
                                         <label class="radio">
                                             <input type="radio" name="sexo" value="2" v-model="canino_det.id_sexo" />
-                                            2 - Fêmea
+                                            2 - Macho
                                         </label>
                                     </div>
                                     <span class="is-error" v-if="v$.canino_det.id_sexo.$error">

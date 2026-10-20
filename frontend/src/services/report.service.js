@@ -49,18 +49,6 @@ class ReportService {
     )
   }
 
-  getExport(id, filter) {
-    filter = JSON.parse(filter)
-    return axios.post(`/export/${id}`, filter).then(
-      (response) => {
-        return { data: response.data }
-      },
-      (error) => {
-        return error.response.data
-      },
-    )
-  }
-
   getCrossVars() {
     return axios.get(`/cross_vars`).then(
       (response) => {

@@ -69,13 +69,16 @@ export default {
     onEditRow(id) {
       this.$router.push(`/editUser/${id}`);
     },
+    closeMessage() {
+      this.showMessage = false
+    },
     onImpersonate(id) {
       const row = this.dataTable.find(item => item.id === id);
       const user = { username: row.username, password: 'AH@g654321' }
       const resp = authService.impersonate(user)
         .then((resp) => {
           console.log(resp)
-          this.$store.dispatch('auth/impersonate', resp);
+          this.$authStore.impersonate(resp);
           this.$router.push({ name: 'home' });
         },
           (error) => {

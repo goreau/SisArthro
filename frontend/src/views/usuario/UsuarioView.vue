@@ -174,7 +174,7 @@ export default {
   },
   computed: {
     loggedIn() {
-      return this.$store.getters["auth/isLogged"];
+      return this.$authStore.isLogged;
     },
     currentUser() {
       return this.$authStore.loggedUser

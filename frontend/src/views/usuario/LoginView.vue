@@ -81,7 +81,8 @@ export default {
         .then(
           () => {
             document.getElementById('main').className = "main";
-            this.$router.push({ name: 'home' });
+            const rotaDestino = this.$route.query.redirect || '/home';
+            this.$router.push(rotaDestino);
           },
           (error) => {
             this.isLoading = false;

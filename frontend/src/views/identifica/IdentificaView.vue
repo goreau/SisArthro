@@ -232,10 +232,12 @@
       </div>
     </div>
   </div>
+  <confirm-dialog ref="confirmDialog"></confirm-dialog>
 </template>
 
 <script>
 import Message from "@/components/general/Message.vue";
+import ConfirmDialog from "@/components/forms/ConfirmDialog.vue";
 import Loader from "@/components/general/Loader.vue";
 import CmbMunicipio from "@/components/forms/CmbMunicipio.vue";
 import identificaService from "@/services/identifica.service";
@@ -262,6 +264,7 @@ export default {
     CmbMunicipio,
     footerCard,
     MyTable,
+    ConfirmDialog,
   },
   data() {
     return {

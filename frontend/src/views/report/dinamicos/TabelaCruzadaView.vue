@@ -90,7 +90,7 @@ export default {
                     this.showMessage = true
                     campos.value = []
                 } else {
-                    console.log(result)
+                    this.showMessage = false
                     this.pivotData = result.data.rows
                     this.pivotColumns = result.data.colunas
                     this.pivotFantasia = result.data.fantasia

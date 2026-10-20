@@ -107,7 +107,7 @@
                         <label class="label is-small">Bairros adicionados:</label>
 
                         <!-- Lista em formato de Tags/Badges removíveis -->
-                        <div v-if="this.localidadeStore.localidade.bairros.length > 0" class="tags">
+                        <div v-if="this.localidadeStore.localidade.bairros?.length > 0" class="tags">
                           <span v-for="(bairro, index) in this.localidadeStore.localidade.bairros" :key="index"
                             class="tag is-info is-light is-medium">
                             {{ bairro }}
@@ -159,7 +159,7 @@
                         <label class="label is-small">Censitários adicionados:</label>
 
                         <!-- Lista em formato de Tags/Badges removíveis -->
-                        <div v-if="this.localidadeStore.localidade.censitarios.length > 0" class="tags">
+                        <div v-if="this.localidadeStore.localidade.censitarios?.length > 0" class="tags">
                           <span v-for="(censitario, index) in this.localidadeStore.localidade.censitarios" :key="index"
                             class="tag is-info is-light is-medium">
                             {{ censitario }}
@@ -227,7 +227,7 @@
                         <label class="label is-small">Subdivisões adicionadas:</label>
 
                         <!-- Lista em formato de Tags/Badges removíveis -->
-                        <div v-if="this.localidadeStore.localidade.subdivisoes.length > 0" class="tags">
+                        <div v-if="this.localidadeStore.localidade.subdivisoes?.length > 0" class="tags">
                           <span v-for="(subdivisao, index) in this.localidadeStore.localidade.subdivisoes" :key="index"
                             class="tag is-info is-light is-medium">
                             {{ subdivisao }}
@@ -293,7 +293,7 @@
                       <div class="mt-3">
                         <label class="label is-small">Agravos Selecionados:</label>
 
-                        <div v-if="this.localidadeStore.localidade.agravos.length > 0" class="tags">
+                        <div v-if="this.localidadeStore.localidade.agravos?.length > 0" class="tags">
                           <span v-for="id in this.localidadeStore.localidade.agravos" :key="id"
                             class="tag is-info is-light is-medium">
                             <!-- Função helper que busca o nome pelo ID -->
@@ -582,27 +582,51 @@ export default {
       if (!this.v$.$error) {
         document.getElementById("login").classList.add("is-loading");
 
-        localidadeService
-          .create(this.localidadeStore.localidade)
-          .then(
-            (response) => {
-              this.showMessage = true;
-              this.message = "Localidade cadastrada.";
-              this.type = "success";
-              this.caption = "Localidade";
-              setTimeout(() => (this.showMessage = false), 3000);
-            },
-            (error) => {
-              this.message = error;
-              this.showMessage = true;
-              this.type = "alert";
-              this.caption = "Usuário";
-              setTimeout(() => (this.showMessage = false), 3000);
-            }
-          )
-          .finally(() => {
-            document.getElementById("login").classList.remove("is-loading");
-          });
+        if (this.isEditMode) {
+          localidadeService
+            .edit(this.localidadeStore.localidade)
+            .then(
+              (response) => {
+                this.showMessage = true;
+                this.message = "Cadastro da localidade atualizado com sucesso.";
+                this.type = "success";
+                this.caption = "Localidade";
+                setTimeout(() => (this.showMessage = false), 3000);
+              },
+              (error) => {
+                this.message = error;
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Usuário";
+                setTimeout(() => (this.showMessage = false), 3000);
+              }
+            )
+            .finally(() => {
+              document.getElementById("login").classList.remove("is-loading");
+            });
+        } else {
+          localidadeService
+            .create(this.localidadeStore.localidade)
+            .then(
+              (response) => {
+                this.showMessage = true;
+                this.message = "Localidade cadastrada.";
+                this.type = "success";
+                this.caption = "Localidade";
+                setTimeout(() => (this.showMessage = false), 3000);
+              },
+              (error) => {
+                this.message = error;
+                this.showMessage = true;
+                this.type = "alert";
+                this.caption = "Usuário";
+                setTimeout(() => (this.showMessage = false), 3000);
+              }
+            )
+            .finally(() => {
+              document.getElementById("login").classList.remove("is-loading");
+            });
+        }
       } else {
         this.message = "Corrija os erros para enviar as informações";
         this.showMessage = true;
@@ -643,6 +667,70 @@ export default {
         });
     },
     async verificaEdit() {
+      if (!this.isEditMode) {
+        console.log(this.$route.params.id);
+        return;
+      }
+
+      const paramId = Number(this.$route.params.id);
+      const storeId = Number(this.localidadeStore.localidade?.id_localidade);
+
+      // SE JÁ É O MESMO ID QUE ESTÁ NA STORE:
+      // Não precisa buscar do backend novamente! Os dados editados (incluindo polígonos) já estão seguros na store.
+      if (paramId === storeId) {
+        console.log('Dados mantidos da store (edição em andamento)');
+        return;
+      }
+
+      // SE É UM ID DIFERENTE (ou a store está vazia/primeira carga do registro):
+      this.isLoading = true;
+
+      try {
+        const response = await localidadeService.getLocalidade(paramId);
+        const data = response.data;
+
+        data.agravos = data.agravos || [];
+        data.censitarios = data.censitarios || [];
+        data.bairros = data.bairros || [];
+        data.subdivisoes = data.subdivisoes || [];
+
+
+        // 1. Atualiza o objeto geral da localidade na store
+        this.localidadeStore.localidade = data;
+
+        // 2. Se tiver coordenadas vindas do banco, faz o parse e atualiza
+        if (data.fant_coordenadas) {
+          try {
+            const geojsonObj = typeof data.fant_coordenadas === 'string'
+              ? JSON.parse(data.fant_coordenadas)
+              : data.fant_coordenadas;
+
+            if (geojsonObj && geojsonObj.coordinates) {
+              this.localidadeStore.setCoordenadas(geojsonObj);
+            }
+          } catch (e) {
+            console.error("Erro ao fazer parse do fant_coordenadas:", e);
+            data.fant_coordenadas = null;
+          }
+        }
+
+      } catch (error) {
+        this.message =
+          (error.response && error.response.data && error.response.data.message) ||
+          error.response?.data ||
+          error.message ||
+          error.toString();
+
+        this.showMessage = true;
+        this.type = "alert";
+        this.caption = "Localidade";
+        setTimeout(() => (this.showMessage = false), 3000);
+      } finally {
+        // Garante que o loading apague só depois de terminar a chamada HTTP
+        this.isLoading = false;
+      }
+    },
+    async verificaEditMeu() {
       if (this.isEditMode) {
         this.isLoading = true;
 
@@ -650,7 +738,11 @@ export default {
           (response) => {
             let data = response.data;
 
-            if (data.fant_coordenadas) {
+            const paramId = Number(this.$route.params.id)
+            const storeId = Number(this.localidadeStore.localidade.id_localidade)
+
+
+            if (data.fant_coordenadas && paramId !== storeId) {
               try {
                 // 1. Converte a string JSON para um objeto JavaScript
                 const geojsonObj = typeof data.fant_coordenadas === 'string'
@@ -671,7 +763,7 @@ export default {
                 data.fant_coordenadas = null;
               }
             } else {
-              localidadeStore.localidade = data;
+              //       localidadeStore.localidade = data;
             }
           },
           (error) => {
@@ -703,6 +795,7 @@ export default {
     }
 
     this.loadCombos()
+
     this.verificaEdit()
 
     if (!this.isEditMode) {

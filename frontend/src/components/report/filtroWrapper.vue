@@ -35,17 +35,38 @@
                     </div>
                 </div>
             </div>
-            <div class="columns">
+            <div class="columns" v-show="props.ativos.atividade">
                 <div class="column is-full">
                     <div class="field">
                         <label class="label">Atividade</label>
                         <div class="control">
-                            <CmbAuxiliares :tipo="1" @selValue="captura.zona = $event" />
+                            <CmbAuxiliares :tipo="3" @selValue="filtros.id_atividade = $event" />
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="columns" :v-show="props.ativos.datas">
+            <div class="columns" v-show="props.ativos.ciclo">
+                <div class="column is-4 is-offset-4">
+                    <div class="field">
+                        <label class="label">Ciclo</label>
+                        <div class="control">
+                            <input type="number" class="input" v-model="filtros.ciclo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns" v-show="props.ativos.ano">
+                <div class="column is-4 is-offset-4">
+                    <div class="field">
+                        <label class="label">Ano</label>
+                        <div class="control">
+                            <input type="number" class="input" v-model="filtros.ano">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="columns" v-show="props.ativos.datas">
                 <div class="column is-half">
                     <label class="label">Início</label>
                     <div class="field">
@@ -65,7 +86,6 @@
                 </div>
             </div>
         </section>
-
         <hr />
         <div class="columns">
             <div class="column is-8 is-offset-2">
@@ -117,10 +137,8 @@ const filtros = reactive({
     dt_inicio: '',
     dt_final: '',
     ano: '',
-    id_area_nav: 0,
-    id_bairro: 0,
+    ciclo: 0,
     tipo_rel: 0,
-    agente: '',
 })
 
 /**const filtrosAtivos = computed(() => {
@@ -143,6 +161,9 @@ function limparFiltros() {
     Object.keys(filtrosAtivos).forEach((k) => delete filtrosAtivos[k])
     if (props.ativos['ano'] && filtros.ano !== '' && filtros.ano != null) {
         filtrosAtivos.ano = filtros.ano
+    }
+    if (props.ativos['ciclo'] && filtros.ciclo !== '' && filtros.ciclo != null) {
+        filtrosAtivos.ciclo = filtros.ciclo
     }
     if (props.ativos['municipio'] && filtros.id_municipio !== '' && filtros.id_municipio != null) {
         filtrosAtivos.id_municipio = filtros.id_municipio

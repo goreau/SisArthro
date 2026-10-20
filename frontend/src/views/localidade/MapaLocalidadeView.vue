@@ -252,7 +252,7 @@ function onEditRow(id) {
 }
 
 async function onDeleteRow(id) {
-    localCoordenadas.value.filter((i) => i.id != id);
+    localCoordenadas.value = localCoordenadas.value.filter((i) => i.id != id);
     delId.value = id;
 }
 

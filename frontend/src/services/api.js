@@ -29,27 +29,21 @@ api.interceptors.response.use(
     }
   },
   (error) => {
-    //console.log(this.$router)
     if (error.response.status) {
       switch (error.response.status) {
-        /* case 400:
-          alert(error.response.data.message);
-         //do something
-     //     return Promise.resolve({ error: error.response.data });
-          break;  */
         case 401:
-          authService.logout()
-          router.replace({
-            path: '/login',
-            query: { redirect: router.currentRoute.fullPath },
-          })
-          break
         case 403:
-          authService.logout()
-          router.replace({
-            path: '/login',
-            query: { redirect: router.currentRoute.fullPath },
-          })
+          const currentPath = router.currentRoute.value?.fullPath
+
+          if (currentPath && !currentPath.startsWith('/login')) {
+            authService.logout()
+
+            window.location.hash = `/login?redirect=${encodeURIComponent(
+              currentPath,
+            )}`
+
+            window.location.reload()
+          }
           break
         case 404:
           alert('page not exist')
@@ -59,7 +53,7 @@ api.interceptors.response.use(
             router.replace({
               path: '/login',
               query: {
-                redirect: router.currentRoute.fullPath,
+                redirect: router.currentRoute.value?.fullPath,
               },
             })
           }, 1000)

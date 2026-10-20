@@ -15,7 +15,8 @@ import {
     ValidationModule,
     ClientSideRowModelModule,
     ClientSideRowModelApiModule,
-    CellStyleModule
+    CellStyleModule,
+    ColumnApiModule
 } from 'ag-grid-community'
 
 import localeText from '@/utils/agGridLocale'
@@ -37,6 +38,7 @@ ModuleRegistry.registerModules([
     PaginationModule,
     LocaleModule,
     CellStyleModule,
+    ColumnApiModule
 ])
 
 const paginationPageSizeSelector = [12, 20, 50, 100]
@@ -103,7 +105,6 @@ const emit = defineEmits([
 ])
 
 const gridApi = ref(null)
-const columnApi = ref(null)
 const gridWrapper = ref(null)
 
 const agGridColumns = ref([])
@@ -116,17 +117,23 @@ const baseHeight = 60 // altura base (header + margens), ajuste se necessário
 const rows = shallowRef([])
 
 const onFirstDataRendered = (params) => {
-    setTimeout(() => {
-
-        autoSizeAll()
-    }, 0)
+    params.api.sizeColumnsToFit();
+    /* const allColumns = params.api.getColumns();
+ 
+     if (!allColumns) {
+         console.warn("As colunas ainda não estão disponíveis.");
+         return;
+     }
+ 
+     const allColumnIds = allColumns.map((col) => col.getColId());
+ 
+     // Se estiver usando AG Grid v31+, use o objeto de configuração:
+     params.api.autoSizeColumns({
+         columns: allColumnIds,
+         skipHeader: false
+     });*/
 }
 
-/*const onFirstDataRendered = () => {
-  setTimeout(() => {
-    autoSizeAll()
-  }, 0)
-}*/
 
 function onFilterChanged(params) {
     const filterModel = params.api.getFilterModel();
@@ -137,27 +144,19 @@ function onFilterChanged(params) {
 
 function onGridReady(params) {
     gridApi.value = params.api
-    columnApi.value = params.columnApi
+
     gridApi.value.hideOverlay();
     if (props.data && props.data.length > 0) {
         const data = markRaw(props.data);
         gridApi.value.setGridOption('rowData', data);
     }
-    //  console.log('SET columnApi', params.columnApi)
-    //autoSizeColumns()
+
     const savedFilter = false;// localStorage.getItem(`filter_state_${props.persistenceId}`);
     if (savedFilter) {
         const model = JSON.parse(savedFilter);
         params.api.setFilterModel(model);
     }
     emit('grid-ready');
-}
-
-function autoSizeAll() {
-    if (!columnApi.value) return
-
-    const allColumnIds = columnApi.value.getAllColumns().map((col) => col.getColId())
-    columnApi.value.autoSizeColumns(allColumnIds, false)
 }
 
 function shouldDisableButton(row, name) {
@@ -347,16 +346,6 @@ onMounted(() => {
     let footer = document.querySelector('#footer')?.offsetHeight || 0
     let header = document.querySelector('.conteudo')?.offsetHeight || 0
     alturasFixas.value = footer + header * 4 + 100
-    /**nextTick(() => {
-        if (gridApi.value && props.pagination) {
-            //gridApi.value.setPaginationSetPageSize(20)
-        }
-    })*/
-    if (gridApi && typeof gridApi.sizeColumnsToFit === 'function') {
-        setTimeout(() => {
-            gridApi.sizeColumnsToFit();
-        }, 100);
-    }
 })
 
 
