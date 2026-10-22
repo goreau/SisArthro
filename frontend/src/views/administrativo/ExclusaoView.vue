@@ -178,7 +178,6 @@ export default {
     },
     methods: {
         closeMessage() {
-            alert('funfa')
             this.showMessage = false;
         },
         getRows() {

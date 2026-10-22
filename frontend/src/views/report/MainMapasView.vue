@@ -156,8 +156,8 @@ export default {
             strFiltro: '',
             tableName: 'mapas',
             indic: {},
-            noDate: [100],
-            noAgravo: [1],
+            noDate: [5],
+            noAgravo: [1, 5],
             operacionais: [
                 { label: "Casos Novos de LVC", to: "/mapa/1" },
                 { label: "Métodos de Captura", to: "/mapa/2" },

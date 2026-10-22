@@ -183,6 +183,7 @@ async function limparMapa() {
         })
         if (ok) {
             localCoordenadas.value = []
+            source.clear();
         }
     }
 }

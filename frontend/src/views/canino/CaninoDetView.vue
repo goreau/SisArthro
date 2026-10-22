@@ -191,6 +191,9 @@ export default {
         };
     },
     methods: {
+        closeMessage() {
+            this.showMessage = false;
+        },
         details() {
             this.$router.push("/canino_dets/" + this.canino_det.id_canino);
         },
@@ -262,7 +265,7 @@ export default {
     created() {
         this.canino_det.id_canino = this.$route.params.master;
 
-        this.getRaca();
+        this.getRaca(1);
     },
     watch: {
         'canino_det.id_especie'(value) {

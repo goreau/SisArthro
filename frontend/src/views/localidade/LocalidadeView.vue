@@ -405,6 +405,13 @@ export default {
           },
           dt_cadastro: {
             required$
+          },
+          responsavel: {
+            required$,
+            maxLength: maxLength$(100)
+          },
+          motivo_especifica: {
+            maxLength: maxLength$(255)
           }
         },
       }
@@ -427,6 +434,9 @@ export default {
     footerCard,
   },
   methods: {
+    closeMessage() {
+      this.showMessage = false;
+    },
     adicionarBairro() {
       const valorFormatado = this.novoBairro.trim()
       this.mensagemErro = ''
@@ -802,13 +812,17 @@ export default {
       this.localidadeStore.localidade.dt_cadastro = new Date()
     }
 
+    const dataInicial = (this.isEditMode && this.localidadeStore.localidade?.dt_cadastro)
+      ? new Date(this.localidadeStore.localidade.dt_cadastro)
+      : new Date();
+
+    this.localidadeStore.localidade.dt_cadastro = dataInicial;
+
     const options = {
       type: "date",
       dateFormat: "dd/MM/yyyy",
       showHeader: false,
-      startDate: (this.isEditMode && this.localidadeStore.localidade?.dt_cadastro)
-        ? new Date(this.localidadeStore.localidade.dt_cadastro)
-        : new Date(),
+      startDate: dataInicial,
       color: "info",
       allowInput: true,
       cancelLabel: 'Cancelar',
